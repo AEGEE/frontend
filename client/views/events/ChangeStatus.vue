@@ -8,6 +8,7 @@
           <table class="table is-bordered is-striped is-narrow is-fullwidth">
             <thead>
               <tr>
+                <th>Event type</th>
                 <th>Event name</th>
                 <th>Description</th>
                 <th>Dates</th>
@@ -18,6 +19,7 @@
             </thead>
             <tfoot>
               <tr>
+                <th>Event type</th>
                 <th>Event name</th>
                 <th>Description</th>
                 <th>Dates</th>
@@ -28,6 +30,7 @@
             </tfoot>
             <tbody>
               <tr v-show="events.length" v-for="event in events" v-bind:key="event.id">
+                <td>{{ event.type }}</td>
                 <td>
                   <router-link :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }">
                     {{ event.name }}
@@ -53,10 +56,10 @@
                 </td>
               </tr>
               <tr v-show="!events.length && !isLoading">
-                <td colspan="5" class="has-text-centered">There are no events for which you can change status.</td>
+                <td colspan="7" class="has-text-centered">There are no events for which you can change status.</td>
               </tr>
               <tr v-show="isLoading">
-                <td colspan="5" class="has-text-centered"><i style="font-size:24px" class="fa fa-spinner fa-spin"></i></td>
+                <td colspan="7" class="has-text-centered"><i style="font-size:24px" class="fa fa-spinner fa-spin"></i></td>
               </tr>
             </tbody>
           </table>
@@ -68,7 +71,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 
 export default {
   name: 'ChangeEventsStatus',
@@ -92,19 +94,12 @@ export default {
       this.axios.put(this.services['oms-events'] + '/single/' + event.id + '/status', {
         status: event.futureStatus.name
       }).then(() => {
-        this.$toast.open({
-          message: 'Event status is now "' + event.futureStatus.name + '".',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Event status is now "' + event.futureStatus.name + '".')
 
         this.events = []
         this.fetchData()
       }).catch((err) => {
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not update event status: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not update event status: ' + err.message)
       })
     },
     fetchData () {
@@ -119,21 +114,12 @@ export default {
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch events list: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch events list: ' + err.message)
       })
     }
   },
   mounted () {
     this.fetchData()
-  },
-  filters: {
-    date (val) {
-      return moment(val).format('YYYY-MM-DD')
-    }
   }
 }
 </script>

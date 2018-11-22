@@ -10,7 +10,60 @@
           </div>
         </div>
 
-        <div class="tile">
+        <div class="table-responsive">
+          <table class="table is-bordered is-striped is-narrow is-fullwidth">
+            <thead>
+              <tr>
+                <th>Name and surname</th>
+                <th>Position</th>
+                <th>Is circle admin?</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Name and surname</th>
+                <th>Position</th>
+                <th>Is circle admin?</th>
+                <th></th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr v-show="members.length" v-for="(member, index) in members" v-bind:key="member.id">
+                <td>
+                  <router-link :to="{ name: 'oms.members.view', params: { id: member.member.seo_url || member.member.id } }">
+                    {{ member.member.first_name }} {{ member.member.last_name }}
+                  </router-link>
+                </td>
+                <td v-if="member.position">{{ member.position }}</td>
+                <td v-if="!member.position"><i>No position set.</i></td>
+                <td>
+                  <i v-if="!member.circle_admin">No</i>
+                  <strong v-if="member.circle_admin">Yes</strong>
+                </td>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <a class="button is-small is-warning" @click="selectedUserIndex = index" v-if="can.edit">
+                        <span class="icon"><i class="fa fa-edit"></i></span>
+                        <span>Edit</span>
+                      </a>
+                      <a class="button is-small is-danger" @click="askDeleteMember(member, false)"  v-if="can.delete">
+                        <span class="icon"><i class="fa fa-minus"></i></span>
+                        <span>Delete</span>
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr v-show="!members.length && !isLoading">
+                <td colspan="4" class="has-text-centered">This circle does not have any members.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!--<div class="tile">
           <div class="tile is-vertical is-2" v-for="(member, index) in members" v-bind:key="member.id">
 
             <div class="tile is-child">
@@ -51,7 +104,7 @@
           <div class="tile is-vertical is-12 is-child" v-if="members.length === 0 && !isLoading">
             <h1 class="subtitle has-text-centered">No members inside this circle.</h1>
           </div>
-        </div>
+        </div>-->
 
         <div class="field">
           <button
@@ -153,15 +206,11 @@ export default {
     },
     deleteMember (member) {
       this.axios.delete(this.services['oms-core-elixir'] + '/circles/' + this.$route.params.id + '/members/' + member.id).then((response) => {
-        this.$toast.open('Member is deleted.')
+        this.$root.showSuccess('Member is deleted.')
 
         const index = this.members.findIndex(m => m.id === member.id)
         this.members.splice(index, 1)
-      }).catch((err) => this.$toast.open({
-        duration: 3000,
-        message: 'Could not delete member: ' + err.message,
-        type: 'is-danger'
-      }))
+      }).catch((err) => this.$root.showDanger('Could not delete member: ' + err.message))
     },
     updateMembership () {
       this.isLoading = true
@@ -171,20 +220,13 @@ export default {
       this.axios.put(this.services['oms-core-elixir'] + '/circles/' + this.$route.params.id + '/members/' + member.id, {
         circle_membership: member
       }).then((response) => {
-        this.$toast.open({
-          message: 'Membership is updated',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Membership is updated')
         this.isLoading = false
         this.selectedUserIndex = null
       }).catch((err) => {
         this.isLoading = false
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Error updating user membership: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Error updating user membership: ' + err.message)
       })
     },
     refetch () {
@@ -218,11 +260,7 @@ export default {
           return console.debug('Request cancelled.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch members: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch members: ' + err.message)
       })
     }
   },

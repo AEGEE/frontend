@@ -4,19 +4,38 @@ import VueAxios from 'vue-axios'
 import NProgress from 'vue-nprogress'
 import { sync } from 'vuex-router-sync'
 import Buefy from 'buefy'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import flatPickr from 'vue-flatpickr-component'
+import Multiselect from 'vue-multiselect'
+import InputTag from 'vue-input-tag'
+import qs from 'qs'
 
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import * as filters from './filters'
-import { TOGGLE_SIDEBAR } from 'vuex-store/mutation-types'
+import filters from './filters'
 import Auth from './auth'
+
+axios.defaults.paramsSerializer = params => qs.stringify(params, {
+  arrayFormat: 'brackets',
+  encode: false,
+  encodeValuesOnly: true
+})
 
 Vue.router = router
 Vue.use(VueAxios, axios)
 Vue.use(Auth)
 Vue.use(NProgress)
 Vue.use(Buefy, { defaultNoticeQueue: false, defaultIconPack: 'fa' })
+Vue.use(flatPickr)
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBbo9L1-AW0DSuo0IolsyZweKU9hX6lKE0',
+    libraries: 'places,drawing,visualization,geometry'
+  }
+})
+Vue.component('multiselect', Multiselect)
+Vue.component('input-tag', InputTag)
 
 // Enable devtools
 Vue.config.devtools = true
@@ -28,10 +47,6 @@ const nprogress = new NProgress({ parent: '.nprogress-container' })
 const { state } = store
 
 router.beforeEach((route, redirect, next) => {
-  if (state.app.device.isMobile && state.app.sidebar.opened) {
-    store.commit(TOGGLE_SIDEBAR, false)
-  }
-
   // Skipping fetching user if going to page that doesn't require authorization
   if (!route.meta.auth) {
     return next()
@@ -60,7 +75,7 @@ axios.interceptors.response.use(
   response => response, // success handler
   error => {
     let originalRequest = error.config
-    if (axios.isCancel(error) || error.response.status !== 401 || originalRequest._retry) {
+    if (axios.isCancel(error) || !error.response || error.response.status !== 401 || originalRequest._retry) {
       return Promise.reject(error)
     }
 

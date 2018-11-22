@@ -4,9 +4,9 @@
       <article class="tile is-child">
         <h4 class="title">Bodies list</h4>
         <div class="field">
-          <label class="label">Search by name or description</label>
+          <label class="label">Search by name or body code</label>
           <div class="control">
-            <input class="input" type="text" v-model="query" placeholder="Search by name or description" @input="refetch()">
+            <input class="input" type="text" v-model="query" placeholder="Search by name or body code" @input="refetch()">
           </div>
         </div>
 
@@ -38,7 +38,9 @@
                 <td>
                   <router-link :to="{ name: 'oms.bodies.view', params: { id: body.id } }">{{ body.name}}</router-link>
                 </td>
-                <td>{{ body.description }}</td>
+                <td>
+                  <span v-html="$options.filters.markdown(body.description)"></span>
+                </td>
               </tr>
               <tr v-show="!bodies.length && !isLoading">
                 <td colspan="4" class="has-text-centered">Bodies list is empty</td>
@@ -123,11 +125,7 @@ export default {
           return console.debug('Request cancelled.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch bodies list: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch bodies list: ' + err.message)
       })
     }
   },

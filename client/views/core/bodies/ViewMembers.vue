@@ -10,12 +10,64 @@
           </div>
         </div>
 
-        <div class="field" v-if="can.create">
-          <router-link :to="{ name: 'oms.bodies.new_member', params: { id: $route.params.id } }" class="button" >Create member</router-link>
+        <div class="field is-grouped" v-if="can.create">
+          <div class="control">
+            <router-link :to="{ name: 'oms.bodies.new_member', params: { id: $route.params.id } }" class="button is-primary" >Create member</router-link>
+          </div>
+          <div class="control">
+            <router-link :to="{ name: 'oms.bodies.bulk_import', params: { id: $route.params.id } }" class="button is-primary" >Bulk import members</router-link>
+          </div>
         </div>
 
-        <div class="tile">
-          <div class="tile is-vertical is-2" v-for="member in members" v-bind:key="member.id">
+        <div class="table-responsive">
+          <table class="table is-bordered is-striped is-narrow is-fullwidth">
+            <thead>
+              <tr>
+                <th>Name and surname</th>
+                <th>Comment</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Name and surname</th>
+                <th>Comment</th>
+                <th></th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr v-show="members.length" v-for="member in members" v-bind:key="member.id">
+                <td>
+                  <router-link :to="{ name: 'oms.members.view', params: { id: member.member_id } }">
+                    {{ member.member.first_name }} {{ member.member.last_name }}
+                  </router-link>
+                </td>
+                <td v-if="member.comment">{{ member.comment }}</td>
+                <td v-if="!member.comment"><i>No comment set.</i></td>
+                <td>
+                  <div class="field">
+                    <div class="control">
+                      <a class="button is-small is-warning" @click="askToChangeComment(member)" v-if="can.edit">
+                        <span class="icon"><i class="fa fa-edit"></i></span>
+                        <span>Edit</span>
+                      </a>
+                      <a class="button is-small is-danger" @click="askDeleteMember(member, false)"  v-if="can.delete">
+                        <span class="icon"><i class="fa fa-minus"></i></span>
+                        <span>Delete</span>
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr v-show="!members.length && !isLoading">
+                <td colspan="4" class="has-text-centered">This body does not have any members.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!--<div class="tile">
+          <div class="tile is-vertical is-2 box" v-for="member in members" v-bind:key="member.id">
 
             <div class="tile is-child">
               <div class="image is-1by1">
@@ -51,7 +103,7 @@
           <div class="tile is-vertical is-12 is-child" v-if="members.length === 0 && !isLoading">
             <h1 class="subtitle has-text-centered">No members inside this body.</h1>
           </div>
-        </div>
+        </div>-->
 
         <div class="field">
           <button
@@ -120,15 +172,11 @@ export default {
     },
     deleteMember (member) {
       this.axios.delete(this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.id + '/members/' + member.id).then((response) => {
-        this.$toast.open('Member is deleted.')
+        this.$root.showSuccess('Member is deleted.')
 
         const index = this.members.findIndex(m => m.id === member.id)
         this.members.splice(index, 1)
-      }).catch((err) => this.$toast.open({
-        duration: 3000,
-        message: 'Could not delete member: ' + err.message,
-        type: 'is-danger'
-      }))
+      }).catch((err) => this.$root.showDanger('Could not delete member: ' + err.message))
     },
     askToChangeComment (member) {
       this.$dialog.prompt({
@@ -144,20 +192,13 @@ export default {
       this.axios.put(this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.id + '/members/' + member.id, {
         body_membership: { comment }
       }).then((response) => {
-        this.$toast.open({
-          message: 'Comment is set.',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Comment is set.')
         member.comment = comment
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Error updating user comment: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Error updating user comment: ' + err.message)
       })
     },
     refetch () {
@@ -193,11 +234,7 @@ export default {
           return console.debug('Request cancelled.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch members: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch members: ' + err.message)
       })
     }
   },

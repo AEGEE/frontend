@@ -48,6 +48,7 @@
               <b-autocomplete
                 v-model="autocompleteCampaign"
                 :data="bodies"
+                :disabled="$route.params.body_id"
                 open-on-focus="true"
                 @select="circle => { campaign.autojoin_body_id = circle.id; campaign.autojoin_body = circle }">
                 <template slot-scope="props">
@@ -63,7 +64,12 @@
               <p class="control">
                 <a class="button is-danger"
                   @click="campaign.autojoin_body_id = null; campaign.autojoin_body = null"
-                  v-if="campaign.autojoin_body">{{ campaign.autojoin_body.name }} (Click to unset)</a>
+                  v-if="campaign.autojoin_body && !$route.params.body_id">
+                  {{ campaign.autojoin_body.name }} (Click to unset)
+                </a>
+                <a class="button is-static" v-if="campaign.autojoin_body && $route.params.body_id">
+                  {{ campaign.autojoin_body.name }}
+                </a>
                 <a class="button is-static" v-if="!campaign.autojoin_body">Not set.</a>
               </p>
             </div>
@@ -79,9 +85,13 @@
 
         <div class="field">
           <label class="label">Active?
-            <input type="checkbox" v-model="campaign.active" />
+            <input type="checkbox" v-model="campaign.active" :disabled="!$route.params.id"/>
           </label>
           <p class="help is-danger" v-if="errors.active">{{ errors.active.join(', ')}}</p>
+        </div>
+
+        <div class="notification is-info" v-if="!$route.params.id">
+          The newly created recruitment campaign should be active.
         </div>
 
         <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
@@ -110,8 +120,8 @@ export default {
         id: null,
         autojoin_body_id: null,
         autojoin_body: null,
-        active: null,
-        activate_user: null
+        active: true,
+        activate_user: false
       },
       bodies: [],
       errors: {},
@@ -131,33 +141,21 @@ export default {
       promise.then((response) => {
         this.isSaving = false
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Campaign is saved.',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Campaign is saved.')
 
         return this.$router.push({
-          name: 'oms.campaigns.view',
-          params: { id: response.data.data.id }
+          name: this.$route.params.body_id ? 'oms.bodies.campaigns.view' : 'oms.campaigns.view',
+          params: { id: response.data.data.id, body_id: response.data.data.autojoin_body_id }
         })
       }).catch((err) => {
         this.isSaving = false
 
         if (err.response.status === 422) { // validation errors
           this.errors = err.response.data.errors
-          return this.$toast.open({
-            duration: 3000,
-            message: 'Some of the campaign data is invalid.',
-            type: 'is-danger'
-          })
+          return this.$root.showDanger('Some of the campaign data is invalid.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not save campaign: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not save campaign: ' + err.message)
       })
     }
   },
@@ -165,12 +163,13 @@ export default {
   mounted () {
     this.axios.get(this.services['oms-core-elixir'] + '/bodies/', { params: { limit: 1000 } }).then((response) => { // TODO rethink
       this.bodies = response.data.data
+
+      if (this.$route.params.body_id) {
+        this.campaign.autojoin_body_id = parseInt(this.$route.params.body_id, 10)
+        this.campaign.autojoin_body = this.bodies.find(body => body.id === this.campaign.autojoin_body_id)
+      }
     }).catch((err) => {
-      this.$toast.open({
-        duration: 3000,
-        message: 'Could not fetch bodies list: ' + err.message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger('Could not fetch bodies list: ' + err.message)
     })
 
     if (!this.$route.params.id) {
@@ -184,11 +183,7 @@ export default {
     }).catch((err) => {
       let message = (err.response.status === 404) ? 'Campaign is not found' : 'Some error happened: ' + err.message
 
-      this.$toast.open({
-        duration: 3000,
-        message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger(message)
       this.$router.push({ name: 'oms.campaigns.list' })
     })
   }

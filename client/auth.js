@@ -14,27 +14,8 @@ export default {
       store.dispatch('login')
     }
 
-    const renew = async (refreshToken) => {
-      if (!refreshToken) {
-        throw new Error('Cannot renew access token without refresh token')
-      }
-
-      const result = await Vue.axios.post(services['oms-core-elixir'] + '/renew', { refresh_token: refreshToken })
-      if (!result.data.success) {
-        throw result.data
-      }
-
-      window.localStorage.setItem('access-token', result.data.access_token)
-    }
-
-    const fetchUser = async (accessToken) => {
-      if (!accessToken) {
-        throw new Error('Cannot fetch user without access token')
-      }
-
-      const result = await Vue.axios.get(services['oms-core-elixir'] + '/members/me', {
-        headers: { 'X-Auth-Token': accessToken }
-      })
+    const fetchUser = async () => {
+      const result = await Vue.axios.get(services['oms-core-elixir'] + '/members/me')
 
       if (!result.data.success) {
         throw result.data
@@ -44,31 +25,23 @@ export default {
       return result.data.data
     }
 
-    const fetchUserWithExistingData = async () => {
-      const accessToken = window.localStorage.getItem('access-token')
-      const refreshToken = window.localStorage.getItem('refresh-token')
+    const fetchPermissions = async () => {
+      const result = await Vue.axios.get(services['oms-core-elixir'] + '/my_permissions')
 
-      if (!accessToken && !refreshToken) {
-        // User is not logged in/has cleared the localStorage
-        throw new Error('Cannot authorize, both access and refresh tokens are not presented.')
+      if (!result.data.success) {
+        throw result.data
       }
 
-      // First, trying to fetch the user with access token.
+      store.dispatch('setPermissions', result.data.data)
+      return result.data.data
+    }
+
+    const fetchUserWithExistingData = async () => {
       try {
-        await fetchUser(accessToken)
+        await fetchUser() // The request will be re-done and access token will be renewed if expired.
+        await fetchPermissions()
         return
       } catch (err) {
-        console.log('Could not fetch user with access token')
-      }
-
-      // If that failed, trying to obtain new access token and load the user again.
-      try {
-        await renew(refreshToken)
-
-        const newAccessToken = window.localStorage.getItem('access-token')
-        await fetchUser(newAccessToken)
-      } catch (err) {
-        // everything failed, redirect to login
         store.dispatch('logout')
         throw new Error('Cannot authorize, need to relogin.')
       }
@@ -94,7 +67,6 @@ export default {
           return {
             login,
             logout,
-            renew,
             fetchUserWithExistingData,
             fetchUser
           }

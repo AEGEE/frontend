@@ -3,10 +3,17 @@
     <div class="tile is-parent is-vertical">
       <article class="tile is-child">
         <h4 class="title">Circles list</h4>
+
         <div class="field">
-          <label class="label">Search</label>
-          <div class="control">
-            <input class="input" type="text" v-model="query" placeholder="Search" @click="refetch()">
+          <label class="label">Search by name or description</label>
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="query" placeholder="Search" @input="refetch()">
+            </div>
+            <div class="control">
+              <a class="button is-info" v-if="includeBoundCircles"  @click="toggleBoundCircles()">Show only free circles</a>
+              <a class="button is-info" v-if="!includeBoundCircles" @click="toggleBoundCircles()">Show also bound circles</a>
+            </div>
           </div>
         </div>
 
@@ -14,30 +21,24 @@
           <div class="control" v-if="can.createFree">
             <router-link class="button is-primary" :to="{ name: 'oms.circles.create' }">Create circle</router-link>
           </div>
-
-          <a class="button" v-if="includeBoundCircles" @click="toggleBoundCircles()">Show only free circles</a>
-          <a class="button" v-if="!includeBoundCircles" @click="toggleBoundCircles()">Show also bound circles</a>
         </div>
 
         <div class="table-responsive">
           <table class="table is-bordered is-striped is-narrow is-fullwidth">
             <thead>
               <tr>
-                <th>Circle ID</th>
                 <th>Name</th>
                 <th>Description</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
-                <th>Circle ID</th>
                 <th>Name</th>
                 <th>Description</th>
               </tr>
             </tfoot>
             <tbody>
               <tr v-show="circles.length" v-for="circle in circles" v-bind:key="circle.id">
-                <td>{{ circle.id }}</td>
                 <td>
                   <router-link :to="{ name: 'oms.circles.view', params: { id: circle.id } }">
                     {{ circle.name }}
@@ -46,10 +47,10 @@
                 <td>{{ circle.description }}</td>
               </tr>
               <tr v-show="!circles.length && !isLoading">
-                <td colspan="3" class="has-text-centered">Circles list is empty</td>
+                <td colspan="2" class="has-text-centered">Circles list is empty</td>
               </tr>
               <tr v-show="isLoading">
-                <td colspan="3" class="has-text-centered"><i style="font-size:24px" class="fa fa-spinner fa-spin"></i></td>
+                <td colspan="2" class="has-text-centered"><i style="font-size:24px" class="fa fa-spinner fa-spin"></i></td>
               </tr>
             </tbody>
           </table>
@@ -136,11 +137,7 @@ export default {
           return console.debug('Request cancelled.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch circles list: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch circles list: ' + err.message)
       })
     }
   },

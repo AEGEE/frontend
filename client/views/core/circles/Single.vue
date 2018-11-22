@@ -147,11 +147,13 @@ export default {
       circle: {
         id: null,
         name: '',
-        descsription: '',
+        description: '',
         joinable: false,
         parent_circle: null,
         child_circles: [],
-        permissions: []
+        permissions: [],
+        body: null,
+        body_id: null
       },
       inheritedPermissions: [],
       isOwnProfile: false,
@@ -180,34 +182,35 @@ export default {
       if (this.token) this.token.cancel()
       this.token = this.axios.CancelToken.source()
 
-      this.axios.get(this.services['oms-core-elixir'] + '/members', {
+      // If circle is bound to a body, search for body members. If not, use global search.
+      const url = this.circle.body_id
+        ? this.services['oms-core-elixir'] + '/bodies/' + this.circle.body_id + '/members'
+        : this.services['oms-core-elixir'] + '/members'
+
+      this.axios.get(url, {
         cancelToken: this.token.token,
         params: { query: this.addedMemberName }
       }).then((response) => {
-        this.members = response.data.data
+        // Transform members if the circle is bound (there's another API response format)
+        this.members = this.circle.body_id
+          ? response.data.data.map(entry => entry.member)
+          : response.data.data
+
         this.isLoadingMembers = false
       }).catch((err) => {
         if (this.axios.isCancel(err)) {
-          return console.log('Request canceled')
+          return
         }
 
         this.isLoadingMembers = false
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch members: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch members: ' + err.message)
       })
     },
     addMember (member) {
       this.axios.post(this.services['oms-core-elixir'] + '/circles/' + this.circle.id + '/add_member', {
         member_id: member.id
       }).then(() => {
-        this.$toast.open({
-          duration: 3000,
-          message: 'Member is added.',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Member is added.')
         this.isAddingMember = false
       }).catch((err) => {
         const message = 'Could not add member: ' +
@@ -215,11 +218,7 @@ export default {
             ? 'This person is already a member of this circle.'
             : err.message)
 
-        this.$toast.open({
-          duration: 3000,
-          message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger(message)
       })
     },
     askDeleteCircle () {
@@ -234,18 +233,14 @@ export default {
     },
     deleteCircle () {
       this.axios.delete(this.services['oms-core-elixir'] + '/circles/' + this.circle.id).then((response) => {
-        this.$toast.open('Circle is deleted.')
+        this.$root.showInfo('Circle is deleted.')
         this.$router.push({ name: 'oms.circles.list' })
-      }).catch((err) => this.$toast.open({
-        duration: 3000,
-        message: 'Could not delete circle: ' + err.message,
-        type: 'is-danger'
-      }))
+      }).catch((err) => this.$root.showDanger('Could not delete circle: ' + err.message))
     },
     joinCircle () {
       this.isLoading = true
       this.axios.post(this.services['oms-core-elixir'] + '/circles/' + this.circle.id + '/members').then((response) => {
-        this.$toast.open('Successfully joined circle.')
+        this.$root.showSuccess('Successfully joined circle.')
         this.can.join = false
         this.isMember = true
         this.isLoading = false
@@ -257,11 +252,7 @@ export default {
             ? 'You are already a member of this circle.'
             : err.message)
 
-        this.$toast.open({
-          duration: 3000,
-          message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger(message)
       })
     },
     askLeaveCircle () {
@@ -277,20 +268,13 @@ export default {
     leaveCircle () {
       this.isLoading = true
       this.axios.delete(this.services['oms-core-elixir'] + '/circles/' + this.circle.id + '/members').then((response) => {
-        this.$toast.open({ message: 'Successfully left circle.', type: 'is-success' })
+        this.$root.showSuccess('Successfully left circle.')
         this.can.join = true
         this.isMember = false
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-
-        let message = 'Could not leave circle: ' + err.message
-
-        this.$toast.open({
-          duration: 3000,
-          message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not leave circle: ' + err.message)
       })
     },
     loadData (id) {
@@ -308,7 +292,13 @@ export default {
         this.can.delete = this.permissions.some(permission => permission.combined.endsWith('delete:circle'))
         this.can.join = this.permissions.some(permission => permission.combined.endsWith('join:circle')) && this.circle.joinable
         this.can.viewMembers = this.permissions.some(permission => permission.combined.endsWith('view_members:circle'))
-        this.can.addMembers = this.permissions.some(permission => permission.combined.endsWith('add_member:circle'))
+
+        // A person has the right to add members in 2 cases: this person has add_member:circle permission and
+        // 1) the circle is bound to a body
+        // 2) the circle is unbound and the person has view:member permission (to search globall for users)
+        const hasPermissionToAdd = this.permissions.some(permission => permission.combined.endsWith('add_member:circle'))
+        const hasPermissionToViewMembers = this.permissions.some(permission => permission.combined.endsWith('view:member'))
+        this.can.addMembers = hasPermissionToAdd && (this.circle.body_id || hasPermissionToViewMembers)
 
         return this.axios.get(this.services['oms-core-elixir'] + '/circles/' + id + '/permissions')
       }).then((response) => {
@@ -318,11 +308,7 @@ export default {
       }).catch((err) => {
         let message = (err.response.status === 404) ? 'Circle is not found' : 'Some error happened: ' + err.message
 
-        this.$toast.open({
-          duration: 3000,
-          message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger(message)
         this.$router.push({ name: 'oms.circles.list' })
       })
     }

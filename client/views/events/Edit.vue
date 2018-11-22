@@ -1,6 +1,37 @@
 <template>
   <div class="tile is-ancestor ">
     <div class="tile is-child">
+      <div v-if="$route.params.id">
+        <div class="subtitle">Update event image</div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <div class="file has-name">
+              <label class="file-label">
+                <input class="file-input" type="file" name="resume" @change="setFile($event)">
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fa fa-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Choose a file
+                  </span>
+                </span>
+                <span class="file-name">
+                  {{ file ? file.name : 'Not set.' }}
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="control">
+            <a class="button is-info" :disabled="!file" @click="updateImage()">Upload!</a>
+          </div>
+        </div>
+
+        <hr />
+      </div>
+
       <form @submit.prevent="saveEvent()">
         <div class="field">
           <label class="label">Title</label>
@@ -13,7 +44,11 @@
         <div class="field">
           <label class="label">Description</label>
           <div class="control">
-            <input class="input" type="text" required v-model="event.description" />
+            <textarea class="textarea" placeholder="e.g. Hello world" required v-model="event.description"></textarea>
+          </div>
+          <label class="label">Description preview</label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(event.description)">
           </div>
           <p class="help is-danger" v-if="errors.description">{{ errors.description.message }}</p>
         </div>
@@ -191,6 +226,50 @@
           </div>
         </div>
 
+        <hr/>
+
+        <div class="subtitle is-fullwidth has-text-centered">Locations</div>
+        <GmapMap
+          :class="is-fullwidth"
+          :zoom="7"
+          :center="center"
+          style="height: 400px" >
+            <GmapMarker
+              :key="index"
+              v-for="(marker, index) in event.locations"
+              :position="marker.position"
+              :draggable="true"
+              @dragend="setMarkerPosition($event.latLng, index)" />
+        </GmapMap>
+
+        <table class="table is-narrowed is-stripped is-fullwidth">
+          <thead>
+            <tr>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(marker, index) in event.locations" v-bind:key="index">
+              <td>{{ marker.position.lat }}</td>
+              <td>{{ marker.position.lng }}</td>
+              <td>
+                <input type="text" class="input" required v-model="marker.name" />
+              </td>
+            </tr>
+            <tr colspan="3" v-if="event.locations.length === 0">
+              <td>No locations added.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="field">
+          <div class="control">
+            <a class="button is-primary" @click="addLocation()">Add new location</a>
+          </div>
+        </div>
+
         <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
 
         <div class="field">
@@ -212,13 +291,14 @@ export default {
     return {
       event: {
         name: null,
-        description: null,
+        description: '', // so it won't be null and marked() would not error
         id: null,
         url: null,
         application_status: 'closed',
         application_deadline: null,
         application_fields: [],
         max_participants: null,
+        locations: [],
         fee: null,
         status: null,
         starts: null,
@@ -226,6 +306,11 @@ export default {
         body_id: null,
         body: null
       },
+      center: {
+        lat: 50.8503396,
+        lng: 4.3517103
+      },
+      file: null,
       eventTypes: [],
       autoComplete: {
         bodies: { name: '' },
@@ -241,6 +326,24 @@ export default {
     }
   },
   methods: {
+    setFile (event) {
+      this.file = event.target.files[0]
+    },
+    updateImage () {
+      if (!this.file) {
+        return
+      }
+
+      const data = new FormData()
+      data.append('head_image', this.file)
+
+      this.axios.post(this.services['oms-events'] + '/single/' + this.$route.params.id + '/upload', data).then(() => {
+        this.$root.showSuccess('Event image is updated.')
+        this.file = null
+      }).catch((err) => {
+        this.$root.showDanger('Could not update image: ' + err.message)
+      })
+    },
     addApplicationField () {
       this.event.application_fields.push({
         name: '',
@@ -249,6 +352,19 @@ export default {
     },
     deleteApplicationField (index) {
       this.event.application_fields.splice(index, 1)
+    },
+    addLocation () {
+      this.event.locations.push({
+        name: '',
+        position: {
+          lat: 50.8503396,
+          lng: 4.3517103
+        }
+      })
+    },
+    setMarkerPosition (position, index) {
+      this.event.locations[index].position.lat = position.lat()
+      this.event.locations[index].position.lng = position.lng()
     },
     saveEvent () {
       this.isSaving = true
@@ -260,12 +376,7 @@ export default {
 
       promise.then((response) => {
         this.isSaving = false
-
-        this.$toast.open({
-          duration: 3000,
-          message: 'Event is saved.',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Event is saved.')
 
         return this.$router.push({
           name: 'oms.events.view',
@@ -276,18 +387,10 @@ export default {
 
         if (err.response.status === 422) { // validation errors
           this.errors = err.response.data.errors
-          return this.$toast.open({
-            duration: 3000,
-            message: 'Some of the event data is invalid.',
-            type: 'is-danger'
-          })
+          return this.$root.showDanger('Some of the event data is invalid.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not save event: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not save event: ' + err.message)
       })
     }
   },
@@ -299,22 +402,14 @@ export default {
     this.axios.get(this.services['oms-events'] + '/eventroles').then((response) => {
       this.roles = response.data.data
     }).catch((err) => {
-      this.$toast.open({
-        duration: 3000,
-        message: 'Could not fetch event roles: ' + err.message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger('Could not fetch event roles: ' + err.message)
     })
 
     if (!this.$route.params.id) {
       this.axios.get(this.services['oms-events'] + '/lifecycle/names').then((response) => {
         this.eventTypes = response.data.data
       }).catch((err) => {
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch event types: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch event types: ' + err.message)
       })
 
       return
@@ -333,11 +428,7 @@ export default {
     }).catch((err) => {
       let message = (err.response.status === 404) ? 'Event is not found' : 'Some error happened: ' + err.message
 
-      this.$toast.open({
-        duration: 3000,
-        message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger(message)
       this.$router.push({ name: 'oms.events.list' })
     })
   }

@@ -8,10 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const baseWebpackConfig = require('./webpack.base.conf')
 const config = require('../config')
 const utils = require('./utils')
-const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : config.build.env
-const isELECTRON = process.env.NODE_ELECTRON === 'true'
+const env = config.build.env
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -23,7 +20,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    publicPath: isELECTRON ? path.join(__dirname, '../dist/') : config.build.assetsPublicPath,
+    publicPath: config.build.assetsPublicPath,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
@@ -51,10 +48,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      title: 'Vue Admin',
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
+      title: 'OMS | Online Membership System',
+      filename: config.build.index,
       template: 'index.html',
       inject: true,
       favicon: 'client/assets/logo.png',

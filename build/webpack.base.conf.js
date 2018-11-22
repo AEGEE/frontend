@@ -33,8 +33,6 @@ module.exports = {
       assets: path.resolve(__dirname, '../client/assets'),
       components: path.resolve(__dirname, '../client/components'),
       views: path.resolve(__dirname, '../client/views'),
-      // third-party
-      'plotly.js': 'plotly.js/dist/plotly',
       // vue-addon
       'vuex-store': path.resolve(__dirname, '../client/store')
     }
@@ -83,8 +81,12 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: path.resolve(__dirname, '../client/static/status.json'), to: path.resolve(__dirname, '../dist') },
-      { from: path.resolve(__dirname, '../client/static/getModules.json'), to: path.resolve(__dirname, '../dist') }
+      {
+        from: path.resolve(__dirname, '../client/static/'),
+        to: path.resolve(__dirname, '../dist'),
+        fromType: 'dir',
+        toType: 'dir'
+      }
     ])
   ],
   // See https://github.com/webpack/webpack/issues/3486

@@ -5,17 +5,17 @@
         {{ category.categoryName }}
       </p>
       <ul class="menu-list">
-        <li v-for="(item, index) in category.components" v-bind:key="item.name" v-if="!item.meta.skipMenu">
-          <router-link :to="{ name: item.name }" exact="true" :aria-expanded="isExpanded(item) ? 'true' : 'false'" v-if="item.path" @click.native="toggle(index, categoryIndex, item)">
-            <span class="icon is-small"><i :class="['fa', item.meta.icon]"></i></span>
-            {{ item.meta.label || item.name }}
+        <li v-for="(item, index) in category.components" exact="true" v-bind:key="item.name" v-if="userHasPermissions(item)">
+          <router-link :to="{ name: item.name }" v-if="item.name" :aria-expanded="isExpanded(item) ? 'true' : 'false'" @click.native="toggle(index, categoryIndex, item)">
+            <span class="icon is-small"><i :class="['fa', item.icon]"></i></span>
+            {{ item.label }}
             <span class="icon is-small is-angle" v-if="item.children && item.children.length">
               <i class="fa fa-angle-down"></i>
             </span>
           </router-link>
           <a :aria-expanded="isExpanded(item)" v-else @click="toggle(index, categoryIndex, item)">
-            <span class="icon is-small"><i :class="['fa', item.meta.icon]"></i></span>
-            {{ item.meta.label || item.name }}
+            <span class="icon is-small"><i :class="['fa', item.icon]"></i></span>
+            {{ item.label }}
             <span class="icon is-small is-angle" v-if="item.children && item.children.length">
               <i class="fa fa-angle-down"></i>
             </span>
@@ -23,9 +23,9 @@
 
           <expanding v-if="item.children && item.children.length">
             <ul v-show="isExpanded(item)">
-              <li v-for="subItem in item.children" v-bind:key="subItem.name" v-if="subItem.path && !subItem.meta.skipMenu">
+              <li v-for="subItem in item.children" v-bind:key="subItem.name" v-if="userHasPermissions(subItem)">
                 <router-link :to="{ name: subItem.name }" exact="true">
-                  {{ subItem.meta ? subItem.meta.label : subItem.name }}
+                  {{ subItem.label }}
                 </router-link>
               </li>
             </ul>
@@ -54,7 +54,6 @@ export default {
       isReady: false
     }
   },
-
   mounted () {
     let route = this.$route
     if (route.name) {
@@ -64,7 +63,8 @@ export default {
   },
 
   computed: mapGetters({
-    menu: 'menuitems'
+    menu: 'menuitems',
+    permissions: 'permissions'
   }),
 
   methods: {
@@ -72,15 +72,26 @@ export default {
       'expandMenu'
     ]),
 
+    userHasPermissions (item) {
+      // If item has no permissions attribute, show it.
+      if (!item.permissions) {
+        return true
+      }
+
+      // Otherwise, check if user has such a permission.
+      return item.permissions.some(itemPermission =>
+        this.permissions.find(userPermission => userPermission.combined.includes(itemPermission)))
+    },
+
     isExpanded (item) {
-      return item.meta.expanded
+      return item.expanded
     },
 
     toggle (index, categoryIndex, item) {
       this.expandMenu({
         index: index,
         categoryIndex: categoryIndex,
-        expanded: !item.meta.expanded
+        expanded: !item.expanded
       })
     },
 
@@ -97,7 +108,7 @@ export default {
         }
       }
 
-      if ('expanded' in parent.meta && !isParent) {
+      if ('expanded' in parent && !isParent) {
         this.expandMenu({
           item: parent,
           expanded: true

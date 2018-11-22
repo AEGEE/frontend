@@ -3,23 +3,30 @@
     <div class="tile is-vertical is-3">
       <div class="tile is-parent is-vertical">
         <article class="tile is-child is-primary">
-          <figure class="image is-4by3">
-            <img v-if="!event.head_image || !event.head_image.url" src="https://bulma.io/images/placeholders/640x480.png">
-            <img v-if="event.head_image && event.head_image.url" :src="event.head_image.url">
+          <figure class="image is-1by1">
+            <img v-if="!event.head_image || !event.head_image.url" src="/images/logo.png">
+            <img v-if="event.head_image && event.head_image.url" :src="services['oms-events'] + event.head_image.url">
           </figure>
         </article>
       </div>
       <div class="tile is-parent">
         <article class="tile is-child is-info">
           <div class="field is-grouped" v-if="can.view_applications">
-            <router-link :to="{ name: 'oms.events.edit', params: { id: event.seo_url || event.id } }" class="button is-fullwidth">
+            <router-link :to="{ name: 'oms.events.participants', params: { id: event.seo_url || event.id } }" class="button is-fullwidth">
               <span>View applications</span>
               <span class="icon"><i class="fa fa-users"></i></span>
             </router-link>
           </div>
 
+          <div class="field is-grouped" v-if="can.view_applications">
+            <router-link :to="{ name: 'oms.events.accepted', params: { id: event.seo_url || event.id } }" class="button is-fullwidth">
+              <span>View participants</span>
+              <span class="icon"><i class="fa fa-users"></i></span>
+            </router-link>
+          </div>
+
           <div class="field is-grouped" v-if="can.apply">
-            <router-link :to="{ name: 'oms.events.apply', params: { id: event.seo_url || event.id } }" class="button is-info is-fullwidth">
+            <router-link :to="{ name: 'oms.events.apply', params: { id: event.seo_url || event.id } }" class="button is-warning is-fullwidth">
               <span>Apply</span>
               <span class="icon"><i class="fa fa-plus"></i></span>
             </router-link>
@@ -62,7 +69,9 @@
                 </tr>
                 <tr>
                   <th>Description</th>
-                  <td>{{ event.description }}</td>
+                  <td>
+                    <div class="content" v-html="$options.filters.markdown(event.description)"></div>
+                  <td>
                 </tr>
                 <tr>
                   <th>Max. participants</th>
@@ -74,16 +83,16 @@
                 </tr>
                 <tr>
                   <th>Application deadline</th>
-                  <td v-if="event.application_deadline">{{ event.application_deadline }}</td>
+                  <td v-if="event.application_deadline">{{ event.application_deadline | datetime }}</td>
                   <td v-if="!event.application_deadline"><i>Not set.</i></td>
                 </tr>
                 <tr>
                   <th>Starts</th>
-                  <td>{{ event.starts }}</td>
+                  <td>{{ event.starts | datetime }}</td>
                 </tr>
                 <tr>
                   <th>Ends</th>
-                  <td>{{ event.ends }}</td>
+                  <td>{{ event.ends | datetime }}</td>
                 </tr>
                 <tr>
                   <th>Type</th>
@@ -126,6 +135,28 @@
               </tbody>
             </table>
           </div>
+
+          <GmapMap
+            v-if="event.locations.length > 0"
+            :zoom="7"
+            :class="is-fullwidth"
+            :center="map.center"
+            style="height: 400px"
+            ref="mapRef" >
+            <gmap-info-window
+              v-if="map.selectedMarkerIndex != null"
+              :position="event.locations[map.selectedMarkerIndex].position"
+              :options="map.infoOptions"
+              @closeclick="map.selectedMarkerIndex = null">
+              {{ event.locations[map.selectedMarkerIndex].name }}
+            </gmap-info-window>
+            <GmapMarker
+              :key="index"
+              v-for="(marker, index) in event.locations"
+              :position="marker.position"
+              @click="map.selectedMarkerIndex = index"
+              :draggable="false" />
+          </GmapMap>
         </div>
       </article>
     </div>
@@ -136,6 +167,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { gmapApi } from 'vue2-google-maps'
 
 export default {
   name: 'SingleEvent',
@@ -148,6 +180,7 @@ export default {
         url: null,
         organizers: [],
         organizing_locals: [],
+        locations: [],
         circles: [],
         starts: null,
         ends: null,
@@ -155,6 +188,16 @@ export default {
         application_deadline: null,
         head_image: null,
         status: { name: 'Loading...' }
+      },
+      map: {
+        center: { lat: 50.8503396, lng: 4.3517103 },
+        selectedMarkerIndex: null,
+        infoOptions: {
+          pixelOffset: {
+            width: 0,
+            height: -35
+          }
+        }
       },
       isLoading: false,
       can: {
@@ -175,33 +218,42 @@ export default {
       this.isLoading = false
 
       for (const body of this.event.organizing_locals) {
-        this.axios.get(this.services['oms-core-elixir'] + '/bodies/' + body.body_id).then((response) => {
-          body.body = response.data.data
+        this.axios.get(this.services['oms-core-elixir'] + '/bodies/' + body.body_id).then((bodyResponse) => {
+          body.body = bodyResponse.data.data
           this.$forceUpdate()
         }).catch(console.error)
       }
 
       for (const member of this.event.organizers) {
-        this.axios.get(this.services['oms-core-elixir'] + '/members/' + member.user_id).then((response) => {
-          member.user = response.data.data
+        this.axios.get(this.services['oms-core-elixir'] + '/members/' + member.user_id).then((memberResponse) => {
+          member.user = memberResponse.data.data
           this.$forceUpdate()
         }).catch(console.error)
       }
+
+      // loading map
+      this.$refs.mapRef.$mapPromise.then((map) => {
+        const bounds = new this.google.maps.LatLngBounds()
+        for (const marker of this.event.locations) {
+          bounds.extend(marker.position)
+        }
+
+        this.$refs.mapRef.$mapObject.fitBounds(bounds)
+      })
     }).catch((err) => {
       this.isLoading = false
       let message = (err.response.status === 404) ? 'Event is not found' : 'Some error happened: ' + err.message
 
-      this.$toast.open({
-        duration: 3000,
-        message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger(message)
       this.$router.push({ name: 'oms.events.list' })
     })
   },
-  computed: mapGetters({
-    loginUser: 'user',
-    services: 'services'
-  })
+  computed: {
+    ...mapGetters({
+      loginUser: 'user',
+      services: 'services'
+    }),
+    google: gmapApi
+  }
 }
 </script>

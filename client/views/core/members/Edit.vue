@@ -34,15 +34,6 @@
         </div>
 
         <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left">
-            <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
-            <input class="input" type="text" v-model="user.user.email" />
-          </div>
-          <p class="help is-danger" v-if="errors.email">{{ errors.email.join(', ')}}</p>
-        </div>
-
-        <div class="field">
           <label class="label">Phone</label>
           <div class="control has-icons-left">
             <span class="icon is-small is-left"><i class="fa fa-phone"></i></span>
@@ -158,7 +149,7 @@ export default {
       return moment(date).format('YYYY-MM-DD')
     },
     transformBirthday () {
-      this.user.date_of_birth = moment(this.birthday, 'YYYY-MM-DD').toDate()
+      this.user.date_of_birth = moment(this.birthday).format('YYYY-MM-DD')
     },
     saveUser () {
       this.isSaving = true
@@ -167,11 +158,7 @@ export default {
       this.axios.put(this.services['oms-core-elixir'] + '/members/' + this.$route.params.id, { member: this.user }).then((response) => {
         this.isSaving = false
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'User is saved.',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('User is saved.')
 
         return this.$router.push({
           name: 'oms.members.view',
@@ -182,18 +169,10 @@ export default {
 
         if (err.response.status === 422) { // validation errors
           this.errors = err.response.data.errors
-          return this.$toast.open({
-            duration: 3000,
-            message: 'Some of the user data is invalid.',
-            type: 'is-danger'
-          })
+          return this.$root.showDanger('Some of the user data is invalid.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not save user: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not save user: ' + err.message)
       })
     }
   },
@@ -206,11 +185,7 @@ export default {
     }).catch((err) => {
       let message = (err.response.status === 404) ? 'User is not found' : 'Some error happened: ' + err.message
 
-      this.$toast.open({
-        duration: 3000,
-        message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger(message)
       this.$router.push({ name: 'oms.members.list' })
     })
   }

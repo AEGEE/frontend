@@ -50,7 +50,12 @@
         <div class="tile is-parent">
           <article class="tile is-child is-info">
             <div class="field is-grouped">
-              <router-link  v-if="can.edit" :to="{ name: 'oms.campaigns.edit', params: { id: campaign.id } }" class="button is-fullwidth is-warning">
+              <router-link  v-if="can.edit && !$route.params.body_id" :to="{ name: 'oms.campaigns.edit', params: { id: campaign.id } }" class="button is-fullwidth is-warning">
+                <span>Edit campaign details</span>
+                <span class="icon"><i class="fa fa-edit"></i></span>
+              </router-link>
+
+              <router-link  v-if="can.edit && $route.params.body_id" :to="{ name: 'oms.bodies.campaigns.edit', params: { body_id: campaign.autojoin_body_id, id: campaign.id } }" class="button is-fullwidth is-warning">
                 <span>Edit campaign details</span>
                 <span class="icon"><i class="fa fa-edit"></i></span>
               </router-link>
@@ -82,7 +87,7 @@
                     </router-link>
                   </td>
                   <td>{{ submission.motivation }}</td>
-                  <td>{{ submission.mail_confirmed }}</td>
+                  <td>{{ submission.mail_confirmed ? 'Yes' : 'No' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -134,13 +139,9 @@ export default {
     },
     deleteCampaign () {
       this.axios.delete(this.services['oms-core-elixir'] + '/backend_campaigns/' + this.$route.params.id).then((response) => {
-        this.$toast.open('Campaign is deleted.')
+        this.$root.showSuccess('Campaign is deleted.')
         this.$router.push({ name: 'oms.campaigns.list' })
-      }).catch((err) => this.$toast.open({
-        duration: 3000,
-        message: 'Could not delete campaign: ' + err.message,
-        type: 'is-danger'
-      }))
+      }).catch((err) => this.$root.showDanger('Could not delete campaign: ' + err.message))
     }
   },
   mounted () {
@@ -159,11 +160,7 @@ export default {
     }).catch((err) => {
       let message = (err.response.status === 404) ? 'Campaign is not found' : 'Some error happened: ' + err.message
 
-      this.$toast.open({
-        duration: 3000,
-        message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger(message)
       this.$router.push({ name: 'oms.campaigns.list' })
     })
   },

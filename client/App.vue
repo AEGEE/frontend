@@ -2,7 +2,7 @@
   <div id="app">
     <nprogress-container></nprogress-container>
     <navbar :show="true"></navbar>
-    <sidebar :show="sidebar.opened && !sidebar.hidden"></sidebar>
+    <sidebar :show="sidebar.opened && !sidebar.hidden && $route.meta.showSidebar"></sidebar>
     <app-main></app-main>
     <hr />
     <footer-bar></footer-bar>
@@ -13,6 +13,7 @@
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import { Navbar, Sidebar, AppMain, FooterBar } from 'components/layout/'
 import { mapGetters, mapActions } from 'vuex'
+import methods from './methods'
 
 export default {
   components: {
@@ -48,26 +49,26 @@ export default {
     sidebar: 'sidebar'
   }),
 
-  methods: mapActions([
-    'toggleDevice',
-    'toggleSidebar'
-  ])
+  methods: {
+    ...mapActions([
+      'toggleDevice',
+      'toggleSidebar'
+    ]),
+    ...methods
+  }
 }
 </script>
 
 <style lang="scss">
+@import '~flatpickr/dist/flatpickr.css';
 @import '~animate.css';
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
+
 .animated {
   animation-duration: .377s;
 }
 
-@import '~bulma';
-@import '~buefy/lib/buefy.css';
-
-@import '~wysiwyg.css/wysiwyg.sass';
-
-$fa-font-path: '~font-awesome/fonts/';
-@import '~font-awesome/scss/font-awesome';
+@import './styles/main.scss';
 
 html, body, #app, .app-main {
   background-color: #fafafa;
@@ -81,7 +82,7 @@ html, body, #app, .app-main {
   pointer-events: none;
 
   #nprogress {
-    $color: #48e79a;
+    $color: linear-gradient(to right, #c51c13 20%,#a0c514 20%, #a0c514 40%, #981991 40%, #981991 60%, #fbba00 60%, #fbba00 80%, #1468c5 80%);;
 
     .bar {
       background: $color;

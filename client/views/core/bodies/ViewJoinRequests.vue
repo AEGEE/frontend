@@ -5,47 +5,65 @@
         <h4 class="title">Join requests</h4>
         <div class="field">
           <label class="label">Search</label>
-          <div class="control">
-            <input class="input" type="text" v-model="query" placeholder="Search" @input="refetch()">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="query" placeholder="Search" @input="refetch()">
+            </div>
+            <div class="control">
+              <a class="button is-info" @click="displayAccepted = !displayAccepted; refetch()">
+                {{ this.displayAccepted ? 'Display only pending join requests' : 'Display all join requests' }}
+              </a>
+            </div>
           </div>
         </div>
 
-        <div class="tile">
-          <div class="tile is-vertical is-2" v-for="member in members" v-bind:key="member.id">
-
-            <div class="tile is-child">
-              <div class="image is-1by1">
-                <img src="https://bulma.io/images/placeholders/480x480.png" alt="" />
-              </div>
-            </div>
-
-            <div class="tile">
-              <strong class="has-text-centered">{{ member.member.first_name }} {{ member.member.last_name }}</strong>
-            </div>
-
-            <div class="tile">
-              <p class="has-text-centered">{{ member.motivation }}</p>
-            </div>
-
-            <div class="tile">
-              <div class="field" v-if="!member.approved">
-                <div class="control">
-                  <a class="button is-info" @click="askSetMemberApproved(member, true)">
-                    <span class="icon"><i class="fa fa-plus"></i></span>
-                    <span>Approve</span>
-                  </a>
-                  <a class="button is-danger" @click="askSetMemberApproved(member, false)">
-                    <span class="icon"><i class="fa fa-minus"></i></span>
-                    <span>Reject</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tile is-vertical is-12 is-child" v-if="members.length === 0 && !isLoading">
-            <h1 class="subtitle has-text-centered">No join requests for this body.</h1>
-          </div>
+        <div class="table-responsive">
+          <table class="table is-bordered is-striped is-narrow is-fullwidth">
+            <thead>
+              <tr>
+                <th>Name and surname</th>
+                <th>Motivation</th>
+                <th>Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Name and surname</th>
+                <th>Motivation</th>
+                <th>Date</th>
+                <th></th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr v-show="members.length" v-for="member in members" v-bind:key="member.id">
+                <td>
+                  <router-link :to="{ name: 'oms.members.view', params: { id: member.member_id } }">
+                    {{ member.member.first_name }} {{ member.member.last_name }}
+                  </router-link>
+                </td>
+                <td>{{ member.motivation }}</td>
+                <td>{{ member.inserted_at | datetime }}
+                <td>
+                  <div class="field" v-if="!member.approved">
+                    <div class="control">
+                      <a class="button is-small is-info" @click="askSetMemberApproved(member, true)">
+                        <span class="icon"><i class="fa fa-plus"></i></span>
+                        <span>Approve</span>
+                      </a>
+                      <a class="button is-small is-danger" @click="askSetMemberApproved(member, false)">
+                        <span class="icon"><i class="fa fa-minus"></i></span>
+                        <span>Reject</span>
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr v-show="!members.length && !isLoading">
+                <td colspan="4" class="has-text-centered">No join requests for this body.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <div class="field">
@@ -72,6 +90,7 @@ export default {
     return {
       members: [],
       isLoading: false,
+      displayAccepted: true,
       query: '',
       limit: 30,
       offset: 0,
@@ -91,6 +110,7 @@ export default {
       }
 
       if (this.query) queryObj.query = this.query
+      if (!this.displayAccepted) queryObj.filter = { approved: false }
       return queryObj
     },
     ...mapGetters(['services'])
@@ -117,21 +137,14 @@ export default {
       this.axios.post(this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.id + '/join_requests/' + member.id, {
         approved
       }).then((response) => {
-        this.$toast.open({
-          message: 'Join request is ' + (approved ? 'approved' : 'rejected') + '.',
-          type: 'is-success'
-        })
+        this.$root.showSuccess('Join request is ' + (approved ? 'approved' : 'rejected') + '.')
         if (approved) {
           member.approved = true
         } else {
           const index = this.members.findIndex(m => m.id === member.id)
           this.members.splice(index, 1)
         }
-      }).catch((err) => this.$toast.open({
-        duration: 3000,
-        message: 'Could not process join request: ' + err.message,
-        type: 'is-danger'
-      }))
+      }).catch((err) => this.$root.showDanger('Could not process join request: ' + err.message))
     },
     refetch () {
       this.members = []
@@ -157,11 +170,7 @@ export default {
           return console.debug('Request cancelled.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch join requests: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch join requests: ' + err.message)
       })
     }
   },

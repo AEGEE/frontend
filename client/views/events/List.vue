@@ -5,9 +5,24 @@
         <h4 class="title">Events list</h4>
         <div class="field">
           <label class="label">Search by name or description</label>
-          <div class="control">
-            <input class="input" type="text" v-model="query" placeholder="Search by name or description" @input="refetch()">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="query" placeholder="Search by name or description" @input="refetch()" />
+            </div>
+            <div class="control">
+              <a class="button is-info" @click="toggleDisplayPast()">
+                {{ this.displayPast ? 'Display only future events' : 'Display past events' }}
+              </a>
+            </div>
           </div>
+        </div>
+
+        <div class="field" v-if="Object.keys(eventTypesEnabled).length > 0">
+          <label class="label">Event types</label>
+          <label v-for="(value, name) in eventTypesEnabled" v-bind:key="name">
+            <input class="checkbox" type="checkbox" v-model="eventTypesEnabled[name]" @change="refetch()" />
+            {{ name }}
+          </label>
         </div>
 
         <div class="field">
@@ -21,7 +36,7 @@
             <div class="media">
               <div class="media-left">
                 <figure class="image is-96x96">
-                  <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                  <img src="/images/logo.png">
                 </figure>
               </div>
               <div class="media-content">
@@ -32,10 +47,16 @@
             </div>
 
             <div class="content">
-              <span>{{ event.description }}</span>
-              <br/><br/>
-              <span>From {{ event.starts | date }} to {{ event.ends | date }}</span>
-              <br/><br/>
+              <span v-html="$options.filters.markdown(event.description)"></span>
+              <ul>
+                <li><strong>Type:</strong> {{ event.type }} </li>
+                <li><strong>From:</strong> {{ event.starts | date }} </li>
+                <li><strong>To:</strong> {{ event.ends | date }} </li>
+                <li><strong>Application deadline:</strong>
+                  <span v-if="event.application_deadline">{{ event.application_deadlinee | date }}</span>
+                  <span v-if="!event.application_deadline"><i>Not set.</i></span>
+                </li>
+              </ul>
 
               <div class="field is-grouped">
                 <p class="control">
@@ -45,9 +66,21 @@
                 </p>
                 <p class="control" v-if="event.application_status === 'open'">
                   <router-link
-                    :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }"
-                    class="button is-warning">Apply</router-link>
+                    :to="{ name: 'oms.events.apply', params: { id: event.url || event.id } }"
+                    class="button is-warning">
+                    {{ scope === 'participating' ? 'Manage my application' : 'Apply' }}
+                  </router-link>
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" v-show="events.length === 0 && !isLoading">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title has-text-centered">No events found.</p>
               </div>
             </div>
           </div>
@@ -69,35 +102,32 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 
 export default {
   name: 'EventsList',
   data () {
     return {
       events: [],
-      eventTypeNames: [],
+      eventTypesEnabled: {},
       isLoading: false,
       query: '',
       limit: 30,
       offset: 0,
+      displayPast: false,
       canLoadMore: true,
       source: null
-    }
-  },
-  filters: {
-    date (value) {
-      return moment(value).format('YYYY-MM-DD HH:mm')
     }
   },
   computed: {
     queryObject () {
       const queryObj = {
         limit: this.limit,
-        offset: this.offset
+        offset: this.offset,
+        type: Object.keys(this.eventTypesEnabled).filter(key => this.eventTypesEnabled[key]),
+        displayPast: this.displayPast
       }
 
-      if (this.query) queryObj.query = this.query
+      if (this.query) queryObj.search = this.query
       return queryObj
     },
     scope () {
@@ -110,6 +140,10 @@ export default {
     ...mapGetters(['services'])
   },
   methods: {
+    toggleDisplayPast () {
+      this.displayPast = !this.displayPast
+      this.refetch()
+    },
     refetch () {
       this.events = []
       this.offset = 0
@@ -138,11 +172,7 @@ export default {
           return console.debug('Request cancelled.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not fetch events list: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not fetch events list: ' + err.message)
       })
     }
   },
@@ -155,14 +185,13 @@ export default {
     this.fetchData()
 
     this.axios.get(this.services['oms-events'] + '/lifecycle/names').then((response) => {
-      this.eventTypeNames = response.data.data
+      for (const type of response.data.data) {
+        this.eventTypesEnabled[type] = true
+      }
       this.isLoading = false
+      this.$forceUpdate()
     }).catch((err) => {
-      this.$toast.open({
-        duration: 3000,
-        message: 'Could not fetch events types: ' + err.message,
-        type: 'is-danger'
-      })
+      this.$root.showDanger('Could not fetch events types: ' + err.message)
     })
   }
 }

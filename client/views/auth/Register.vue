@@ -57,13 +57,13 @@
           <div class="field">
             <label class="label">Motivation</label>
             <div class="control">
-              <input v-model="submission.motivation" required class="input" type="text" placeholder="Describe why you want to be a member.">
+              <input v-model="submission.motivation" required class="input" type="text" placeholder="Why you want to be a member.">
             </div>
              <p class="help is-danger" v-if="errors.motivation">{{ errors.motivation.join(', ')}}</p>
           </div>
 
           <div class="field">
-            <label class="label">I agree to the Privacy Policy
+            <label class="label">I agree to the <router-link :to="{ name: 'oms.legal.simple' }">Privacy Policy</router-link>
               <input type="checkbox" class="checkbox" v-model="agreedToPrivacyPolicy" />
             </label>
              <p class="help is-danger" v-if="errors.agreedToPrivacyPolicy">{{ errors.agreedToPrivacyPolicy.join(', ')}}</p>
@@ -120,36 +120,19 @@ export default {
       this.axios.post(this.services['oms-core-elixir'] + '/campaigns/' + this.$route.params.id, {
         submission: this.submission
       }).then((res) => {
-        this.$toast.open({
-          duration: 3000,
-          message: 'Your submission is registered.',
-          type: 'is-success'
-        })
-
+        this.$root.showSuccess('Your submission is registered.')
         return this.$router.push({ name: 'oms.confirm_token' })
       }).catch((err) => {
         if (err.response.status === 422) { // validation errors
           this.errors = err.response.data.errors
-          return this.$toast.open({
-            duration: 3000,
-            message: 'Some of the registration data is invalid.',
-            type: 'is-danger'
-          })
+          return this.$root.showDanger('Some of the registration data is invalid.')
         }
 
         if (err.response.status === 404) { // validation errors
-          return this.$toast.open({
-            duration: 3000,
-            message: 'The registration campaign is not found.',
-            type: 'is-danger'
-          })
+          return this.$root.showDanger('The registration campaign is not found.')
         }
 
-        this.$toast.open({
-          duration: 3000,
-          message: 'Could not register: ' + err.message,
-          type: 'is-danger'
-        })
+        this.$root.showDanger('Could not register: ' + err.message)
       })
     }
   }
