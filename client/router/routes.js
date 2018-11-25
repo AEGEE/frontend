@@ -427,6 +427,14 @@ module.exports = [
     }
   },
   {
+    name: 'oms.statutory.limits',
+    path: '/statutory/limits',
+    component: 'statutory/PaxLimits',
+    meta: {
+      label: 'Manage participants limits for Agora'
+    }
+  },
+  {
     name: 'oms.statutory.applications',
     path: '/statutory/:id/applications',
     component: 'statutory/Applications',
@@ -440,6 +448,14 @@ module.exports = [
     component: 'statutory/Stats',
     meta: {
       label: 'Applications statistics for statutory event'
+    }
+  },
+  {
+    name: 'oms.statutory.applications.export',
+    path: '/statutory/:id/applications/export',
+    component: 'statutory/Export',
+    meta: {
+      label: 'Export stats for statutory'
     }
   },
   {

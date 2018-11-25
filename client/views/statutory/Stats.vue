@@ -8,13 +8,13 @@
         <line-chart class="chart" :chart-data="byDateData" :options="byDateOptions"></line-chart>
 
         <div class="subtitle">By date (cumulative)</div>
-        <line-chart class="chart" :chart-data="byDateCumulativeData" :options="byDateOptions"></line-chart>
+        <line-chart class="chart" :chart-data="byDateCumulativeData" :options="byDateCumulativeOptions"></line-chart>
 
         <div class="subtitle">By participant type</div>
         <pie-chart class="chart" :chart-data="byTypeData" :options="byTypeOptions"></pie-chart>
 
         <div class="subtitle">By body</div>
-        <pie-chart class="chart" :chart-data="byBodyData" :options="byBodyOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byBodyData()" :options="byBodyOptions"></pie-chart>
 
         <div class="subtitle">Quorum</div>
         <pie-chart class="chart" :chart-data="byQuorumData" :options="byQuorumOptions"></pie-chart>
@@ -106,6 +106,9 @@ export default {
       }
     },
     byDateOptions () {
+      const applications = Math.max(...this.stats.by_date.map(s => s.value), 1)
+      const tickSize = Math.ceil(applications / 100) * 10
+
       return {
         responsive: true,
         maintainAspectRatio: false,
@@ -115,7 +118,29 @@ export default {
             ticks: {
               beginAtZero: true,
               stepValue: 1,
-              stepSize: 1
+              stepSize: tickSize
+            }
+          }]
+        }
+      }
+    },
+    byDateCumulativeOptions () {
+      // Custom ticks based on mow much applications there are.
+      const applications = this.stats.by_date_cumulative.length > 0
+        ? this.stats.by_date_cumulative[this.stats.by_date_cumulative.length - 1].value
+        : 1
+      const tickSize = Math.ceil(applications / 100) * 10
+
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: { display: false },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              stepValue: 1,
+              stepSize: tickSize
             }
           }]
         }
@@ -123,7 +148,7 @@ export default {
     },
     byTypeData () {
       return {
-        labels: this.stats.by_type.map(s => s.type === null ? 'Not set' : s.type),
+        labels: this.stats.by_type.map(s => `${s.type === null ? 'Not set' : s.type} (${s.value})`),
         datasets: [{
           label: 'Applications by participant type',
           backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
@@ -138,17 +163,11 @@ export default {
         title: {
           display: true,
           text: 'Applications by participant type'
+        },
+        legend: {
+          position: 'right',
+          onClick: (e) => e.stopPropagation()
         }
-      }
-    },
-    byBodyData () {
-      return {
-        labels: this.stats.by_body.map(s => s.body ? s.body.name : s.body_id),
-        datasets: [{
-          label: 'Applications by body',
-          backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
-          data: this.stats.by_body.map(s => s.value)
-        }]
       }
     },
     byBodyOptions () {
@@ -158,12 +177,16 @@ export default {
         title: {
           display: true,
           text: 'Applications by body'
+        },
+        legend: {
+          position: 'right'
         }
       }
     },
     byQuorumData () {
+      const present = this.stats.by_body.length * 100 / this.bodies.length
       return {
-        labels: ['Present', 'Not present'],
+        labels: [`Present (${present.toFixed(2)}%)`, `Not present (${(100 - present).toFixed(2)}%)`],
         datasets: [{
           label: 'Quorum',
           backgroundColor: ['#3e95cd', '#8e5ea2'],
@@ -174,7 +197,25 @@ export default {
     byQuorumOptions () {
       return {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        legend: {
+          position: 'right',
+          onClick: (e) => e.stopPropagation()
+        }
+      }
+    }
+  },
+  methods: {
+    byBodyData () {
+      return {
+        labels: this.stats.by_body.map(s => {
+          return `${s.body ? s.body.name : s.body_id} (${s.value})`
+        }),
+        datasets: [{
+          label: 'Applications by body',
+          backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+          data: this.stats.by_body.map(s => s.value)
+        }]
       }
     }
   },
@@ -189,9 +230,11 @@ export default {
       return this.axios.get(this.services['oms-core-elixir'] + '/bodies/')
     }).then((bodies) => {
       this.bodies = bodies.data.data
-      for (const body of this.bodies) {
-        const stat = this.stats.by_body.find(b => b.body_id === body.id)
-        if (stat) stat.body = body
+      for (const stat of this.stats.by_body) {
+        const body = this.bodies.find(body => stat.body_id === body.id)
+        if (body) {
+          stat.body = body
+        }
       }
       this.$forceUpdate()
       this.isLoading = false
