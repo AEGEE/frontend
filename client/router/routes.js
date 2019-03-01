@@ -656,5 +656,22 @@ module.exports = [
       label: 'Resources'
     },
     component: 'static/Resources'
+  },
+  /* Alastair */
+  {
+    name: 'oms.alastair.organizer.home',
+    path: '/alstair/organizer',
+    meta: {
+      label: 'Home'
+    },
+    component: 'alastair/organizer/Home'
+  },
+  {
+    name: 'oms.alastair.organizer.myevents',
+    path: '/alastair/organizer/events',
+    meta: {
+      label: 'My Events'
+    },
+    component: 'alastair/organizer/MyEvents'
   }
 ]
