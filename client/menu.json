@@ -6,11 +6,21 @@
         "name": "oms.dashboard",
         "label": "Dashboard",
         "icon": "fa-tachometer-alt"
+      },
+      {
+        "name": "oms.helpdesk",
+        "label": "Need help?",
+        "icon": "fa-headset"
+      },
+      {
+        "name": "oms.status",
+        "label": "Platform status",
+        "icon": "fa-heartbeat"
       }
     ]
   },
   {
-    "categoryName": "Core",
+    "categoryName": "Members area",
     "components": [
       {
         "name": "oms.members.list",
