@@ -6,6 +6,7 @@ services:
         build:
             context: ./$PATH_OMS_FRONTEND/oms-frontend/
             dockerfile: ./Dockerfile.dev
+        image: aegee/oms-frontend-builder
         volumes:
             - "./$PATH_OMS_FRONTEND/../:/usr/app/src"
 
@@ -14,6 +15,7 @@ services:
         build:
             context: ./$PATH_OMS_FRONTEND/oms-frontend-nginx/
             dockerfile: ./Dockerfile.dev
+        image: aegee/oms-frontend
         volumes:
             - "./$PATH_OMS_FRONTEND/../:/usr/app/src"
         # expose:

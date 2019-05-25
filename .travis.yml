@@ -12,3 +12,15 @@ script:
   - npm audit
   - npm run build
   - npm run lint
+
+# after_script:
+#   - sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+#   - sudo docker tag aegee/oms-frontend aegee/oms-frontend:${TRAVIS_COMMIT}
+#   - sudo docker push aegee/oms-frontend:${TRAVIS_COMMIT}
+#   - sudo docker tag aegee/oms-frontend:${TRAVIS_COMMIT} aegee/oms-frontend:latest
+#   - sudo docker push aegee/oms-frontend:latest
+#   - sudo docker tag aegee/oms-frontend-builder aegee/oms-frontend-builder:${TRAVIS_COMMIT}
+#   - sudo docker push aegee/oms-frontend-builder:${TRAVIS_COMMIT}
+#   - sudo docker tag aegee/oms-frontend-builder:${TRAVIS_COMMIT} aegee/oms-frontend-builder:latest
+#   - sudo docker push aegee/oms-frontend-builder:latest
+#   #if: tag
