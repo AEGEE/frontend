@@ -8,9 +8,20 @@ services:
             dockerfile: ./docker/Dockerfile
         volumes:
             - "./$PATH_OMS_FRONTEND/../:/usr/app/src"
+        healthcheck:
+            test: ["CMD", "curl", "--fail", "http://localhost/healthcheck"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 40s
         labels:
             - "traefik.frontend.rule=HostRegexp:{domain:[a-z0-9.]+};PathPrefix:/"
             - "traefik.frontend.priority=11"
             - "traefik.port=80"
             - "traefik.backend=oms-frontend"
             - "traefik.enable=true"
+
+networks:
+    default:
+        external:
+            name: OMS
