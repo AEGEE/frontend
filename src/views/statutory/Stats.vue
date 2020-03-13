@@ -303,7 +303,7 @@ export default {
 
       const presentQuorum = []
       for (const body of this.stats.by_body) {
-        if (nonQuorum.indexOf == -1) {
+        if (nonQuorum.indexOf(body) == -1) {
           presentLocals.push(body)
         }
       }
