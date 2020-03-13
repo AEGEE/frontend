@@ -293,7 +293,6 @@ export default {
       }
     },
     byQuorumData () {
-
       const nonQuorum = []
       for (const body of this.bodies) {
         if (!body.name.includes('AEGEE', 0)) {
@@ -303,8 +302,8 @@ export default {
 
       const presentQuorum = []
       for (const body of this.stats.by_body) {
-        if (nonQuorum.indexOf(body) == -1) {
-          presentLocals.push(body)
+        if (nonQuorum.indexOf(body) === -1) {
+          presentQuorum.push(body)
         }
       }
 
@@ -313,7 +312,7 @@ export default {
         labels: [`Present (${present.toFixed(2)}%)`, `Not present (${(100 - present).toFixed(2)}%)`],
         datasets: [{
           label: 'Quorum',
-          backgroundColor: ['#C2DE5D','#C45850'],
+          backgroundColor: ['#C2DE5D', '#C45850'],
           data: [this.stats.by_body.length, this.bodies.length - this.stats.by_body.length]
         }]
       }
