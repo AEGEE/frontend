@@ -293,12 +293,27 @@ export default {
       }
     },
     byQuorumData () {
-      const present = this.stats.by_body.length * 100 / this.bodies.length
+
+      const nonQuorum = []
+      for (const body of this.bodies) {
+        if (!body.name.includes('AEGEE', 0)) {
+          nonQuorum.push(body)
+        }
+      }
+
+      const presentQuorum = []
+      for (const body of this.stats.by_body) {
+        if (nonQuorum.indexOf == -1) {
+          presentLocals.push(body)
+        }
+      }
+
+      const present = presentQuorum.length * 100 / (this.bodies.length - nonQuorum.length)
       return {
         labels: [`Present (${present.toFixed(2)}%)`, `Not present (${(100 - present).toFixed(2)}%)`],
         datasets: [{
           label: 'Quorum',
-          backgroundColor: this.colors,
+          backgroundColor: ['#C2DE5D','#C45850'],
           data: [this.stats.by_body.length, this.bodies.length - this.stats.by_body.length]
         }]
       }
