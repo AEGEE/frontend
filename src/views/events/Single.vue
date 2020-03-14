@@ -107,19 +107,19 @@
                   <td>{{ event.application_status | capitalize }}</td>
                 </tr>
                 <tr>
-                  <th>Application period starts</th>
+                  <th>Application period starts <tooltip text="Date and time in your timezone"></tooltip></th>
                   <td>{{ event.application_starts | datetime }}</td>
                 </tr>
                 <tr>
-                  <th>Application period ends</th>
+                  <th>Application period ends <tooltip text="Date and time in your timezone"></tooltip></th>
                   <td>{{ event.application_ends | datetime }}</td>
                 </tr>
                 <tr>
-                  <th>Starts</th>
+                  <th>Starts <tooltip text="Date and time in your timezone"></tooltip></th>
                   <td>{{ event.starts | datetime }}</td>
                 </tr>
                 <tr>
-                  <th>Ends</th>
+                  <th>Ends <tooltip text="Date and time in your timezone"></tooltip></th>
                   <td>{{ event.ends | datetime }}</td>
                 </tr>
                 <tr>
