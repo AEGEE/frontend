@@ -293,27 +293,25 @@ export default {
       }
     },
     byQuorumData () {
-      const nonQuorum = []
+      const localsMap = {}
       for (const body of this.bodies) {
-        if (!body.name.includes('AEGEE', 0)) {
-          nonQuorum.push(body)
+        if (['antenna', 'contact antenna', 'partner'].includes(body.type)) {
+          localsMap[body.id] = true
         }
       }
 
-      const presentQuorum = []
-      for (const body of this.stats.by_body) {
-        if (nonQuorum.indexOf(body) === -1) {
-          presentQuorum.push(body)
-        }
-      }
+      const total = Object.keys(localsMap).length
+      const present = this.stats.by_body
+        .filter((body) => body.type in localsMap)
+        .length
 
-      const present = presentQuorum.length * 100 / (this.bodies.length - nonQuorum.length)
+      const quorum = present * 100 / total
       return {
-        labels: [`Present (${present.toFixed(2)}%)`, `Not present (${(100 - present).toFixed(2)}%)`],
+        labels: [`Present (${quorum.toFixed(2)}%)`, `Not present (${(100 - quorum).toFixed(2)}%)`],
         datasets: [{
           label: 'Quorum',
           backgroundColor: ['#C2DE5D', '#C45850'],
-          data: [this.stats.by_body.length, this.bodies.length - this.stats.by_body.length]
+          data: [present, total - present]
         }]
       }
     },
