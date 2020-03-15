@@ -168,7 +168,7 @@ export default {
         this.events.future.sort((e1, e2) => ((e1.name > e2.name) ? 1 : -1))
         this.isLoading.events = false
       }).catch((err) => {
-        this.isLoading.events=false
+        this.isLoading.events = false
         this.$root.showError('Could not fetch statutory events list', err)
       })
     }).catch((err) => {
