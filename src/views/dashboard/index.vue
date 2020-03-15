@@ -155,16 +155,22 @@ export default {
     })
 
     this.axios.get(this.services['oms-events'] + '/mine/participating').then((response) => {
-      for (const event of response.data.data) {
-        if (moment().isSameOrBefore(event.starts)) {
-          this.events.future.push(event)
-        } else {
-          this.events.past.push(event)
+      this.axios.get(this.services['oms-statutory'] + '/mine/participating').then((response2) => {
+        const input = response.data.data.concat(response2.data.data)
+        for (const event of input) {
+          if (moment().isSameOrBefore(event.starts)) {
+            this.events.future.push(event)
+          } else {
+            this.events.past.push(event)
+          }
         }
-      }
-      this.events.past.sort((e1, e2) => ((e1.name > e2.name) ? 1 : -1))
-      this.events.future.sort((e1, e2) => ((e1.name > e2.name) ? 1 : -1))
-      this.isLoading.events = false
+        this.events.past.sort((e1, e2) => ((e1.name > e2.name) ? 1 : -1))
+        this.events.future.sort((e1, e2) => ((e1.name > e2.name) ? 1 : -1))
+        this.isLoading.events = false
+      }).catch((err) => {
+        this.isLoading.events=false
+        this.$root.showError('Could not fetch statutory events list', err)
+      })
     }).catch((err) => {
       this.isLoading.events = false
       this.$root.showError('Could not fetch events list', err)
