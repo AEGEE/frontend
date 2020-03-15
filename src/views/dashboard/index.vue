@@ -155,7 +155,7 @@ export default {
     })
 
     this.axios.get(this.services['oms-events'] + '/mine/participating').then((response) => {
-      this.axios.get(this.services['oms-statutory'] + '/mine/participating').then((response2) => {
+      this.axios.get(this.services['oms-statutory'] + '/events/mine').then((response2) => {
         const input = response.data.data.concat(response2.data.data)
         for (const event of input) {
           if (moment().isSameOrBefore(event.starts)) {
