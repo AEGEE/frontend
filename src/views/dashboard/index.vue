@@ -119,9 +119,9 @@
 </template>
 
 <script>
-import constants from '../../constants.js'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import constants from '../../constants.js'
 
 export default {
   name: 'Dashboard',
@@ -162,7 +162,7 @@ export default {
       this.$root.showError('Could not fetch user', err)
     })
 
-    this.axios.get(this.services['oms-events'] + '/mine/participating').then((eventResponse) => {
+    this.axios.get(this.services['oms-events'] + '/mine/participating').then((eventsResponse) => {
       this.axios.get(this.services['oms-statutory'] + '/mine').then((statutoryResponse) => {
         const input = eventResponse.data.data.concat(statutoryResponse.data.data)
         for (const event of input) {
