@@ -34,7 +34,10 @@
               <div class="content" v-show="events.future.length > 0">
                 <ul>
                   <li v-for="event in events.future" v-bind:key="event.id">
-                    <router-link :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }">
+                    <router-link :to="{ name: 'oms.statutory.view', params: { id: event.url || event.id } }" v-if="constants.STATUTORY_TYPES_NAMES[event.type]">
+                      {{ event.name }} - {{ event.starts | date }}
+                    </router-link>
+                    <router-link :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }" v-else>
                       {{ event.name }} - {{ event.starts | date }}
                     </router-link>
                   </li>
@@ -50,7 +53,10 @@
               <div class="content" v-show="events.past.length > 0">
                 <ul>
                 <li v-for="event in events.past" v-bind:key="event.id">
-                  <router-link :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }">
+                  <router-link :to="{ name: 'oms.statutory.view', params: { id: event.url || event.id } }" v-if="constants.STATUTORY_TYPES_NAMES[event.type]">
+                    {{ event.name }}
+                  </router-link>
+                  <router-link :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }" v-else>
                     {{ event.name }}
                   </router-link>
                 </li>
@@ -113,6 +119,7 @@
 </template>
 
 <script>
+import constants from '../../constants.js'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
@@ -120,6 +127,7 @@ export default {
   name: 'Dashboard',
   data () {
     return {
+      constants,
       user: {
         first_name: '',
         last_name: '',
@@ -154,9 +162,9 @@ export default {
       this.$root.showError('Could not fetch user', err)
     })
 
-    this.axios.get(this.services['oms-events'] + '/mine/participating').then((response) => {
-      this.axios.get(this.services['oms-statutory'] + '/events/mine').then((response2) => {
-        const input = response.data.data.concat(response2.data.data)
+    this.axios.get(this.services['oms-events'] + '/mine/participating').then((eventResponse) => {
+      this.axios.get(this.services['oms-statutory'] + '/mine').then((statutoryResponse) => {
+        const input = eventResponse.data.data.concat(statutoryResponse.data.data)
         for (const event of input) {
           if (moment().isSameOrBefore(event.starts)) {
             this.events.future.push(event)
