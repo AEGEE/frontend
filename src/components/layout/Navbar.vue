@@ -79,8 +79,8 @@ export default {
   .logo {
     .image {
       height: 52px;
-    	padding: 3px;
-    	padding-left: 10px;
+      padding: 3px;
+      padding-left: 10px;
     }
   }
 
