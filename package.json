@@ -77,5 +77,8 @@
     "semantic-release": "^17.0.4",
     "vue-loader": "^15.8.3",
     "vue-template-compiler": "^2.6.10"
+  },
+  "optionalDependencies": {
+    "iltorb": "^2.4.5"
   }
 }
