@@ -18,3 +18,18 @@ module.exports = {
     }
   }
 }
+
+if (process.env.NODE_ENV === 'production') {
+  const CompressionPlugin = require('compression-webpack-plugin');
+
+  module.exports.configureWebpack.plugins = [
+    new CompressionPlugin({
+      algorithm: require("@gfx/zopfli").gzip,
+      compressionOptions: {
+        numiterations: 15
+      },
+      minRatio: 0.99,
+      test:  /\.(js|css|json|html|ico|svg)(\?.*)?$/i
+    })
+  ];
+}
