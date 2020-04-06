@@ -6,7 +6,7 @@
 
         <div class="field" v-if="boardBodies.length === 1">
           <label>You are currently viewing applications from </label>
-          <strong v-for="body in boardBodies" v-bind:key="body.id">{{ body.name }}</strong>.
+          <strong>{{ boardBodies[0].name }}</strong>.
         </div>
 
         <div class="field" v-if="boardBodies.length > 1">
