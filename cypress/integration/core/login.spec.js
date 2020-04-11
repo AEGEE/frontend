@@ -2,11 +2,42 @@
 
 context('Login', () => {
   beforeEach(() => {
-    cy.visit('http://localhost')
+    cy.resetDatabase()
   })
 
-  it('successfully loads', () => {
-    cy.visit('http://localhost') // change URL to match your dev URL
+  it('should allow you to login with correct password', () => {
+    cy.visit('/campaigns')
+
+    cy.url().should('include', '/login')
+
+    cy.get('form input[type=email]').type('admin@example.com')
+    cy.get('form input[type=password]').type('5ecr3t5ecr3t')
+
+    cy.get('form').contains('Login').click()
+
+    cy.url().should('include', '/campaigns')
+  })
+
+  it('should redirect you after login', () => {
+    cy.visit('/login')
+
+    cy.get('form input[type=email]').type('admin@example.com')
+    cy.get('form input[type=password]').type('5ecr3t5ecr3t')
+
+    cy.get('form').contains('Login').click()
+
+    cy.url().should('include', '/dashboard')
+  })
+
+  it('should display an error on invalid password', () => {
+    cy.visit('/login')
+
+    cy.get('form input[type=email]').type('admin@example.com')
+    cy.get('form input[type=password]').type('invalid')
+
+    cy.get('form').contains('Login').click()
+
+    cy.contains('Password is not valid.')
   })
 })
   
