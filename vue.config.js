@@ -21,9 +21,10 @@ module.exports = {
   },
   chainWebpack: (config) => {
     if (process.env.NODE_ENV === 'test') {
-      // too many workarounds, see https://gist.githubusercontent.com/lsapan/3bfd0ffc0fb3d4a036fce84f6eea142e/raw/1e98fd0c5d27b445f083d6e2cb8e94b2a8ddaf8b/vue-tests-mocha-webpack-with-coverage.md
+      // too many workarounds, see
+      // https://gist.githubusercontent.com/lsapan/3bfd0ffc0fb3d4a036fce84f6eea142e/raw/1e98fd0c5d27b445f083d6e2cb8e94b2a8ddaf8b/vue-tests-mocha-webpack-with-coverage.md
       const command = os.platform() === 'darwin'
-        ? 'sed -i \'\' s/source: pathutils.relativeTo(start.source, origFile),/source: origFile,/\' node_modules/istanbul-lib-source-maps/lib/get-mapping.js'
+        ? 'sed -i \'\' \'s/source: pathutils.relativeTo(start.source, origFile),/source: origFile,/\' node_modules/istanbul-lib-source-maps/lib/get-mapping.js'
         : 'sed -i \'s/source: pathutils.relativeTo(start.source, origFile),/source: origFile,/\' node_modules/istanbul-lib-source-maps/lib/get-mapping.js'
       execSync(command)
 
