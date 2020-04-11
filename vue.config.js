@@ -1,5 +1,6 @@
 const path = require('path')
-const { execSync } = require('child_process');
+const os = require('os')
+const { execSync } = require('child_process')
 
 module.exports = {
   lintOnSave: true,
@@ -19,18 +20,23 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
-    // too many workarounds, see https://gist.githubusercontent.com/lsapan/3bfd0ffc0fb3d4a036fce84f6eea142e/raw/1e98fd0c5d27b445f083d6e2cb8e94b2a8ddaf8b/vue-tests-mocha-webpack-with-coverage.md
-    execSync("sed -i 's/source: pathutils.relativeTo(start.source, origFile),/source: origFile,/' node_modules/istanbul-lib-source-maps/lib/get-mapping.js")
+    if (process.env.NODE_ENV === 'test') {
+      // too many workarounds, see https://gist.githubusercontent.com/lsapan/3bfd0ffc0fb3d4a036fce84f6eea142e/raw/1e98fd0c5d27b445f083d6e2cb8e94b2a8ddaf8b/vue-tests-mocha-webpack-with-coverage.md
+      const command = os.platform() === 'darwin'
+        ? 'sed -i \'\' s/source: pathutils.relativeTo(start.source, origFile),/source: origFile,/\' node_modules/istanbul-lib-source-maps/lib/get-mapping.js'
+        : 'sed -i \'s/source: pathutils.relativeTo(start.source, origFile),/source: origFile,/\' node_modules/istanbul-lib-source-maps/lib/get-mapping.js'
+      execSync(command)
 
-    config.devtool('cheap-module-eval-source-map')
-    config.module.rule('js')
-      .test(/\.js$/)
-      .use('istanbul-instrumenter-loader')
-      .loader('istanbul-instrumenter-loader')
-      .before('babel-loader')
-      .options({
-        esModules: true,
-      })
+      config.devtool('cheap-module-eval-source-map')
+      config.module.rule('js')
+        .test(/\.js$/)
+        .use('istanbul-instrumenter-loader')
+        .loader('istanbul-instrumenter-loader')
+        .before('babel-loader')
+        .options({
+          esModules: true,
+        })
+    }
   }
 }
 

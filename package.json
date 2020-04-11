@@ -12,9 +12,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-and-test": "NODE_ENV=test npm run build && npm test",
     "lint": "vue-cli-service lint --no-fix",
-    "instrument": "nyc instrument ./dist/js ./dist/js-instrumented && mv ./dist/js ./dist/js-original && mv ./dist/js-instrumented ./dist/js",
-    "instrument:undo": "rm -rf ./dist/js && mv ./dist/js-original ./dist/js",
     "test": "cypress run && nyc report --reporter=text --reporter=lcov --skip-empty false"
   },
   "husky": {
