@@ -8,7 +8,7 @@
             <label class="label">Username</label>
             <div class="control">
               <input
-                v-model="submission.name"
+                v-model="submission.username"
                 required
                 class="input"
                 type="text"
@@ -97,13 +97,11 @@ export default {
   data () {
     return {
       submission: {
-        name: '',
+        username: '',
         password: '',
-        password_copy: '',
         first_name: '',
         last_name: '',
-        email: '',
-        motivation: ''
+        email: ''
       },
       agreedToPrivacyPolicy: false,
       errors: {}
@@ -124,9 +122,7 @@ export default {
         return
       }
 
-      this.axios.post(this.services['oms-core-elixir'] + '/campaigns/' + this.$route.params.id, {
-        submission: this.submission
-      }).then(() => {
+      this.axios.post(this.services['oms-core-elixir'] + '/campaigns/' + this.$route.params.id, this.submission).then(() => {
         this.$root.showSuccess('Your submission is registered.')
         return this.$router.push({ name: 'oms.confirm_token' })
       }).catch((err) => {
@@ -135,7 +131,7 @@ export default {
           return this.$root.showError('Some of the registration data is invalid.')
         }
 
-        if (err.response.status === 404) { // validation errors
+        if (err.response.status === 404) {
           return this.$root.showError('The registration campaign is not found.')
         }
 

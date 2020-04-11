@@ -92,19 +92,19 @@
                 </tr>
                 <tr>
                   <th>Is superadmin?</th>
-                  <td>{{ (user.user && user.user.superadmin) ? 'Yes' : 'No' }}</td>
+                  <td>{{ (user.superadmin) ? 'Yes' : 'No' }}</td>
                 </tr>
                 <tr>
-                  <th>Email</th><td v-if="user.user.email"><a :href="'mailto:' + user.user.email">{{ user.user.email }}</a></td>
-                  <td v-if="!user.user.email"><i>Not set.</i></td>
+                  <th>Email</th>
+                  <td><a :href="'mailto:' + user.email">{{ user.email }}</a></td>
                 </tr>
                 <tr>
                   <th>Username</th>
-                  <td>{{ user.user.name }}</td>
+                  <td>{{ user.username }}</td>
                 </tr>
                 <tr>
                   <th>Login suspended?</th>
-                  <td>{{ user.user.active ? 'No' : 'Yes' }}</td>
+                  <td>{{ user.active ? 'No' : 'Yes' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -170,19 +170,16 @@ export default {
         name: '',
         surname: '',
         id: null,
-        seo_url: null,
         primary_body: null,
         bodies: [],
         circles: [],
         date_of_birth: null,
         gender: null,
         phone: null,
-        user: {
-          email: null,
-          active: null,
-          superadmin: null,
-          name: null
-        }
+        email: null,
+        active: null,
+        superadmin: null,
+        username: null
       },
       isOwnProfile: false,
       isLoading: false,
