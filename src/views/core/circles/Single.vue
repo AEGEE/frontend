@@ -231,7 +231,7 @@ export default {
 
         // A person has the right to add members in 2 cases: this person has add_member:circle permission and
         // 1) the circle is bound to a body
-        // 2) the circle is unbound and the person has view:member permission (to search globall for users)
+        // 2) the circle is unbound and the person has view:member permission (to search globally for users)
         const hasPermissionToAdd = this.permissions.some(permission => permission.combined.endsWith('add_member:circle'))
         const hasPermissionToViewMembers = this.permissions.some(permission => permission.combined.endsWith('view:member'))
         this.can.addMembers = hasPermissionToAdd && (this.circle.body_id || hasPermissionToViewMembers)

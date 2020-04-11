@@ -9,8 +9,8 @@ export default {
         throw res.data
       }
 
-      window.localStorage.setItem('access-token', res.data.data.access_token)
-      window.localStorage.setItem('refresh-token', res.data.data.refresh_token)
+      window.localStorage.setItem('access-token', res.data.access_token)
+      window.localStorage.setItem('refresh-token', res.data.refresh_token)
       store.dispatch('login')
     }
 
