@@ -39,5 +39,19 @@ context('Login', () => {
 
     cy.contains('Password is not valid.')
   })
+
+  it('should display an error on backend error', () => {
+    cy.visit('/login')
+
+    cy.server()
+    cy.route('POST', /login/, 'Some garbage')
+
+    cy.get('form input[type=email]').type('admin@example.com')
+    cy.get('form input[type=password]').type('invalid')
+
+    cy.get('form').contains('Login').click()
+
+    cy.contains('An error occured while logging in.')
+  })
 })
   

@@ -25,6 +25,5 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('resetDatabase', () => {
-  cy.exec('../helper.sh --docker -- exec -T oms-core-js npm run db:setup')
-  cy.exec('../helper.sh --docker -- exec -T oms-core-js npm run db:seed')
+  cy.exec('(cd .. && ./helper.sh --docker -- exec -T oms-core-js sh -c \\\'npm run db:clear \\&\\& npm run db:seed\\\')')
 })
