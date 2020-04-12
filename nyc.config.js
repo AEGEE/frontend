@@ -1,7 +1,5 @@
 module.exports = {
   'check-coverage': false,
-  'per-file': true,
-  'skip-full': true,
   'instrument': false,
   'sourceMap': false,
   reporter: [
