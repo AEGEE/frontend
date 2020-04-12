@@ -13,8 +13,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build-and-test": "NODE_ENV=test npm run build && npm test",
-    "lint": "vue-cli-service lint --no-fix",
-    "test": "cypress run && nyc report --reporter=text --reporter=lcov --skip-empty false"
+    "lint": "vue-cli-service lint --no-fix .",
+    "test": "npm run cypress:run && npm run nyc:report",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open",
+    "nyc:report": "nyc report"
   },
   "husky": {
     "hooks": {
@@ -35,6 +38,7 @@
     "chart.js": "^2.9.3",
     "dompurify": "^2.0.11",
     "ical": "^0.8.0",
+    "eslint-plugin-cypress": "^2.10.3",
     "mapbox-gl": "^1.10.0",
     "marked": "^1.0.0",
     "moment": "^2.24.0",

@@ -1,10 +1,9 @@
-/// <reference types="cypress" />
+// / <reference types="cypress" />
 
 context('Register', () => {
   beforeEach(() => {
     cy.resetDatabase()
     cy.visit('/signup/default')
-
   })
 
   it('should complain if the passwords mismatch', () => {
@@ -110,4 +109,3 @@ context('Register', () => {
     cy.contains('Your submission is registered.')
   })
 })
-    

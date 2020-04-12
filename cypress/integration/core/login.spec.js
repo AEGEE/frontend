@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+// / <reference types="cypress" />
 
 context('Login', () => {
   beforeEach(() => {
@@ -54,4 +54,3 @@ context('Login', () => {
     cy.contains('An error occured while logging in.')
   })
 })
-  
