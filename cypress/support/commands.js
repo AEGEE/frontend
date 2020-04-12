@@ -27,3 +27,19 @@
 Cypress.Commands.add('resetDatabase', () => {
   cy.exec('(cd .. && ./helper.sh --docker -- exec -T oms-core-js sh -c \\\'npm run db:clear \\&\\& npm run db:seed\\\')')
 })
+
+Cypress.Commands.add('login', (username = 'admin@example.com', password = '5ecret5ecr3t') => {
+  cy.request({
+    method: 'POST',
+    url: '/api/core/login',
+    body: {
+      username,
+      password,
+    }
+  })
+    .its('body')
+    .then((body) => {
+      window.localStorage.setItem('accessToken', body.data.access_token);
+      window.localStorage.setItem('refreshToken', body.data.refresh_token);
+    })
+});
