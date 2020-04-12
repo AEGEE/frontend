@@ -1,58 +1,70 @@
 // / <reference types="cypress" />
 
-context('Login', () => {
-    beforeEach(() => {
-      cy.resetDatabase()
-      cy.login()
-    })
-  
-    it('should allow you to login with correct password', () => {
-      cy.visit('/campaigns')
-  
-      cy.url().should('include', '/login')
-  
-      cy.get('form input[type=email]').type('admin@example.com')
-      cy.get('form input[type=password]').type('5ecr3t5ecr3t')
-  
-      cy.get('form').contains('Login').click()
-  
-      cy.url().should('include', '/campaigns')
-    })
-  
-    it('should redirect you after login', () => {
-      cy.visit('/login')
-  
-      cy.get('form input[type=email]').type('admin@example.com')
-      cy.get('form input[type=password]').type('5ecr3t5ecr3t')
-  
-      cy.get('form').contains('Login').click()
-  
-      cy.url().should('include', '/dashboard')
-    })
-  
-    it('should display an error on invalid password', () => {
-      cy.visit('/login')
-  
-      cy.get('form input[type=email]').type('admin@example.com')
-      cy.get('form input[type=password]').type('invalid')
-  
-      cy.get('form').contains('Login').click()
-  
-      cy.contains('Password is not valid.')
-    })
-  
-    it('should display an error on backend error', () => {
-      cy.visit('/login')
-  
-      cy.server()
-      cy.route('POST', /login/, 'Some garbage')
-  
-      cy.get('form input[type=email]').type('admin@example.com')
-      cy.get('form input[type=password]').type('invalid')
-  
-      cy.get('form').contains('Login').click()
-  
-      cy.contains('An error occured while logging in.')
-    })
+context('Members list', () => {
+  beforeEach(() => {
+    cy.resetDatabase()
+    cy.login()
+    cy.visit('/members')
   })
-  
+
+  it('should display users', () => {
+    cy.get('table thead tr').should('have.length', 1)  
+    cy.get('table tbody tr').its('length').should('be.gt', 1)
+  })
+
+  it('should display an error on network error', () => {
+    cy.server()
+    cy.route({
+      method: 'GET',
+      url: /api\/core\/members(\?)/,
+      response: 'Some garbage',
+      status: 500
+    })
+
+    cy.visit('/members')
+    cy.contains('Could not fetch user list')
+  })
+
+  it('should display a stub if no users', () => {
+    cy.server()
+    cy.route({
+      method: 'GET',
+      url: /api\/core\/members/,
+      response: { success: true, data: [] },
+      status: 200
+    })
+
+    cy.visit('/members')
+    cy.contains('Nothing here')
+  })
+
+  it('should paginate', () => {
+    cy.server()
+    cy.route({
+      method: 'GET',
+      url: /api\/core\/members/,
+      response: {
+        success: true,
+        data: Array(30).fill().map((_, i) => ({
+          email: 'test@example.com',
+          first_name: 'test',
+          last_name: 'test',
+          about_me: 'test',
+          address: 'test'
+        }))
+      },
+      status: 200
+    }).as('membersList')
+
+    cy.visit('/members')
+    cy.contains('test@example.com')
+    cy.get('table tbody tr').its('length').should('be.eq', 30)
+    cy.contains('Load more users').click()
+    cy.get('table tbody tr').its('length').should('be.eq', 60)
+  })
+
+  it('should filter', () => {
+    cy.get('[data-cy=query]').type('admin@example.com')
+    cy.get('table tbody tr').its('length').should('be.eq', 1)
+  })
+})

@@ -6,7 +6,7 @@
         <div class="field">
           <label class="label">Search by name or surname</label>
           <div class="control">
-            <input class="input" type="text" v-model="query" placeholder="Search by name or surname" @input="refetch()">
+            <input class="input" type="text" data-cy="query" v-model="query" placeholder="Search by name or surname" @input="refetch()">
           </div>
         </div>
 
@@ -22,6 +22,10 @@
               <router-link :to="{ name: 'oms.members.view', params: { id: props.row.seo_url || props.row.id } }">
                 {{ props.row.first_name }} {{ props.row.last_name }}
               </router-link>
+            </b-table-column>
+
+            <b-table-column field="email" label="Email">
+              {{ props.row.email }}
             </b-table-column>
 
             <b-table-column field="birthday" label="Birthday" sortable width="150">
