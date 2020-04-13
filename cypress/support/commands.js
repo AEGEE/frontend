@@ -34,12 +34,12 @@ Cypress.Commands.add('login', (username = 'admin@example.com', password = '5ecr3
     url: '/api/core/login',
     body: {
       username,
-      password,
+      password
     }
   })
     .its('body')
     .then((body) => {
-      window.localStorage.setItem('access-token', body.access_token);
-      window.localStorage.setItem('refresh-token', body.refresh_token);
+      window.localStorage.setItem('access-token', body.access_token)
+      window.localStorage.setItem('refresh-token', body.refresh_token)
     })
-});
+})

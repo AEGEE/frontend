@@ -29,5 +29,21 @@ context('Members single', () => {
     cy.contains('User is not found')
     cy.url().should('match', /\/members$/)
   })
+
+  it('should refetch the user if going from one profile to another', () => {
+    cy.visit('/members/board')
+    cy.contains('Board')
+
+    cy.get('[data-cy=navbar-menu]').click()
+    cy.get('[data-cy=navbar-my-account-link]').click()
+
+    cy.url().should('include', '/members/me')
+
+    cy.get('[data-cy=app-main]').contains('Admin')
+  })
+
+  it('should display a notice on picture change', () => {
+    cy.get('[data-cy=picture-change-link]').click()
+    cy.contains('This feature is not implemented yet')
+  })
 })
-  

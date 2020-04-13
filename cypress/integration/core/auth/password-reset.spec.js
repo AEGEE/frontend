@@ -31,9 +31,8 @@ context('Password reset', () => {
   it('should succeed if everything is okay', () => {
     cy.get('[data-cy=email]').type('admin@example.com')
     cy.get('button').contains('Reset password').click()
-  
+
     cy.contains('Password reset triggered. Check your email.')
     cy.url().should('include', '/password_confirm')
   })
 })
-  

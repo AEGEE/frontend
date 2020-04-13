@@ -11,7 +11,7 @@
       <div class="tile is-parent">
         <article class="tile is-child is-info" v-if="can.edit">
           <div class="field is-grouped">
-            <a class="button is-fullwidth is-primary" @click="updatePicture()">
+            <a class="button is-fullwidth is-primary" data-cy="picture-change-link" @click="updatePicture()">
               <span>Change picture</span>
               <span class="icon"><font-awesome-icon icon="camera" /></span>
             </a>
@@ -25,30 +25,30 @@
           </div>
 
           <div class="field is-grouped" v-if="isOwnProfile">
-            <router-link :to="{ name: 'oms.members.edituser', params: { id: user.seo_url || user.id } }" class="button is-fullwidth is-warning">
+            <router-link :to="{ name: 'oms.members.edituser', params: { id: user.username || user.id } }" class="button is-fullwidth is-warning">
               <span>Change email or password</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
           </div>
 
           <div class="field is-grouped" v-if="can.setActive">
-            <a v-if="user.user.active" class="button is-fullwidth is-danger" :class="{'is-loading': isSwitchingStatus }" @click="askToggleActive()">
+            <a v-if="user.active" class="button is-fullwidth is-danger" :class="{'is-loading': isSwitchingStatus }" @click="askToggleActive()" data-cy="suspend-user-link">
               <span>Suspend user</span>
               <span class="icon"><font-awesome-icon icon="minus" /></span>
             </a>
 
-            <a v-if="!user.user.active" class="button is-fullwidth is-success" :class="{'is-loading': isSwitchingStatus }" @click="askToggleActive()">
+            <a v-if="!user.active" class="button is-fullwidth is-primary" :class="{'is-loading': isSwitchingStatus }" @click="askToggleActive()" data-cy="activate-user-link">
               <span>Activate user</span>
               <span class="icon"><font-awesome-icon icon="plus" /></span>
             </a>
           </div>
 
-          <div class="field is-grouped" v-if="can.delete">
+          <!-- <div class="field is-grouped" v-if="can.delete">
             <a class="button is-fullwidth is-danger" @click="askDeleteUser()">
               <span>Delete profile</span>
               <span class="icon"><font-awesome-icon icon="times" /></span>
             </a>
-          </div>
+          </div> -->
 
         </article>
       </div>
@@ -196,24 +196,24 @@ export default {
     updatePicture () {
       this.$root.showInfo('This feature is not implemented yet, come join the OMS to help us implementing it ;)')
     },
-    askDeleteUser () {
-      this.$buefy.dialog.confirm({
-        title: 'Deleting a user',
-        message: 'Are you sure you want to <b>delete</b> this user? This action cannot be undone.',
-        confirmText: 'Delete user',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: () => this.deleteUser()
-      })
-    },
-    deleteUser () {
-      this.axios.delete(this.services['oms-core-elixir'] + '/user/' + this.user.user.id).then(() => {
-        this.$root.showSuccess('User is deleted.')
-        this.$router.push({ name: 'oms.members.list' })
-      }).catch((err) => this.$root.showError('Could not delete user', err))
-    },
+    // askDeleteUser () {
+    //   this.$buefy.dialog.confirm({
+    //     title: 'Deleting a user',
+    //     message: 'Are you sure you want to <b>delete</b> this user? This action cannot be undone.',
+    //     confirmText: 'Delete user',
+    //     type: 'is-danger',
+    //     hasIcon: true,
+    //     onConfirm: () => this.deleteUser()
+    //   })
+    // },
+    // deleteUser () {
+    //   this.axios.delete(this.services['oms-core-elixir'] + '/user/' + this.user.id).then(() => {
+    //     this.$root.showSuccess('User is deleted.')
+    //     this.$router.push({ name: 'oms.members.list' })
+    //   }).catch((err) => this.$root.showError('Could not delete user', err))
+    // },
     askToggleActive () {
-      const active = this.user.user.active
+      const active = this.user.active
       this.$buefy.dialog.confirm({
         title: active ? 'Suspend user' : 'Activate user',
         message: 'Are you sure you want to <b>' + (active ? 'suspend' : 'activate') + '</b> this user?',
@@ -226,8 +226,10 @@ export default {
     },
     toggleActive () {
       this.isSwitchingStatus = true
-      this.axios.put(this.services['oms-core-elixir'] + '/user/' + this.user.user.id, { active: !this.user.user.active }).then((response) => {
-        this.user.user.active = response.data.data.active
+      this.axios.put(this.services['oms-core-elixir'] + '/members/' + this.user.id + '/active', { active: !this.user.active }).then((response) => {
+        console.log('response', response)
+        this.user.active = response.data.data.active
+        this.$root.showSuccess('User is ' + (this.user.active ? 'activated.' : 'suspended.'))
         this.isSwitchingStatus = false
       }).catch((err) => {
         this.$root.showError('Error changing user status', err)
@@ -253,7 +255,7 @@ export default {
         // for global and local permissions for users' bodies check the following:
         // set the permission to true if at least one set of permissions have
         // the required permission (either first for global, or others for local).
-        this.can.setActive = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('update_active:user')))
+        this.can.setActive = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('update_active:member')))
         this.can.edit = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('update:member')))
         this.can.delete = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('delete:user')))
 

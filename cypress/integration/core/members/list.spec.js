@@ -8,7 +8,7 @@ context('Members list', () => {
   })
 
   it('should display users', () => {
-    cy.get('table thead tr').should('have.length', 1)  
+    cy.get('table thead tr').should('have.length', 1)
     cy.get('table tbody tr').its('length').should('be.gt', 1)
   })
 
@@ -45,7 +45,7 @@ context('Members list', () => {
       url: /api\/core\/members/,
       response: {
         success: true,
-        data: Array(30).fill().map((_, i) => ({
+        data: Array(30).fill().map(() => ({
           email: 'test@example.com',
           first_name: 'test',
           last_name: 'test',
