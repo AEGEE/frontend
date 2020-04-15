@@ -26,7 +26,7 @@
 
           <div class="field is-grouped" v-if="isOwnProfile">
             <router-link :to="{ name: 'oms.members.edituser', params: { id: user.username || user.id } }" class="button is-fullwidth is-warning">
-              <span>Change email or password</span>
+              <span>Change password</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
           </div>
@@ -56,14 +56,14 @@
     <div class="tile is-vertical is-parent">
       <article class="tile is-child">
         <div class="content">
-          <p class="title">{{ user.first_name }}</p>
-          <p class="subtitle">{{ user.last_name }}</p>
+          <p class="title" data-cy="first_name">{{ user.first_name }}</p>
+          <p class="subtitle" data-cy="last_name">{{ user.last_name }}</p>
           <div class="content">
             <table class="table is-narrow">
               <tbody>
                 <tr>
                   <th>Profile link</th>
-                  <td>/members/{{ user.seo_url || user.id }}</td>
+                  <td>/members/<span data-cy="username">{{ user.username || user.id }}</span></td>
                 </tr>
                 <tr>
                   <th>Primary body</th>
@@ -72,39 +72,35 @@
                 </tr>
                 <tr>
                   <th>Phone</th>
-                  <td>{{ user.phone }}</td>
+                  <td data-cy="phone">{{ user.phone }}</td>
                 </tr>
                 <tr>
                   <th>Date of birth</th>
-                  <td>{{ user.date_of_birth }}</td>
+                  <td data-cy="date_of_birth">{{ user.date_of_birth }}</td>
                 </tr>
                 <tr>
                   <th>Gender</th>
-                  <td>{{ user.gender }}</td>
+                  <td data-cy="gender">{{ user.gender }}</td>
                 </tr>
                 <tr>
                   <th>Address</th>
-                  <td>{{ user.address }}</td>
+                  <td data-cy="address">{{ user.address }}</td>
                 </tr>
                 <tr>
                   <th>About me</th>
-                  <td>{{ user.about_me }}</td>
+                  <td data-cy="about_me">{{ user.about_me }}</td>
                 </tr>
                 <tr>
                   <th>Is superadmin?</th>
-                  <td>{{ (user.superadmin) ? 'Yes' : 'No' }}</td>
+                  <td data-cy="superadmin">{{ (user.superadmin) ? 'Yes' : 'No' }}</td>
                 </tr>
                 <tr>
                   <th>Email</th>
-                  <td><a :href="'mailto:' + user.email">{{ user.email }}</a></td>
-                </tr>
-                <tr>
-                  <th>Username</th>
-                  <td>{{ user.username }}</td>
+                  <td><a :href="'mailto:' + user.email" data-cy="email">{{ user.email }}</a></td>
                 </tr>
                 <tr>
                   <th>Login suspended?</th>
-                  <td>{{ user.active ? 'No' : 'Yes' }}</td>
+                  <td data-cy="active">{{ user.active ? 'No' : 'Yes' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -155,7 +151,7 @@
       </article>
     </div>
 
-    <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
+    <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
   </div>
 </template>
 
