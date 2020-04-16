@@ -97,7 +97,7 @@
                 </tr>
                 <tr>
                   <th>Code</th>
-                  <td>{{ body.legacy_key }}</td>
+                  <td>{{ body.code }}</td>
                 </tr>
                 <tr>
                   <th>Foundation date</th>
@@ -166,7 +166,7 @@ export default {
         description: '',
         type: '',
         id: null,
-        legacy_key: null,
+        code: null,
         circles: [],
         date_of_birth: null,
         email: null,
