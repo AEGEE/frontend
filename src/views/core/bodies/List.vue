@@ -39,8 +39,8 @@
 
         <b-table :data="bodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
-            <b-table-column field="legacy_key" label="Body code">
-              {{ props.row.legacy_key }}
+            <b-table-column field="code" label="Body code">
+              {{ props.row.code }}
             </b-table-column>
 
             <b-table-column field="name" label="Body name">
