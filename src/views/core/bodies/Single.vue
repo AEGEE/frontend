@@ -238,8 +238,8 @@ export default {
     },
     joinBody (motivation) {
       this.isLoading = true
-      this.axios.post(this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.id + '/members', {
-        join_request: { motivation }
+      this.axios.post(this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.id + '/join-requests', {
+        motivation
       }).then(() => {
         this.$root.showSuccess('Join request is sent.')
         this.isLoading = false
