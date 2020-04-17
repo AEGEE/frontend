@@ -45,7 +45,7 @@ export default {
 
 .footer {
   margin-left: 180px;
-  padding: 3rem 1.5rem 3rem !important;
+  padding: 1rem 1.5rem 1rem !important;
 
   @include mobile() {
     margin-left: 0;
