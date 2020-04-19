@@ -178,7 +178,7 @@ export default {
     changeComment (member, comment) {
       this.isLoading = true
       this.axios.put(this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.id + '/members/' + member.id, {
-         comment
+        comment
       }).then(() => {
         this.$root.showSuccess('Comment is set.')
         member.comment = comment
