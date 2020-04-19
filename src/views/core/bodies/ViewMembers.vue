@@ -236,7 +236,7 @@ export default {
 
           for (const member of this.members) {
             const paymentsForMember = this.payments
-              .filter(payment => payment.member_id === member.member_id)
+              .filter(payment => payment.user_id === member.user_id)
               .sort((a, b) => a.expires.localeCompare(b.expires))
             this.$set(member, 'payments', paymentsForMember)
             this.$set(member, 'lastPayment', paymentsForMember.length >= 1 ? paymentsForMember[paymentsForMember.length - 1] : null)
