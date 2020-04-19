@@ -279,6 +279,14 @@ module.exports = [
     }
   },
   {
+    name: 'oms.circles.create',
+    path: '/circles/new',
+    component: 'core/circles/Edit',
+    meta: {
+      label: 'Create a circle'
+    }
+  },
+  {
     name: 'oms.circles.view',
     path: '/circles/:id',
     component: 'core/circles/Single',
@@ -300,14 +308,6 @@ module.exports = [
     component: 'core/circles/Edit',
     meta: {
       label: 'Edit single circle'
-    }
-  },
-  {
-    name: 'oms.circles.create',
-    path: '/circles/new',
-    component: 'core/circles/Edit',
-    meta: {
-      label: 'Create a circle'
     }
   },
   /* Campaigns management. */

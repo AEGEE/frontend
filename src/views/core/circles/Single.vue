@@ -218,7 +218,7 @@ export default {
       this.axios.get(this.services['oms-core-elixir'] + '/circles/' + id).then((response) => {
         this.circle = response.data.data
 
-        this.isMember = this.loginUser.circle_memberships.some(membership => membership.circle.id === this.circle.id)
+        this.isMember = this.loginUser.circles.some(circle => circle.id === this.circle.id)
 
         return this.axios.get(this.services['oms-core-elixir'] + '/circles/' + id + '/my_permissions')
       }).then((response) => {
@@ -241,16 +241,15 @@ export default {
         this.inheritedPermissions = response.data.data
 
         this.isLoading = false
-      })
-        .catch((err) => {
-          if (err.response.status === 404) {
-            this.$root.showError('Circle is not found')
-          } else {
-            this.$root.showError('Some error happened', err)
-          }
+      }).catch((err) => {
+        if (err.response && err.response.status && err.response.status === 404) {
+          this.$root.showError('Circle is not found')
+        } else {
+          this.$root.showError('Some error happened', err)
+        }
 
-          this.$router.push({ name: 'oms.circles.list' })
-        })
+        this.$router.push({ name: 'oms.circles.list' })
+      })
     }
   },
   mounted () {
