@@ -120,7 +120,7 @@
                   <th>Description</th>
                 </tr>
                 <tr v-for="body in user.bodies" v-bind:key="body.id">
-                  <td><router-link :to="{ name: 'oms.bodies.view', params: { id: body.id } }">{{ body.legacy_key }}</router-link></td>
+                  <td><router-link :to="{ name: 'oms.bodies.view', params: { id: body.id } }">{{ body.code }}</router-link></td>
                   <td>{{ body.name }}</td>
                   <td>{{ body.description }}</td>
                 </tr>
