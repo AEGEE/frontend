@@ -162,7 +162,7 @@ export default {
       })
     },
     deleteCampaign () {
-      this.axios.delete(this.services['oms-core-elixir'] + '/backend_campaigns/' + this.$route.params.id).then(() => {
+      this.axios.delete(this.services['oms-core-elixir'] + '/campaigns/' + this.$route.params.id).then(() => {
         this.$root.showSuccess('Campaign is deleted.')
         this.$router.push({ name: 'oms.campaigns.list' })
       }).catch((err) => this.$root.showError('Could not delete campaign', err))
@@ -170,7 +170,7 @@ export default {
   },
   mounted () {
     this.isLoading = true
-    this.axios.get(this.services['oms-core-elixir'] + '/backend_campaigns/' + this.$route.params.id).then((response) => {
+    this.axios.get(this.services['oms-core-elixir'] + '/campaigns/' + this.$route.params.id).then((response) => {
       this.campaign = response.data.data
 
       const requests = [
