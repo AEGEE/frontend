@@ -1,0 +1,38 @@
+This code is used to:
+• extract data from the OMS, generate iCalendar files from the data and publish the data to a CalDAV server (mail.aegee.org)
+• download an iCalendar file from Google, sanitize it (remove some html-tags from the description, as the description is not HTML according to RFC 5545)
+
+The download in the last bullet and the upload in both bullets is performed by vdirsyncer.  This software is very sensitive and does not tollerate when other software changes the same iCalendar objects on the server.  In other words, vdirsyncer keeps the ETag of each object and refuses doing any other changes to the object on the server, if the ETag changes on the server.  The ETag is changed on the server, when some other software changes the object on the server.  There is however no problem, of other software creates and changes objects on the server, as long as vdirsyncer does not change the local file, managed by the other software.
+
+Since the password for the upload is not provided in the provided config-file, the code for uploading the data is commented out: you can run the software to generate the data locally.
+
+vdirsyncer uploads the files from the google_sanitized and oms directories.  To clean all data on the server, empty these directories, then call “vdirsyncer sync --force-delete [pair-name]”, the pair-name is from the configuration file.  This is useful, when the ETags mess up and the whole process needs to be restarted from the beginning.
+
+Once a source (OMS or Google) deletes an event, getaegeeevents.js deletes its iCalendar object locally and calls vdirsyncer with the --force-delete option.  That option deletes the object also on the server.
+
+To initalize vdirsyncer call "VDIRSYNCER_CONFIG=(path-to-the-config-file) vdirsyncer discover".  This creates also directories (oms and google_sanitized), that are required by getaegeeevents.js.
+
+getaegeeevents.js invokes vdirsyncer and passes in the VDIRSYNCER_CONFIG environment variable the configuration file for vdirsyncer.  For this to work properly, the current directory must be the directory where getaegeeevents.js is.
+
+Mapping from OMS-event.data to iCalendar properties:
+
+This mapping will break if the format from https://my.aegee.eu/services/oms-events/api changes and there will be no notices from the software.
+
+id → UID with fixed uuid-prefix
+name → SUMMARY.  If the name starts with “CANCELLED”, the prefix stripped and STATUS is set to CANCELLED
+organizers→ATTENDEE
+type→CATEGORIES, where nwm is rewritten to “Network meeting”
+description, budget, programme, application_starts, application_ends, max_participants, organizing_bodies, fee: these are concatenated to DESCRIPTION
+url → URL
+image → IMAGE
+starts → DTSTART
+ends → DTEND
+updated_at → LAST_MODIFIED and DTSTAMP
+created_at → CREATED
+location: LOCATION (location.name) and GEO (location.lng and location.lat)
+
+The comments in event_to_string() mention fields, that are not utilized.
+
+getaegeeevents.js is written as ES6 module, so node >= 13 is necessary.  This program runs at mail.aegee.org houry and the calendars can be subscribed either by providing mail.aegee.org in the calendar software or by providing anonymous@aegee.org as username with any passwords (or using other, more cumbersome methods).
+
+Author: Dilyan Palauzov, dilyan.palauzov@aegee.org

@@ -12,6 +12,7 @@
           Online event
         </span>
       </div>
+      <div>Events from the <a href="https://www.projects.aegee.org/suct/">Summer University</a> project, and events from <a href="https://best.eu.org/">BEST</a>, that can be attended by AEGEE members, are not listed here.  You can subscribe to the events shown here using CalDAV.  For some CalDAV software provide as host <samp>https://mail.aegee.org</samp>, for other provide <samp>anonymous@aegee.org</samp> as username with any password.</div>
     </div>
 
     <hr />
