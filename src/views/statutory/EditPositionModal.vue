@@ -4,6 +4,7 @@
       <p class="modal-card-title">Add position</p>
       <button class="delete" aria-label="close" @click="$parent.close()"></button>
     </header>
+
     <section class="modal-card-body">
       <div class="field">
         <label class="label">Name</label>
@@ -57,7 +58,17 @@
         </div>
         <p class="help is-danger" v-if="errors.places">{{ errors.places.join(', ') }}</p>
       </div>
+
+      <div class="field">
+        <label class="label">Associated body</label>
+        <div class="select">
+          <select v-model="position.body_id">
+            <option v-for="body in bodiesWithElections" v-bind:key="body.id" :value="body.id">{{ body.name }}</option>
+          </select>
+        </div>
+      </div>
     </section>
+
     <footer class="modal-card-foot">
       <button class="button is-primary" @click="savePosition()">Save changes</button>
       <button class="button" @click="$parent.close()">Cancel</button>
@@ -80,7 +91,8 @@ export default {
         starts: null,
         ends: null,
         ends_force: null
-      }
+      },
+      bodiesWithElections: []
     }
   },
   watch: {
@@ -128,6 +140,17 @@ export default {
     this.dates.starts = this.position.starts = new Date(this.position.starts)
     this.dates.ends = this.position.ends = new Date(this.position.ends)
     this.dates.ends_force = this.position.ends_force = new Date(this.position.ends_force)
+
+    this.axios.get(this.services['oms-core-elixir'] + '/bodies').then((response) => {
+      /* The bodies that observe elections during an Agora are:
+       * ALl commissions, SUCT, CD, all WG's
+       */
+      for (const body of response.data.data) {
+        if (body.type == 'commission' || body.type == 'working group' || body.name == 'Summer University Project' || body.name == 'Comité Directeur') {
+          this.bodiesWithElections.push(body)
+        }
+      }
+    })
   }
 }
 </script>

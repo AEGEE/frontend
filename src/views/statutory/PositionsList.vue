@@ -7,7 +7,7 @@
         <div class="notification is-warning">
           <div class="content">
             <p>The positions will be closed on the deadline if there were (number of places + 1) applications at that moment.</p>
-            <p>If there's not enough applications, the position will stay open until 2 weeks before the Agora.</p>
+            <p>If there are not enough applications, the position will stay open until 2 weeks before the Agora.</p>
             <p>All dates are in your local time (which is not always CET).</p>
           </div>
         </div>
@@ -94,6 +94,9 @@
 
         <hr />
 
+        <div class="subtitle" v-if="selectedPosition">Description of selected position</div>
+        <p class="content" v-if="selectedPosition">{{ description }}</p>
+
         <div class="subtitle" v-if="selectedPosition">Applications for selected position</div>
 
         <b-table :data.sync="selectedPosition.candidates" v-if="selectedPosition" narrowed>
@@ -176,6 +179,7 @@ export default {
       can: {
         manage_candidates: false
       },
+      bodiesWithElections: [],
       isLoading: false
     }
   },
@@ -186,6 +190,15 @@ export default {
     }),
     prefix () {
       return this.$route.params.prefix
+    },
+    description: function () {
+      const body = this.bodiesWithElections.find(body =>
+        body.id == this.selectedPosition.body_id
+      )
+      if (body != null) {
+        return body.description
+      }
+      return 'A description for this position has not been set.'
     }
   },
   methods: {
@@ -282,6 +295,17 @@ export default {
   mounted () {
     this.isLoading = true
 
+    this.axios.get(this.services['oms-core-elixir'] + '/bodies').then((response) => {
+      /* The bodies that observe elections during an Agora are:
+       * ALl commissions, SUCT, CD, all WG's
+       */
+      for (const body of response.data.data) {
+        if (body.type == 'commission' || body.type == 'working group' || body.name == 'Summer University Project' || body.name == 'Comité Directeur') {
+          this.bodiesWithElections.push(body)
+        }
+      }
+    })
+
     this.axios.get(this.services['oms-statutory'] + '/events/' + this.$route.params.id).then((event) => {
       this.event = event.data.data
       this.can = event.data.data.permissions
@@ -333,5 +357,9 @@ export default {
 }
 .table-wrapper .table .is-selected .button, .table-wrapper .table .is-selected .tag {
   border: 1px solid white;
+}
+
+.white {
+  color: white;
 }
 </style>
