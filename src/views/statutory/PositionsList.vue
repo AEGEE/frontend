@@ -85,6 +85,12 @@
               </router-link>
               <span v-if="props.row.myCandidate && props.row.myCandidate.status !== 'pending'">You cannot edit your application.</span>
             </b-table-column>
+
+            <b-table-column label="" centered v-if="can.manage_candidates">
+              <a href="#" class="button is-danger is-small" @click.prevent="deletePosition(props.row)">
+                <span class="white"><font-awesome-icon :icon="['fa', 'trash-alt']" /></span>
+              </a>
+            </b-table-column>
           </template>
 
           <template slot="empty">
@@ -262,6 +268,28 @@ export default {
           candidate,
           event: this.event,
           services: this.services
+        }
+      })
+    },
+    deletePosition (position) {
+      this.$buefy.dialog.confirm({
+        title: 'Removing position',
+        message: 'Are you sure you want to remove the position for <b>' + position.name + '</b>? This action cannot be undone (easily).',
+        confirmText: 'Remove position',
+        type: 'is-danger',
+        hasIcon: false,
+        onConfirm: () => {
+          this.isLoading = true
+          this.axios.delete(
+            this.services['oms-statutory'] + '/events/' + this.$route.params.id + '/positions/' + position.id,
+            position
+          ).then(() => {
+            this.isLoading = false
+            this.$router.go(0) // Reloading the page.
+          }).catch((err) => {
+            this.isLoading = false
+            this.$root.showError('Could not remove position', err)
+          })
         }
       })
     },
