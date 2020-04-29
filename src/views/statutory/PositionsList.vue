@@ -185,7 +185,7 @@ export default {
       can: {
         manage_candidates: false
       },
-      bodiesWithElections: [],
+      bodies: [],
       isLoading: false
     }
   },
@@ -197,10 +197,8 @@ export default {
     prefix () {
       return this.$route.params.prefix
     },
-    description: function () {
-      const body = this.bodiesWithElections.find(body =>
-        body.id == this.selectedPosition.body_id
-      )
+    description () {
+      const body = this.bodies.find(body => body.id === this.selectedPosition.body_id)
       if (body != null) {
         return body.description
       }
@@ -233,7 +231,8 @@ export default {
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
-          router: this.$router
+          router: this.$router,
+          bodies: this.bodies
         }
       })
     },
@@ -251,7 +250,8 @@ export default {
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
-          router: this.$router
+          router: this.$router,
+          bodies: this.bodies
         }
       })
     },
@@ -274,7 +274,7 @@ export default {
     deletePosition (position) {
       this.$buefy.dialog.confirm({
         title: 'Removing position',
-        message: 'Are you sure you want to remove the position for <b>' + position.name + '</b>? This action cannot be undone (easily).',
+        message: 'Are you sure you want to remove the position for <b>' + position.name + '</b>? This action cannot be undone.',
         confirmText: 'Remove position',
         type: 'is-danger',
         hasIcon: false,
@@ -329,7 +329,7 @@ export default {
        */
       for (const body of response.data.data) {
         if (body.type == 'commission' || body.type == 'working group' || body.name == 'Summer University Project' || body.name == 'Comité Directeur') {
-          this.bodiesWithElections.push(body)
+          this.bodies.push(body)
         }
       }
     })
