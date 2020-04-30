@@ -87,7 +87,7 @@
             </b-table-column>
 
             <b-table-column label="" centered v-if="can.manage_candidates">
-              <a href="#" class="button is-danger is-small" @click.prevent="deletePosition(props.row)">
+              <a href="#" class="button is-danger is-small" @click.prevent="askDeletePosition(props.row)">
                 <span class="white"><font-awesome-icon :icon="['fa', 'trash-alt']" /></span>
               </a>
             </b-table-column>
@@ -198,11 +198,11 @@ export default {
       return this.$route.params.prefix
     },
     description () {
-      const body = this.bodies.find(body => body.id === this.selectedPosition.body_id)
-      if (body != null) {
-        return body.description
+      if (this.selectedPosition.body_id == null) {
+        return 'A description for this position has not been set.'
       }
-      return 'A description for this position has not been set.'
+      const body = this.bodies.find(body => body.id === this.selectedPosition.body_id)
+      return body.description
     }
   },
   methods: {
@@ -272,25 +272,30 @@ export default {
       })
     },
     deletePosition (position) {
+      this.isLoading = true
+      this.axios.delete(
+        this.services['oms-statutory'] + '/events/' + this.$route.params.id + '/positions/' + position.id,
+        position
+      ).then((response) => {
+        console.log(response)
+        const index = this.positions.indexOf(position)
+        this.positions.splice(index,1)
+        this.selectedPosition = null
+        this.isLoading = false
+        this.$root.showSuccess('Position is removed.')
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not remove position', err)
+      })
+    },
+    askDeletePosition (position) {
       this.$buefy.dialog.confirm({
         title: 'Removing position',
         message: 'Are you sure you want to remove the position for <b>' + position.name + '</b>? This action cannot be undone.',
         confirmText: 'Remove position',
         type: 'is-danger',
         hasIcon: false,
-        onConfirm: () => {
-          this.isLoading = true
-          this.axios.delete(
-            this.services['oms-statutory'] + '/events/' + this.$route.params.id + '/positions/' + position.id,
-            position
-          ).then(() => {
-            this.isLoading = false
-            this.$router.go(0) // Reloading the page.
-          }).catch((err) => {
-            this.isLoading = false
-            this.$root.showError('Could not remove position', err)
-          })
-        }
+        onConfirm: () => this.deletePosition(position)
       })
     },
     switchCandidateStatus (candidate, position) {
@@ -323,15 +328,8 @@ export default {
   mounted () {
     this.isLoading = true
 
-    this.axios.get(this.services['oms-core-elixir'] + '/bodies').then((response) => {
-      /* The bodies that observe elections during an Agora are:
-       * ALl commissions, SUCT, CD, all WG's
-       */
-      for (const body of response.data.data) {
-        if (body.type == 'commission' || body.type == 'working group' || body.name == 'Summer University Project' || body.name == 'Comité Directeur') {
-          this.bodies.push(body)
-        }
-      }
+    this.axios.get(this.services['oms-core-elixir'] + '/bodies').then((bodiesResponse) => {
+      this.bodies = bodiesResponse.data.data
     })
 
     this.axios.get(this.services['oms-statutory'] + '/events/' + this.$route.params.id).then((event) => {
