@@ -201,7 +201,7 @@ export default {
       if (this.selectedPosition.body_id == null) {
         return 'A description for this position has not been set.'
       }
-      const body = this.bodies.find(body => body.id === this.selectedPosition.body_id)
+      const body = this.bodies.find(bod => bod.id === this.selectedPosition.body_id)
       return body.description
     }
   },
@@ -279,7 +279,7 @@ export default {
       ).then((response) => {
         console.log(response)
         const index = this.positions.indexOf(position)
-        this.positions.splice(index,1)
+        this.positions.splice(index, 1)
         this.selectedPosition = null
         this.isLoading = false
         this.$root.showSuccess('Position is removed.')
