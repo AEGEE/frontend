@@ -198,7 +198,7 @@ export default {
       return this.$route.params.prefix
     },
     description () {
-      if (this.selectedPosition.body_id == null) {
+      if (!this.selectedPosition.body_id) {
         return 'A description for this position has not been set.'
       }
       const body = this.bodies.find(bod => bod.id === this.selectedPosition.body_id)
@@ -274,10 +274,8 @@ export default {
     deletePosition (position) {
       this.isLoading = true
       this.axios.delete(
-        this.services['oms-statutory'] + '/events/' + this.$route.params.id + '/positions/' + position.id,
-        position
-      ).then((response) => {
-        console.log(response)
+        this.services['oms-statutory'] + '/events/' + this.$route.params.id + '/positions/' + position.id
+      ).then(() => {
         const index = this.positions.indexOf(position)
         this.positions.splice(index, 1)
         this.selectedPosition = null
