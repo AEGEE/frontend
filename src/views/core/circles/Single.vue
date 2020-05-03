@@ -241,15 +241,16 @@ export default {
         this.inheritedPermissions = response.data.data
 
         this.isLoading = false
-      }).catch((err) => {
-        if (err.response && err.response.status && err.response.status === 404) {
-          this.$root.showError('Circle is not found')
-        } else {
-          this.$root.showError('Some error happened', err)
-        }
-
-        this.$router.push({ name: 'oms.circles.list' })
       })
+        .catch((err) => {
+          if (err.response && err.response.status && err.response.status === 404) {
+            this.$root.showError('Circle is not found')
+          } else {
+            this.$root.showError('Some error happened', err)
+          }
+
+          this.$router.push({ name: 'oms.circles.list' })
+        })
     }
   },
   mounted () {

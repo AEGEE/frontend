@@ -42,7 +42,7 @@ context('Members editing', () => {
       response: 'Some garbage',
       status: 500
     })
-   
+
     cy.get('[data-cy=first_name]').clear().type('new')
     cy.contains('Save user').click()
 
@@ -59,7 +59,7 @@ context('Members editing', () => {
     cy.get('[data-cy=phone]').clear().type('new')
 
     cy.typeDate('[data-cy=date_of_birth]', '1973-02-02')
-    
+
     cy.get('[data-cy=gender]').clear().type('new')
     cy.get('[data-cy=address]').clear().type('new')
     cy.get('[data-cy=about_me]').clear().type('new')
@@ -71,10 +71,9 @@ context('Members editing', () => {
     cy.get('[data-cy=last_name]').contains('new')
     cy.get('[data-cy=username]').contains('new')
     cy.get('[data-cy=phone]').contains('new')
-    cy.get('[data-cy=date_of_birth]').contains('1973-02-02')   
+    cy.get('[data-cy=date_of_birth]').contains('1973-02-02')
     cy.get('[data-cy=gender]').contains('new')
     cy.get('[data-cy=address]').contains('new')
     cy.get('[data-cy=about_me]').contains('new')
   })
 })
-  

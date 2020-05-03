@@ -110,7 +110,7 @@ export default {
       this.isLoading = true
       try {
         const campaignUrl = this.$route.params.body_id
-          ? this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.body_id +  '/campaigns/' + this.$route.params.id
+          ? this.services['oms-core-elixir'] + '/bodies/' + this.$route.params.body_id + '/campaigns/' + this.$route.params.id
           : this.services['oms-core-elixir'] + '/campaigns/' + this.$route.params.id
 
         const campaignsResponse = await this.axios.get(campaignUrl)
