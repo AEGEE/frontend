@@ -50,7 +50,7 @@
                 :data="bodies"
                 :disabled="$route.params.body_id"
                 open-on-focus="true"
-                @select="circle => { campaign.autojoin_body_id = circle.id; campaign.autojoin_body = circle }">
+                @select="body => { campaign.autojoin_body_id = body.id; campaign.autojoin_body = body }">
                 <template slot-scope="props">
                   <div class="media">
                     <div class="media-content">

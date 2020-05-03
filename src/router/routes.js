@@ -156,6 +156,14 @@ module.exports = [
     }
   },
   {
+    name: 'oms.bodies.campaigns.members',
+    path: '/bodies/:body_id/campaigns/:id/members',
+    component: 'core/campaigns/ViewMembers',
+    meta: {
+      label: 'View members of a body campaign'
+    }
+  },
+  {
     name: 'oms.bodies.campaigns.edit',
     path: '/bodies/:body_id/campaigns/:id/edit',
     component: 'core/campaigns/Edit',
@@ -317,6 +325,14 @@ module.exports = [
     component: 'core/campaigns/List',
     meta: {
       label: 'View campaigns'
+    }
+  },
+  {
+    name: 'oms.campaigns.members',
+    path: '/campaigns/:id/members',
+    component: 'core/campaigns/ViewMembers',
+    meta: {
+      label: 'View campaign members'
     }
   },
   {
