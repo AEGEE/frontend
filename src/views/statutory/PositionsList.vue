@@ -104,7 +104,7 @@
         <p class="content" v-if="selectedPosition" v-html="$options.filters.markdown(description)"></p>
 
         <hr v-if="selectedPosition"/>
-        
+
         <div class="subtitle" v-if="selectedPosition">Applications for selected position</div>
 
         <b-table :data.sync="selectedPosition.candidates" v-if="selectedPosition" narrowed>
