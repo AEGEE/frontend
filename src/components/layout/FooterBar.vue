@@ -3,10 +3,8 @@
     <div class="container">
       <div class="content has-text-centered">
         <p>
-          <router-link :to="{ name: 'oms.legal.simple'}">Legal info</router-link> &bull;
-          <!--<router-link :to="{ name: 'oms.legal.full' }">(complex)</router-link> &bull;-->
-          <!-- <router-link :to="{ name: 'oms.about' }">About MyAEGEE</router-link> &bull; -->
-          <a href="/about" target="_blank">About MyAEGEE</a> &bull;
+          <router-link :to="{ name: 'oms.confluence', params: { page_id: 'terms-of-service' } }">Legal info</router-link> &bull;
+          <router-link :to="{ name: 'oms.about' }">About MyAEGEE</router-link> &bull;
           <router-link :to="{ name: 'oms.bug_report' }">Report a bug!</router-link>
         </p>
         <p>© 2017-{{ year }} <a href="//aegee.org" target="_blank">AEGEE-Europe</a> &bull;
