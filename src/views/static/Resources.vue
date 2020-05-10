@@ -152,7 +152,7 @@ export default {
             color: '#C44BC2'
           }
         ],
-        Useful guides: [
+        'Useful guides': [
           {
             url: 'http://www.zeus.aegee.org/portal/resources/pr-materials/',
             title: 'Visual identity',
