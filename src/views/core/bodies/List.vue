@@ -128,9 +128,11 @@ export default {
       }
 
       if (this.query) queryObj.query = this.query
-      if (this.selectedTypes) queryObj.type = this.selectedTypes
-        .map((type) => type.value)
-        .join(',')
+      if (this.selectedTypes) {
+        queryObj.type = this.selectedTypes
+          .map((type) => type.value)
+          .join(',')
+      }
       return queryObj
     },
     ...mapGetters({
@@ -139,8 +141,8 @@ export default {
     })
   },
   watch: {
-    selectedTypes() {
-      this.refetch();
+    selectedTypes () {
+      this.refetch()
     }
   },
   methods: {

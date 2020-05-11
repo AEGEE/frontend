@@ -18,7 +18,7 @@
           </div>
 
           <div class="field is-grouped" v-if="can.edit">
-            <router-link :to="{ name: 'oms.members.edit', params: { id: user.seo_url || user.id } }" class="button is-fullwidth is-warning">
+            <router-link :to="{ name: 'oms.members.edit', params: { id: user.username || user.id } }" class="button is-fullwidth is-warning">
               <span>Edit profile</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
@@ -29,6 +29,13 @@
               <span>Change password</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
+          </div>
+
+          <div class="field is-grouped" v-if="can.edit">
+            <button class="button is-fullwidth is-warning" @click="editPrimaryBodyModal()">
+              <span>Set primary body</span>
+              <span class="icon"><font-awesome-icon icon="edit" /></span>
+            </button>
           </div>
 
           <div class="field is-grouped" v-if="can.setActive">
@@ -157,6 +164,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import EditPrimaryBodyModal from './EditPrimaryBodyModal.vue'
 
 export default {
   name: 'SingleUser',
@@ -190,7 +198,7 @@ export default {
   },
   methods: {
     updatePicture () {
-      this.$root.showInfo('This feature is not implemented yet, come join the OMS to help us implementing it ;)')
+      this.$root.showInfo('This feature is not implemented yet, come join MyAEGEE to help us implementing it ;)')
     },
     // askDeleteUser () {
     //   this.$buefy.dialog.confirm({
@@ -208,6 +216,22 @@ export default {
     //     this.$router.push({ name: 'oms.members.list' })
     //   }).catch((err) => this.$root.showError('Could not delete user', err))
     // },
+    editPrimaryBodyModal () {
+      this.$buefy.modal.open({
+        component: EditPrimaryBodyModal,
+        hasModalCard: true,
+        props: {
+          // When programmatically opening a modal, it doesn't have access to Vue instance
+          // and therefore store, services and notifications functions. That's why
+          // I'm passing them as props.
+          // More info: https://github.com/buefy/buefy/issues/55
+          member: this.user,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess
+        }
+      })
+    },
     askToggleActive () {
       const active = this.user.active
       this.$buefy.dialog.confirm({
