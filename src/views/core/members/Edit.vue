@@ -39,7 +39,7 @@
         <div class="field" data-cy="date_of_birth">
           <label class="label">Birthday</label>
           <b-datepicker :date-formatter="formatDate" :date-parser="parseDate" v-model="birthday" @input="transformBirthday()" />
-          <p class="help is-danger" v-if="errors.birthday">{{ errors.birthday.join(', ')}}</p>
+          <p class="help is-danger" v-if="errors.date_of_birth">{{ errors.date_of_birth.join(', ')}}</p>
         </div>
 
         <!-- <div class="field">
