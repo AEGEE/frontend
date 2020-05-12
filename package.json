@@ -27,7 +27,7 @@
     "@fullcalendar/core": "^4.4.0",
     "@fullcalendar/daygrid": "^4.4.0",
     "@fullcalendar/vue": "^4.4.0",
-    "animate.css": "^4.0.0",
+    "animate.css": "^4.1.0",
     "axios": "^0.19.2",
     "buefy": "^0.8.17",
     "chart.js": "^2.9.3",
