@@ -138,6 +138,9 @@
             <a href="https://gsuite.google.com/" target="_blank">
               <img src="/images/partners-logos/gsuite.svg" alt="GSuite" />
             </a>
+            <a href="https://www.elastic.co/" target="_blank">
+              <img src="/images/partners-logos/elastic.svg" alt="Elastic" />
+            </a>
           </div>
 
           <h2>Microservices</h2>
@@ -169,6 +172,11 @@
               <tr>
                 <td><a href="https://github.com/AEGEE/oms-mailer">oms-mailer</a></td>
                 <td>Internal mailer (every email sent from our system is going through it).</td>
+              </tr>
+
+              <tr>
+                <td><a href="https://github.com/AEGEE/oms-discounts">oms-discounts</a></td>
+                <td>Discount code storage and retrieval.</td>
               </tr>
             </tbody>
           </table>
