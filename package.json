@@ -24,7 +24,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
-    "@fullcalendar/core": "^4.4.0",
+    "@fullcalendar/core": "^4.4.1",
     "@fullcalendar/daygrid": "^4.4.0",
     "@fullcalendar/vue": "^4.4.0",
     "animate.css": "^4.0.0",
