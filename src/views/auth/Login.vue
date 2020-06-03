@@ -3,6 +3,10 @@
   <div class="columns is-vcentered">
     <div class="column is-6 is-offset-3">
       <div class="box">
+        <div class="notification is-warning">
+          We are migrating our data to a new internal system. <br/>
+          In case you are experiencing issues, please contact us at <a href="//aegee.org/helpdesk">helpdesk</a>.
+        </div>
         <div v-show="error" style="color:red; word-wrap:break-word;">{{ error }}</div>
         <form v-on:submit.prevent="login">
           <label class="label">Email</label>
