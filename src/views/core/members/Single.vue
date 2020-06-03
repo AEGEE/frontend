@@ -63,7 +63,7 @@
               <tbody>
                 <tr>
                   <th>Profile link</th>
-                  <td>/members/<span data-cy="username">{{ user.username || user.id }}</span></td>
+                   <td>/members/{{ user.seo_url || user.id }}</td>
                 </tr>
                 <tr>
                   <th>Primary body</th>
