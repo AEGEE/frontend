@@ -43,6 +43,11 @@ module.exports = {
         }
       }
     },
+    // so it'd work with Webpack 4, which doesn't like [contenthash], which is there by default
+    output: {
+      filename: '[name].[hash].js',
+      chunkFilename: '[name].[hash].js'
+    }
   },
   chainWebpack: (config) => {
     if (process.env.NODE_ENV === 'test') {
