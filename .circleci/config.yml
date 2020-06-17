@@ -37,10 +37,10 @@ jobs:
       - run: cd oms-docker
       - run:
           name: Checkout submodules
-          command: git submodules foreach git checkout master
+          command: git submodule foreach git checkout master
       - run:
           name: Pull latest submodules
-          command: git submodules foreach git pull origin master
+          command: git submodule foreach git pull origin master
       - run: sed s/BASE_URL=localhost.test/BASE_URL=localhost/ .env.example
       - run: sed s/SUBDOMAIN_FRONTEND=my./SUBDOMAIN_FRONTEND=/ .env.example
       - run: make start
