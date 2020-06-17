@@ -42,7 +42,7 @@ jobs:
           command: git submodule foreach git pull origin master
       - run: sed s/BASE_URL=localhost.test/BASE_URL=localhost/ .env.example
       - run: sed s/SUBDOMAIN_FRONTEND=my./SUBDOMAIN_FRONTEND=/ .env.example
-      - run: ./start.sh --novagrant
+      - run: ./start.sh --no-vagrant
       - run: make list
   yamllint:
     machine:
