@@ -27,6 +27,24 @@ jobs:
           path: ~/reports
       - store_artifacts:
           path: ~/reports
+  cypress:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - run:
+          name: Checkout oms-docker
+          command: git clone --recursive https://github.com/AEGEE/oms-docker.git
+      - run: cd oms-docker
+      - run:
+          name: Checkout submodules
+          command: git submodules foreach git checkout master
+      - run:
+          name: Pull latest submodules
+          command: git submodules foreach git pull origin master
+      - run: sed s/BASE_URL=localhost.test/BASE_URL=localhost/ .env.example
+      - run: sed s/SUBDOMAIN_FRONTEND=my./SUBDOMAIN_FRONTEND=/ .env.example
+      - run: make start
+      - run: make list
   yamllint:
     machine:
       image: ubuntu-1604:201903-01
@@ -70,6 +88,12 @@ workflows:
   yamllint:
     jobs:
       - yamllint
+  cypress:
+    jobs:
+      - cypress
+          filters:
+            branches:
+              ignore: master
   docker-build-and-push:
     jobs:
       - docker-build-and-push:
