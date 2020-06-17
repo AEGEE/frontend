@@ -90,7 +90,7 @@ workflows:
       - yamllint
   cypress:
     jobs:
-      - cypress
+      - cypress:
           filters:
             branches:
               ignore: master
