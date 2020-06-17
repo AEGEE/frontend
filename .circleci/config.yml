@@ -33,8 +33,7 @@ jobs:
     steps:
       - run:
           name: Checkout oms-docker
-          command: git clone --recursive https://github.com/AEGEE/oms-docker.git
-      - run: cd oms-docker
+          command: git clone --recursive https://github.com/AEGEE/oms-docker.git .
       - run:
           name: Checkout submodules
           command: git submodule foreach git checkout master
