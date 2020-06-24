@@ -262,19 +262,19 @@ export default {
         this.isSwitchingStatus = false
       })
     },
-    askChangeEmail() {
+    askChangeEmail () {
       this.$buefy.dialog.prompt({
-          message: 'Change email',
-          inputAttrs: {
-              type: 'email',
-              placeholder: 'Change email'
-          },
-          trapFocus: true,
-          onConfirm: (newEmail) => this.changeEmail(newEmail)
+        message: 'Change email',
+        inputAttrs: {
+          type: 'email',
+          placeholder: 'Change email'
+        },
+        trapFocus: true,
+        onConfirm: (newEmail) => this.changeEmail(newEmail)
       })
     },
-    changeEmail(newEmail) {
-      this.axios.put(this.services['core'] + '/members/' + this.user.id + '/email', { new_email: newEmail }).then((response) => {
+    changeEmail (newEmail) {
+      this.axios.put(this.services['core'] + '/members/' + this.user.id + '/email', { new_email: newEmail }).then(() => {
         this.$root.showSuccess('An email change is triggered. Check your new inbox for a confirmation.')
       }).catch((err) => {
         this.$root.showError('Error changing user email', err)
