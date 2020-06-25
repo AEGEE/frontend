@@ -44,17 +44,17 @@
             </a>
           </div>
 
-          <div class="field is-grouped" v-if="can.createBoundCircles">
-            <a @click="openAddCircleModal()" :class="['button', 'is-fullwidth', 'is-warning']">
-              <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'edit']" /></span>
-              <span class="field-label">Add bound circle</span>
-            </a>
-          </div>
-
           <div class="field is-grouped" v-if="can.viewMembers && can.addMembers">
             <a @click="openAddMemberModal()" :class="['button', 'is-fullwidth']">
               <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'user-plus']" /></span>
               <span class="field-label">Add member</span>
+            </a>
+          </div>
+
+          <div class="field is-grouped" v-if="can.createBoundCircles">
+            <a @click="openAddCircleModal()" :class="['button', 'is-fullwidth', 'is-warning']">
+              <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'edit']" /></span>
+              <span class="field-label">Add bound circle</span>
             </a>
           </div>
 
