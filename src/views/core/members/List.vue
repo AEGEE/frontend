@@ -120,7 +120,7 @@ export default {
       this.axios.get(this.services['core'] + '/members', { params: this.queryObject, cancelToken: this.source.token }).then((response) => {
         this.users = response.data.data
         this.total = response.data.meta.count
-        this.offset++
+        this.page++
         this.canLoadMore = response.data.data.length === this.limit
         this.isLoading = false
       }).catch((err) => {
