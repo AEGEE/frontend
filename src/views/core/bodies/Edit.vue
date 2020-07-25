@@ -44,7 +44,10 @@
         </div>
 
         <div class="field">
-          <label class="label">Task description (if applicaple)</label>
+          <label class="label">
+            Task description (if applicable)
+            <tooltip text="Only applicable to bodies that have Agora-elected positions"/>
+          </label>
           <div class="control">
             <textarea class="textarea" v-model="body.task_description"></textarea>
           </div>
