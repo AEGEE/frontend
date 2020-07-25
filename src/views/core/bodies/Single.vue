@@ -93,10 +93,13 @@
                 </tr>
                 <tr>
                   <th>Description</th>
-                  <td>
-                    <span v-html="$options.filters.markdown(body.description)"></span>
-                  </td>
+                  <td>{{ body.description }}</td>
                 </tr>
+                <tr>
+                  <th>Task description (if applicable)</th>
+                  <td>
+                    <span v-html="$options.filters.markdown(body.task_description)"</span>
+                  </td>
                 <tr>
                   <th>Type</th>
                   <td>{{ body.type | capitalize }}</td>
@@ -171,6 +174,7 @@ export default {
       body: {
         name: '',
         description: '',
+        task_description: '',
         type: '',
         id: null,
         code: null,
