@@ -98,7 +98,7 @@
                 <tr>
                   <th>Task description (if applicable)</th>
                   <td>
-                    <span v-html="$options.filters.markdown(body.task_description)"</span>
+                    <span v-html="$options.filters.markdown(body.task_description)"/>
                   </td>
                 <tr>
                   <th>Type</th>
