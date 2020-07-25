@@ -89,14 +89,16 @@
               <tbody>
                 <tr>
                   <th>Title</th>
-                  <td>{{ body.name}}</td>
+                  <td>{{ body.name }}</td>
                 </tr>
                 <tr>
                   <th>Description</th>
-                  <td>{{ body.description }}</td>
+                  <td>
+                    <span v-html="$options.filters.markdown(body.description)"/>
+                  </td>
                 </tr>
-                <tr>
-                  <th>Task description (if applicable)</th>
+                <tr v-if="body.task_description !== null">
+                  <th>Task description</th>
                   <td>
                     <span v-html="$options.filters.markdown(body.task_description)"/>
                   </td>
