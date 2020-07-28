@@ -9,6 +9,8 @@
             <input class="input" type="text" v-model="query" placeholder="Search" @input="refetch()">
           </div>
         </div>
+        
+        <p>Total members: {{ members.length }}</p>
 
         <b-table
           :data="members"
