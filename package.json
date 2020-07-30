@@ -47,7 +47,7 @@
     "buefy": "^0.8.17",
     "chart.js": "^2.9.3",
     "compression-webpack-plugin": "^4.0.0",
-    "css-loader": "^3.6.0",
+    "css-loader": "^4.1.1",
     "dompurify": "^2.0.12",
     "eslint": "^7.3.1",
     "eslint-plugin-cypress": "^2.10.3",
