@@ -25,7 +25,7 @@
 
               <tr>
                 <td><a href="https://nodejs.org/en/">Node.js</a> + <a href="http://expressjs.com/">Express</a></td>
-                <td>Running the backend of statutory and events module, and also for building assets for frontend.</td>
+                <td>Running the backend of core, statutory and events module, and also for building assets for frontend.</td>
               </tr>
 
               <tr>
