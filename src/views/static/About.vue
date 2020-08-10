@@ -29,11 +29,6 @@
               </tr>
 
               <tr>
-                <td><a href="https://elixir-lang.org/">Elixir</a> + <a href="http://phoenixframework.org/">Phoenix</a></td>
-                <td>Running the backend of core module.</td>
-              </tr>
-
-              <tr>
                 <td><a href="https://www.postgresql.org/">PostgreSQL</a></td>
                 <td>Database used by core, events and statutory modules.</td>
               </tr>
@@ -127,9 +122,6 @@
             </a>
             <a href="https://gsuite.google.com/" target="_blank">
               <img src="/images/partners-logos/gsuite.svg" alt="GSuite" />
-            </a>
-            <a href="https://dependabot.com/" target="_blank">
-              <img src="/images/partners-logos/dependabot.png" alt="Dependabot" />
             </a>
             <a href="https://www.elastic.co/" target="_blank">
               <img src="/images/partners-logos/elastic.svg" alt="Elastic" />
