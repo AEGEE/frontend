@@ -142,7 +142,8 @@ export default {
         email: '',
         date_of_birth: null,
         gender: null,
-        phone: null
+        phone: null,
+        privacy_consent: null
       },
       birthday: null,
       agreedToPrivacyPolicy: false,
@@ -179,6 +180,8 @@ export default {
         return
       }
 
+      this.user.privacy_consent = moment().format()
+
       const body = _.pick(this.user, [
         'username',
         'password',
@@ -187,7 +190,8 @@ export default {
         'email',
         'date_of_birth',
         'gender',
-        'phone'
+        'phone',
+        'privacy_consent'
       ])
 
       this.axios.post(this.services['core'] + '/signup/' + this.$route.params.id, body).then(() => {
