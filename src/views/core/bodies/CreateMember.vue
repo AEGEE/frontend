@@ -133,7 +133,7 @@ export default {
       this.axios.post(this.services['core'] + '/bodies/' + this.$route.params.id + '/create-member', this.user).then((response) => {
         this.isSaving = false
         this.$root.showSuccess('User is created.')
-        this.$router.push({ name: 'oms.members.view', params: { id: response.data.data.id } })
+        this.$router.push({ name: 'oms.bodies.members', params: { id: this.$route.params.id } })
       }).catch((err) => {
         this.isSaving = false
 
