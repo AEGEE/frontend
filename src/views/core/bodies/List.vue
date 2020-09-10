@@ -68,7 +68,7 @@
               {{ props.row.founded_at }}
             </b-table-column>
 
-            <b-table-column field="status" label="Status" v-if="includeDeleted">
+            <b-table-column field="status" label="Status" :visible="includeDeleted">
               <span class="tag is-small is-info" v-if="props.row.status === 'active'">Active</span>
               <span class="tag is-small is-danger" v-if="props.row.status === 'deleted'">Deleted</span>
             </b-table-column>
