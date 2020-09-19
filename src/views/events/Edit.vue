@@ -519,7 +519,12 @@ export default {
         starts: null,
         ends: null,
         body_id: null,
-        body: null
+        body: null,
+        optional_fee: null,
+        meals_per_day: 0,
+        optional_programme: null,
+        link_info_travel_country: null,
+        accommodation_type: '',
       },
       autoComplete: {
         members: { name: '', values: [], loading: false }
