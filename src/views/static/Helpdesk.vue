@@ -6,11 +6,11 @@
 </template>
 
 <script>
-  export default {
-    name: 'Helpdesk',
-    mounted () {
-      window.open('https://myaegee.atlassian.net/servicedesk/customer/portals')
-      window.history.go(-1)
-    }
+export default {
+  name: 'Helpdesk',
+  mounted () {
+    window.open('https://myaegee.atlassian.net/servicedesk/customer/portals')
+    window.history.go(-1)
   }
+}
 </script>
