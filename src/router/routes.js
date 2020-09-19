@@ -746,6 +746,15 @@ module.exports = [
     },
     component: 'static/Resources'
   },
+  {
+    name: 'oms.helpdesk',
+    path: '/helpdesk',
+    meta: {
+      label: 'Helpdesk',
+      auth: false
+    },
+    component: 'static/Helpdesk'
+  },
   /* Discounts distribution */
   {
     name: 'oms.discounts',
