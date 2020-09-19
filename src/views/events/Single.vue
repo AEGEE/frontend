@@ -131,15 +131,15 @@
                   <td v-if="event.fee">€{{ event.fee }}</td>
                   <td v-if="!event.fee"><i>Free</i></td>
                 </tr>
-                <tr v-if="!event.optional_fee">
-                  <th>Fee</th>
+                <tr v-if="event.optional_fee">
+                  <th>Optional Fee</th>
                   <td>€{{ event.optional_fee }}</td>
                 </tr>
-                <tr v-if="!event.optional_programme">
+                <tr v-if="event.optional_programme">
                   <th>Optional programme</th>
                   <td>{{ event.optional_programme }}</td>
                 </tr>
-                <tr v-if="!event.link_info_travel_country">
+                <tr v-if="event.link_info_travel_country">
                   <th>Useful information to travel to this country</th>
                   <td><a :href="event.link_info_travel_country" target="_blank">{{ event.link_info_travel_country }}</a>
                   </td>
@@ -275,7 +275,7 @@ export default {
         meals_per_day: 0,
         optional_programme: null,
         link_info_travel_country: null,
-        accommodation_type: '',
+        accommodation_type: ''
       },
       eventTypes: constants.EVENT_TYPES_NAMES,
       accessToken: '',
