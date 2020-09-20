@@ -1,3 +1,17 @@
+# [1.12.0](https://github.com/AEGEE/frontend/compare/1.11.3...1.12.0) (2020-09-20)
+
+
+### Features
+
+* add term dates and requirements positions ([#603](https://github.com/AEGEE/frontend/issues/603)) ([7f56442](https://github.com/AEGEE/frontend/commit/7f5644237b3fcdbc2b9fb774cbd48846f15d36c9))
+
+## [1.11.3](https://github.com/AEGEE/frontend/compare/1.11.2...1.11.3) (2020-09-20)
+
+
+### Bug Fixes
+
+* **discounts:** Add button to manage integrations ([#602](https://github.com/AEGEE/frontend/issues/602)) ([23a8aed](https://github.com/AEGEE/frontend/commit/23a8aed9c22991610da5a80451c293ee9a17eb9e))
+
 ## [1.11.2](https://github.com/AEGEE/frontend/compare/1.11.1...1.11.2) (2020-09-19)
 
 
