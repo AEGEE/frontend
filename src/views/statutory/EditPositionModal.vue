@@ -82,9 +82,8 @@
       </div>
 
       <b-message type="is-info">
-        To enter a set date, use the following format:
-      </br>
-        yyyy-mm-dd
+        <p>To enter a set date, use the following format:</p>
+        <p>yyyy-mm-dd</p>
       </b-message>
 
       <b-field label="Position term ends" id="term_ends">
