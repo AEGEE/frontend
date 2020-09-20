@@ -15,10 +15,3 @@ export default {
   props: ['text']
 }
 </script>
-
-<style>
-  strong {
-    color: white;
-  }
-
-</style>
