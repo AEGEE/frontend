@@ -1,6 +1,6 @@
 <template>
   <font-awesome-icon class="icon" :icon="['fa', 'info-circle']" v-tooltip="{
-        content: text,
+        content: $options.filters.markdown(text),
         placement: 'top-center',
         offset: 5,
         delay: {
@@ -15,3 +15,10 @@ export default {
   props: ['text']
 }
 </script>
+
+<style>
+  strong {
+    color: white;
+  }
+
+</style>
