@@ -90,7 +90,7 @@ export default {
         ],
         'Members': [
           {
-            url: "/pages/mailing-lists",
+            url: '/pages/mailing-lists',
             title: 'Mailing lists',
             description: 'AEGEE mailing lists',
             color: '#FFDB4C'
