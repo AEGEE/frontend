@@ -165,6 +165,7 @@
       },
       {
         "name": "oms.helpdesk",
+        "link": "https://myaegee.atlassian.net/servicedesk/customer/portals",
         "label": "Helpdesk",
         "icon": "question"
       }
