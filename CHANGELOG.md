@@ -1,3 +1,59 @@
+## [1.13.2](https://github.com/AEGEE/frontend/compare/1.13.1...1.13.2) (2020-09-23)
+
+
+### Bug Fixes
+
+* **statutory:** fix setting fee paid for members list. Fixes HELP-1305 ([#616](https://github.com/AEGEE/frontend/issues/616)) ([3b93960](https://github.com/AEGEE/frontend/commit/3b93960b61293350da4029ae8df42c0399675391))
+
+## [1.13.1](https://github.com/AEGEE/frontend/compare/1.13.0...1.13.1) (2020-09-23)
+
+
+### Bug Fixes
+
+* **general:** fail request if no access token ([#615](https://github.com/AEGEE/frontend/issues/615)) ([085993d](https://github.com/AEGEE/frontend/commit/085993d3f64a2f2e1dd09e45720f830e25db7343))
+
+# [1.13.0](https://github.com/AEGEE/frontend/compare/1.12.2...1.13.0) (2020-09-20)
+
+
+### Features
+
+* add entry to helpdesk in menu ([#599](https://github.com/AEGEE/frontend/issues/599)) ([c4b26cd](https://github.com/AEGEE/frontend/commit/c4b26cdae0c594f31fc2421ad78319f3cfa2767e))
+
+## [1.12.2](https://github.com/AEGEE/frontend/compare/1.12.1...1.12.2) (2020-09-20)
+
+
+### Bug Fixes
+
+* **ma-43:** update of fullcalendar dependency to 5.3.x ([#607](https://github.com/AEGEE/frontend/issues/607)) ([5c86d1a](https://github.com/AEGEE/frontend/commit/5c86d1a4344770dd65209dbb5525341805e960a3)), closes [#571](https://github.com/AEGEE/frontend/issues/571) [#564](https://github.com/AEGEE/frontend/issues/564) [#563](https://github.com/AEGEE/frontend/issues/563)
+
+## [1.12.1](https://github.com/AEGEE/frontend/compare/1.12.0...1.12.1) (2020-09-20)
+
+
+### Bug Fixes
+
+* **resources:** Update Resources page and add mailing lists page. ([#605](https://github.com/AEGEE/frontend/issues/605)) ([32e2318](https://github.com/AEGEE/frontend/commit/32e2318b3033b2a35e98bd3e01e4d99f9099a01d))
+
+# [1.12.0](https://github.com/AEGEE/frontend/compare/1.11.3...1.12.0) (2020-09-20)
+
+
+### Features
+
+* add term dates and requirements positions ([#603](https://github.com/AEGEE/frontend/issues/603)) ([7f56442](https://github.com/AEGEE/frontend/commit/7f5644237b3fcdbc2b9fb774cbd48846f15d36c9))
+
+## [1.11.3](https://github.com/AEGEE/frontend/compare/1.11.2...1.11.3) (2020-09-20)
+
+
+### Bug Fixes
+
+* **discounts:** Add button to manage integrations ([#602](https://github.com/AEGEE/frontend/issues/602)) ([23a8aed](https://github.com/AEGEE/frontend/commit/23a8aed9c22991610da5a80451c293ee9a17eb9e))
+
+## [1.11.2](https://github.com/AEGEE/frontend/compare/1.11.1...1.11.2) (2020-09-19)
+
+
+### Bug Fixes
+
+* **bodies:** Only show shadow circles if permitted ([#600](https://github.com/AEGEE/frontend/issues/600)) ([7cb789c](https://github.com/AEGEE/frontend/commit/7cb789cbf0d711afb9a427e9d4707189910ae940))
+
 ## [1.11.1](https://github.com/AEGEE/frontend/compare/1.11.0...1.11.1) (2020-09-16)
 
 
