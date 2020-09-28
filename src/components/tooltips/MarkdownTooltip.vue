@@ -15,10 +15,3 @@
     More information can be found by searching for Markdown online'>
   </tooltip>
 </template>
-
-<style>
-  .markdown > p > strong {
-    color: white;
-  }
-
-</style>
