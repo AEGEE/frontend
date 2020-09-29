@@ -154,7 +154,7 @@
 
         <div class="notification is-info">
           <div class="content">
-            <p>You may offer an optional feature to your event. If so, please specify the optional programme and its cost. Leave the fields empty if there is no extra fee charged.</p>
+            <p>You may offer an optional feature to your event. If so, please specify the optional programme and its cost. Leave the fields empty if there is no extra fee charged. Be concise in the description: "trip to city X", "ice-skating", "extra museum".</p>
           </div>
         </div>
         <div class="field">
