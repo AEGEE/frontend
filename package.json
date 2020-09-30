@@ -51,7 +51,7 @@
     "dompurify": "^2.1.1",
     "eslint": "^7.10.0",
     "eslint-plugin-cypress": "^2.11.2",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.0.0",
     "ical": "^0.8.0",
     "lodash": "^4.17.20",
     "mapbox-gl": "^1.12.0",
