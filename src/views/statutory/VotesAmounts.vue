@@ -6,6 +6,7 @@
 
         <div class="subtitle">By antenna</div>
 
+        <div> (ofc, add an icon here, and hide this block as long as the data is not loaded) <a :href="exportVotesCSV.content" :download="exportVotesCSV.filename">download list of votes</a> </div>
         <table class="table is-narrow is-fullwidth">
           <thead>
             <tr>
@@ -73,6 +74,27 @@
 <script>
 import { mapGetters } from 'vuex'
 
+/**
+ * Takes a list of antennas, and returns an object with two properties, CSV content and a filename
+ * @param antennae
+ * @param eventShortLink the string 'aaa' in the URL http://my.appserver.test/statutory/aaa/votes. Since it's part of the URL, it does comport spaces.
+ */
+function prepareExportCsv (antennae, eventShortLink) {
+  // we're forced to use %2C for commas and %0A for linebreak.
+  let contentT = 'data:text/csv,'
+  contentT += 'BODY_CODE%2CVOTES%0A'
+  const filenameT = 'exportVotes_' + eventShortLink + '.csv' // todo  add a date to the export?
+  console.log(antennae)
+  for (const antenna of antennae) {
+    console.log(antenna)
+    contentT += antenna.body.code + '%2C' + antenna.votes + '%0A'
+  }
+  return {
+    content: contentT,
+    filename: filenameT
+  }
+}
+
 export default {
   name: 'VotesAmountsForStatutory',
   data () {
@@ -80,7 +102,11 @@ export default {
       antennae: [],
       delegates: [],
       isLoading: false,
-      isSaving: false
+      isSaving: false,
+      exportVotesCSV: {
+        content: '',
+        filename: ''
+      }
     }
   },
   computed: mapGetters({
@@ -106,6 +132,7 @@ export default {
         for (const antenna of this.antennae) {
           this.$set(antenna, 'body', bodies.data.data.find(b => b.id === antenna.body_id))
         }
+        this.exportVotesCSV = prepareExportCsv(this.antennae, this.$route.params.id)
       }).catch(console.error)
     }).catch((err) => {
       if (err.response.status === 404) {
