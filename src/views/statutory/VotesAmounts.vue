@@ -10,6 +10,7 @@
           <thead>
             <tr>
               <th>Body</th>
+              <th>Body Code</th>
               <th>Votes</th>
             </tr>
           </thead>
@@ -20,6 +21,7 @@
                   {{ vote.body ? vote.body.name : 'Loading...' }}
                 </router-link>
               </td>
+              <td>{{ vote.body ? vote.body.code : 'Loading...' }}</td>
               <td>{{ vote.votes }}</td>
             </tr>
             <tr v-if="antennae.length == 0 && !isLoading">
