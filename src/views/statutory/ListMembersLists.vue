@@ -137,8 +137,6 @@ export default {
 
       this.memberslists = memberslists
 
-      console.log(this.memberslists)
-
       this.isLoading = false
     })
       .catch((err) => {
