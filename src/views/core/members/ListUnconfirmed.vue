@@ -36,18 +36,6 @@
               {{ props.row.email }}
             </b-table-column>
 
-            <b-table-column field="date_of_birth" label="Birthday" sortable width="150">
-              {{ props.row.date_of_birth }}
-            </b-table-column>
-
-            <b-table-column field="address" label="Address">
-              {{ props.row.address }}
-            </b-table-column>
-
-            <b-table-column field="about_me" label="About me">
-              {{ props.row.about_me }}
-            </b-table-column>
-
             <b-table-column field="created_at" label="Registration date" sortable>
               {{ props.row.created_at | datetime }}
             </b-table-column>
