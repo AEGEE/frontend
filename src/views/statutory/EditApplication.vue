@@ -497,11 +497,7 @@ export default {
       // If this is a new application, then allowing selecting bodies which the current user is a member of
       // and not fetching application.
       if (this.isNew) {
-        for (const body in this.loginUser.bodies) {
-          if (this.can.apply_from_body[this.loginUser.bodies[body].id]) {
-            this.bodies.push(this.loginUser.bodies[body])
-          }
-        }
+        this.bodies = this.loginUser.bodies.filter(body => this.can.apply_from_body[body.id])
 
         // Setting primary body as default application body, if possible, otherwise pick the first body in the list
         if (this.bodies.length > 0) {
