@@ -10,14 +10,14 @@
             <div class="tile is-child">
               <div class="field">
                 <label class="label">Body <span class="has-text-danger">*</span></label>
-                <div class="select" v-show="bodies.length > 0">
+                <div class="select" v-if="bodies.length > 0">
                   <select v-model="application.body_id">
                     <option v-for="body in bodies" v-bind:key="body.id" :value="body.id">{{ body.name }}</option>
                   </select>
                 </div>
               </div>
 
-              <event-no-body-notification v-show="bodies.length == 0" />
+              <event-no-body-notification v-if="bodies.length == 0" />
 
               <div class="notification is-danger" v-if="errors.answers || errors.body_id || errors.gender|| errors.date_of_birth">
                 <div class="content">
