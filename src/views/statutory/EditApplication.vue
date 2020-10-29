@@ -503,9 +503,13 @@ export default {
           }
         }
 
-        // Setting 1st body as an application body if possible
+        // Setting primary body as default application body, if possible, otherwise pick the first body in the list
         if (this.bodies.length > 0) {
-          this.application.body_id = this.bodies[0].id
+          if (this.bodies.some(b => b.id === this.loginUser.primary_body_id)) {
+            this.application.body_id = this.loginUser.primary_body_id
+          } else {
+            this.application.body_id = this.bodies[0].id
+          }
         }
 
         this.isLoading = false
