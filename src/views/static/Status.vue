@@ -87,6 +87,14 @@ export default {
           isAlive: 'Waiting...',
           changelog: 'https://github.com/AEGEE/discounts/blob/master/CHANGELOG.md'
         },
+        network: {
+          roundTrip: null,
+          version: '-',
+          latestVersion: '-',
+          latestTag: '-',
+          isAlive: 'Waiting...',
+          changelog: 'https://github.com/AEGEE/network/blob/master/CHANGELOG.md'
+        },
         frontend: {
           roundTrip: null,
           version: this.$store.state.pkg.version,

@@ -4,6 +4,7 @@
   "events": "/api/events",
   "statutory": "/api/statutory",
   "discounts": "/api/discounts",
+  "network": "/api/network",
   "oms-frontend": "",
   "events-static": "/media/events",
   "statutory-static": "/media/statutory"

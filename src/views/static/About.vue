@@ -163,6 +163,11 @@
                 <td><a href="https://github.com/AEGEE/discounts">discounts</a></td>
                 <td>Discount code storage and retrieval.</td>
               </tr>
+
+              <tr>
+                <td><a href="https://github.com/AEGEE/network">network</a></td>
+                <td>Network history and status.</td>
+              </tr>
             </tbody>
           </table>
 
