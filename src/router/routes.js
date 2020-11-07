@@ -48,7 +48,7 @@ module.exports = [
     meta: {
       label: 'Change your email',
       skipLazyLoad: true,
-      auth: true
+      auth: false
     }
   },
   {
@@ -145,6 +145,14 @@ module.exports = [
     component: 'core/members/Single',
     meta: {
       label: 'View single member'
+    }
+  },
+  {
+    name: 'oms.profile.update',
+    path: '/profile/update',
+    component: 'core/members/UpdateProfile',
+    meta: {
+      label: 'Update your profile'
     }
   },
   /* Bodies management */
