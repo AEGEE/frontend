@@ -90,21 +90,9 @@ export default {
         ],
         'Members': [
           {
-            url: 'http://www.zeus.aegee.org/portal/',
-            title: 'Internal news',
-            description: 'Open calls and news from European Bodies',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'https://lists.aegee.org/join/AEGEENEWS-L',
-            title: 'Internal newsletter',
-            description: 'Bi-weekly internal newsletter',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'http://www.zeus.aegee.org/magazine/',
-            title: 'The AEGEEan magazine',
-            description: 'AEGEE\'s online Magazine',
+            url: '/pages/mailing-lists',
+            title: 'Mailing lists',
+            description: 'AEGEE mailing lists',
             color: '#FFDB4C'
           },
           {
@@ -114,25 +102,19 @@ export default {
             color: '#FFDB4C'
           },
           {
-            url: 'https://www.zeus.aegee.org/forum',
-            title: 'Forum',
-            description: 'Place for structured discussions ',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'https://lists.aegee.org/?HOME',
-            title: 'Mailing lists',
-            description: 'AEGEE mailing lists',
-            color: '#FFDB4C'
-          },
-          {
             url: 'https://www.facebook.com/groups/aegeeans/',
             title: 'Facebook group',
             description: 'AEGEE\'s official group on Facebook',
             color: '#FFDB4C'
           },
           {
-            url: 'https://site.aegee.org/wp-content/uploads/AEGEE-StrategicPlan-2020-2023.pdf',
+            url: 'http://www.zeus.aegee.org/magazine/',
+            title: 'The AEGEEan magazine',
+            description: 'AEGEE\'s online Magazine',
+            color: '#FFDB4C'
+          },
+          {
+            url: 'http://www.zeus.aegee.org/portal/wp-content/uploads/Strategic-Plan-2020-2023-updated.pdf',
             title: 'Strategic Plan',
             description: 'Strategic Plan of AEGEE-Europe 2020-2023',
             color: '#FFDB4C'

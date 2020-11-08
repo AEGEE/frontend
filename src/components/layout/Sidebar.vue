@@ -5,20 +5,24 @@
         {{ category.categoryName }}
       </p>
       <ul class="menu-list">
-        <li v-for="item in category.components" exact v-bind:key="item.name">
-          <router-link :to="{ name: item.name, params: item.params }" v-if="item.name" :aria-expanded="isExpanded(item) ? 'true' : 'false'" @click.native="toggle(item.index, category.index, item)">
+        <li v-for="item in category.components" v-bind:key="item.name">
+          <router-link :to="{ name: item.name, params: item.params }" exact v-if="item.name && !item.link" :aria-expanded="isExpanded(item) ? 'true' : 'false'" @click.native="toggle(item.index, category.index, item)">
             <span><font-awesome-icon :icon="['fas', item.icon]" /></span>
             {{ item.label }}
             <span class="icon is-small is-angle" v-if="item.children && item.children.length">
               <font-awesome-icon :icon="['fa', 'angle-down']" />
             </span>
           </router-link>
-          <a :aria-expanded="isExpanded(item)" v-else @click="toggle(item.index, category.index, item)">
+          <a :aria-expanded="isExpanded(item)" v-else-if="!item.link" @click="toggle(item.index, category.index, item)">
             <span><font-awesome-icon :icon="['fas', item.icon]" /></span>
             {{ item.label }}
             <span class="icon is-small is-angle" v-if="item.children && item.children.length">
               <font-awesome-icon :icon="['fa', 'angle-down']" />
             </span>
+          </a>
+          <a :href="item.link" target="_blank" v-else>
+            <span><font-awesome-icon :icon="['fas', item.icon]" /></span>
+            {{ item.label }}
           </a>
 
           <ul v-show="isExpanded(item)">

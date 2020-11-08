@@ -72,9 +72,14 @@
           </div>
 
           <div class="field is-grouped" v-if="can.deleteBody">
-            <a @click="askDeleteBody()" :class="['button', 'is-fullwidth', 'is-danger']">
+            <a @click="askChangeStatus('deleted')" :class="['button', 'is-fullwidth', 'is-danger']" v-if="body.status === 'active'">
               <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'times']" /></span>
               <span class="field-label">Delete body</span>
+            </a>
+
+            <a @click="askChangeStatus('active')" :class="['button', 'is-fullwidth', 'is-info']" v-else>
+              <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'history']" /></span>
+              <span class="field-label">Restore body</span>
             </a>
           </div>
         </article>
@@ -97,7 +102,7 @@
                     <span v-html="$options.filters.markdown(body.description)"/>
                   </td>
                 </tr>
-                <tr v-if="body.task_description !== null">
+                <tr v-if="body.task_description">
                   <th>Task description</th>
                   <td>
                     <span v-html="$options.filters.markdown(body.task_description)"/>
@@ -129,6 +134,11 @@
                   <td>{{ body.address }}</td>
                 </tr>
                 <tr>
+                  <th>Website</th>
+                  <td v-if="body.website"><a :href="body.website" target="_blank">{{ body.website }}</a></td>
+                  <td v-if="!body.website"><i>No website specified.</i></td>
+                </tr>
+                <tr v-if="can.viewShadowCircles">
                   <th>Shadow circle</th>
                   <td v-if="body.shadow_circle"><router-link :to="{ name: 'oms.circles.view', params: { id: body.shadow_circle.id} }">{{ body.shadow_circle.name }}</router-link></td>
                   <td v-if="!body.shadow_circle"><i>No shadow circle assigned.</i></td>
@@ -237,21 +247,39 @@ export default {
         }
       })
     },
-    askDeleteBody () {
+    askChangeStatus (newStatus) {
+      const isDeleting = newStatus === 'deleted'
+
+      const title = isDeleting ? 'Deleting a body' : 'Restoring a body'
+      const confirmText = isDeleting ? 'Delete body' : 'Restore body'
+      const type = isDeleting ? 'is-danger' : 'is-info'
+
+      let message = `Are you sure you want to <b>${isDeleting ? 'delete' : 'restore'}</b> this body?`
+      if (isDeleting) {
+        message += 'This action cannot be undone.'
+      }
+
       this.$buefy.dialog.confirm({
-        title: 'Deleting a body',
-        message: 'Are you sure you want to <b>delete</b> this body? This action cannot be undone.',
-        confirmText: 'Delete body',
-        type: 'is-danger',
+        title,
+        message,
+        confirmText,
+        type,
         hasIcon: true,
-        onConfirm: () => this.deleteBody()
+        onConfirm: () => this.changeStatus(newStatus)
       })
     },
-    deleteBody () {
-      this.axios.put(this.services['core'] + '/bodies/' + this.$route.params.id + '/status', { status: 'deleted' }).then(() => {
-        this.$root.showSuccess('Body is deleted.')
-        this.$router.push({ name: 'oms.bodies.list' })
-      }).catch((err) => this.$root.showError('Could not delete body', err))
+    changeStatus (newStatus) {
+      const isDeleting = newStatus === 'deleted'
+      this.isLoading = true
+
+      this.axios.put(this.services['core'] + '/bodies/' + this.$route.params.id + '/status', { status: newStatus }).then(() => {
+        this.isLoading = false
+        this.$root.showSuccess(isDeleting ? 'Body is deleted.' : 'Body is restored')
+        this.body.status = newStatus
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not change body status', err)
+      })
     },
     askToJoinBody () {
       if (!this.loginUser) {
@@ -319,6 +347,7 @@ export default {
           this.can.viewMembersGlobal = this.permissions.some(permission => permission.combined.endsWith('global:view:member'))
           this.can.viewJoinRequests = this.permissions.some(permission => permission.combined.endsWith('view:join_request'))
           this.can.viewCampaigns = this.permissions.some(permission => permission.combined.endsWith('view:campaign'))
+          this.can.viewShadowCircles = this.permissions.some(permission => permission.combined.endsWith('view:shadow_circle'))
           this.can.createBoundCircles = this.permissions.some(permission => permission.combined.endsWith('create:bound_circle'))
           this.can.updateBody = this.permissions.some(permission => permission.combined.endsWith('update:body'))
           this.can.deleteBody = this.permissions.some(permission => permission.combined.endsWith('delete:body'))

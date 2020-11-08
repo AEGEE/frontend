@@ -26,6 +26,10 @@
               <button class="button is-small is-primary" @click="openMembersListModal(props.row)">View memberslist</button>
             </b-table-column>
 
+            <b-table-column label="Last updated at" sortable>
+                {{ props.row.updated_at | datetime }}
+            </b-table-column>
+
             <b-table-column field="fee_to_aegee" label="Fee to AEGEE-Europe" numeric sortable>
               {{ props.row.fee_to_aegee.toFixed(2) }} EUR
             </b-table-column>
@@ -84,9 +88,11 @@ export default {
         message: 'Set fee paid',
         inputAttrs: {
           placeholder: 'Fee paid (in EUR)',
-          required: true
+          required: true,
+          type: 'number',
+          step: 0.01
         },
-        onConfirm: (newFee) => this.setFeePaid(newFee, memberslist)
+        onConfirm: (newFee) => this.setFeePaid(parseFloat(newFee), memberslist)
       })
     },
     setFeePaid (newFee, memberslist) {

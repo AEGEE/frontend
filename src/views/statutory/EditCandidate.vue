@@ -114,7 +114,10 @@
         </div>
 
         <div class="field">
-          <label class="label">Languages</label>
+          <label class="label">
+            Languages
+            <tooltip text="To add a language to the list, press either 'tab' or 'enter', or add a comma"/>
+          </label>
           <div class="control">
             <input-tag
                 v-if="!isLoading"
@@ -141,7 +144,7 @@
         </div>
 
         <div class="field">
-          <label class="label">Attended EPM</label>
+          <label class="label">Attended EPMs</label>
           <div class="control">
             <textarea class="textarea" required v-model="candidate.attended_epm" />
           </div>

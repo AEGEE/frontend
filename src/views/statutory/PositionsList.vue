@@ -7,7 +7,9 @@
         <div class="notification is-warning">
           <div class="content">
             <p>The positions will be closed on the deadline if there were (number of places + 1) applications at that moment.</p>
-            <p>If there are not enough applications, the position will stay open until 2 weeks before the Agora.</p>
+            <p>After the deadline a position will be automatically closed when it reaches the number of available places plus one.
+            In case the number of candidates for a position drops under (number of places + 1) after the deadline, the position will be reopened.
+            Regardless of the amount of candidates, all positions are closed two weeks before the Agora.</p>
             <p>All dates are in your local time (which is not always CET).</p>
           </div>
         </div>
@@ -39,6 +41,10 @@
 
             <b-table-column field="starts" label="Application period ends" centered>
               {{ props.row.ends | datetime }}
+            </b-table-column>
+
+            <b-table-column field="starts" label="Final application deadline" centered v-if="displayFinalDeadline">
+              {{ props.row.ends_force | datetime }}
             </b-table-column>
 
             <b-table-column field="places" label="Places available" centered numeric>
@@ -97,6 +103,13 @@
             <empty-table-stub />
           </template>
         </b-table>
+
+        <hr v-if="selectedPosition"/>
+
+        <div class="subtitle" v-if="selectedPosition">Information about selected position</div>
+        <p class="content" v-if="selectedPosition">The term for this position starts on <strong>{{ startTerm }}</strong> and ends on <strong>{{ this.selectedPosition.end_term }}</strong>.</p>
+        <p class="content" v-if="selectedPosition && requirementsIsSet">This position has the following requirements associated with it:</p>
+        <p class="content" v-if="selectedPosition && requirementsIsSet" v-html="$options.filters.markdown(this.selectedPosition.requirements)"></p>
 
         <hr v-if="selectedPosition"/>
 
@@ -200,11 +213,22 @@ export default {
       return this.$route.params.prefix
     },
     taskDescription () {
-      if (!this.selectedPosition.body_id) {
+      if (!this.selectedPosition || !this.selectedPosition.body_id) {
         return 'A description for this position has not been set.'
       }
+
       const body = this.bodies.find(bod => bod.id === this.selectedPosition.body_id)
       return body.task_description
+    },
+    startTerm () {
+      return moment(this.selectedPosition.start_term).format('YYYY-MM-DD')
+    },
+    requirementsIsSet () {
+      return (this.selectedPosition.requirements !== null && this.selectedPosition.requirements !== '')
+    },
+    // TODO: This is a temporary solution, in the future, we want to display either the "first" deadline OR the force_end deadline
+    displayFinalDeadline () {
+      return moment().isAfter(this.positions[0].ends)
     }
   },
   methods: {
@@ -223,6 +247,7 @@ export default {
           // I'm passing them as props.
           // More info: https://github.com/buefy/buefy/issues/55
           position: {
+            start_term: new Date(),
             starts: new Date(),
             ends: new Date(),
             ends_force: forceCloseDeadline,

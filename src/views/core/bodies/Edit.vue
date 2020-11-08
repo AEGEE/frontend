@@ -36,7 +36,7 @@
           <div class="control">
             <textarea class="textarea" placeholder="e.g. Hello world" required v-model="body.description"></textarea>
           </div>
-          <label class="label">Preview</label>
+          <label class="label">Preview <MarkdownTooltip/></label>
           <div class="content">
             <span v-html="$options.filters.markdown(body.description)" />
           </div>
@@ -51,7 +51,7 @@
           <div class="control">
             <textarea class="textarea" v-model="body.task_description"></textarea>
           </div>
-          <label class="label">Preview</label>
+          <label class="label">Preview <MarkdownTooltip/></label>
           <div class="content">
             <span v-html="$options.filters.markdown(body.task_description)" />
           </div>
@@ -85,6 +85,27 @@
         </div>
 
         <div class="field">
+          <label class="label">Website</label>
+          <div class="control has-icons-left">
+            <span class="icon is-small is-left"><font-awesome-icon icon="globe" /></span>
+            <input class="input" type="text" v-model="body.website" />
+          </div>
+          <p class="help is-danger" v-if="errors.website">{{ errors.website.join(', ')}}</p>
+        </div>
+
+        <div class="field">
+          <label class="label">Country</label>
+          <div class="control">
+            <div class="select">
+              <select v-model="body.country">
+                <option v-for="(country, index) in countries" v-bind:key="index">{{ country }}</option>
+              </select>
+            </div>
+          </div>
+          <p class="help is-danger" v-if="errors.country">{{ errors.country.join(', ') }}</p>
+        </div>
+
+        <div class="field">
           <label class="label">Address</label>
           <div class="control">
             <input class="input" type="text" required v-model="body.address" />
@@ -106,7 +127,7 @@
                 v-model="autocompleteBody"
                 :data="filteredShadowCircles"
                 :disabled="!can.editShadowCircle"
-                open-on-focus="true"
+                :open-on-focus="true"
                 @select="circle => { body.shadow_circle_id = circle.id; body.shadow_circle = circle }">
                 <template slot-scope="props">
                   <div class="media">
@@ -132,7 +153,7 @@
           <p class="help is-danger" v-if="errors.shadow_circle_id">{{ errors.shadow_circle_id.join(', ')}}</p>
         </div>
 
-        <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
+        <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
 
         <div class="field">
           <div class="control">
@@ -148,7 +169,13 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
+import countries from '../../../countries'
+import MarkdownTooltip from '../../../components/tooltips/MarkdownTooltip'
+
 export default {
+  components: {
+    MarkdownTooltip
+  },
   name: 'EditBody',
   data () {
     return {
@@ -173,6 +200,7 @@ export default {
         editShadowCircle: true,
         editType: true
       },
+      countries,
       autocompleteBody: '',
       errors: {},
       isLoading: false,

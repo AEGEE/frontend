@@ -143,7 +143,9 @@ export default {
         date_of_birth: null,
         gender: null,
         phone: null,
-        privacy_consent: null
+        privacy_consent: null,
+        address: null,
+        about_me: null
       },
       birthday: null,
       agreedToPrivacyPolicy: false,
@@ -191,7 +193,9 @@ export default {
         'date_of_birth',
         'gender',
         'phone',
-        'privacy_consent'
+        'privacy_consent',
+        'address',
+        'about_me'
       ])
 
       this.axios.post(this.services['core'] + '/signup/' + this.$route.params.id, body).then(() => {
