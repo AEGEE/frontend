@@ -840,7 +840,8 @@ module.exports = [
     path: '/pages/:page_id',
     component: 'static/ConfluencePage',
     meta: {
-      label: 'Display page'
+      label: 'Display page',
+      auth: false
     }
   }
 ]
