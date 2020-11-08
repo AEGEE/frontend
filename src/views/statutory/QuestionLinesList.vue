@@ -67,28 +67,27 @@
         <div class="subtitle" v-if="selectedQuestionLine">Question for selected question line</div>
 
         <b-table :data.sync="selectedQuestionLine.questions" v-if="selectedQuestionLine" narrowed>
-          <template slot-scope="props">
-            <b-table-column label="#">
+            <b-table-column label="#" v-slot="props">
               {{ props.index + 1 }}
             </b-table-column>
 
-            <b-table-column field="participant" label="Participant">
+            <b-table-column field="participant" label="Participant" v-slot="props">
               {{ props.row.application.first_name }} {{ props.row.application.last_name }}, {{ props.row.application.body_name }}
             </b-table-column>
 
-            <b-table-column :visible="can.manage_question_lines" field="paricipant_type" label="Participant type">
+            <b-table-column :visible="can.manage_question_lines" field="paricipant_type" label="Participant type" v-slot="props">
               {{ props.row.application.participant_type }}
             </b-table-column>
 
-            <b-table-column field="text" label="Text">
+            <b-table-column field="text" label="Text" v-slot="props">
               {{ props.row.text }}
             </b-table-column>
 
-            <b-table-column field="updated_at" label="Last updated on">
+            <b-table-column field="updated_at" label="Last updated on" v-slot="props">
               {{ props.row.updated_at | datetime }}
             </b-table-column>
 
-            <b-table-column label="">
+            <b-table-column label="" v-slot="props">
               <button
                 class="button is-small is-warning"
                 v-show="(loginUser.id === props.row.application.user_id && selectedQuestionLine.status === 'open') || can.manage_question_lines"
@@ -96,7 +95,7 @@
                 Edit
               </button>
             </b-table-column>
-            <b-table-column label=" ">
+            <b-table-column label="" v-slot="props">
               <button
                 class="button is-small is-danger"
                 v-show="loginUser.id === props.row.application.id || can.manage_question_lines"
@@ -104,7 +103,6 @@
                 Delete
               </button>
             </b-table-column>
-          </template>
 
           <template slot="empty">
             <empty-table-stub />
