@@ -83,6 +83,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import { RESTRICTED_EMAILS, ALLOWED_BODY_TYPES } from '../../../validate-user'
 
 export default {
   name: 'UpdateProfile',
@@ -179,7 +180,7 @@ export default {
       })
     },
     changeEmail (newEmail) {
-      if (['aegee.eu', 'aegee.org'].some(domain => newEmail.includes(domain))) {
+      if (RESTRICTED_EMAILS.some(domain => newEmail.includes(domain))) {
         return this.$root.showError('Cannot use @aegee.org or @aegee.eu emails.')
       }
 
@@ -203,7 +204,7 @@ export default {
 
       return this.axios.get(this.services['core'] + '/bodies')
     }).then((response) => {
-      this.bodies = response.data.data.filter(b => ['antenna', 'contact antenna', 'contact'].includes(b.type))
+      this.bodies = response.data.data.filter(b => ALLOWED_BODY_TYPES.includes(b.type))
       this.isLoading = false
     }).catch((err) => {
       if (err.response.status === 404) {

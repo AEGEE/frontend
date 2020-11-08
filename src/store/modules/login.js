@@ -1,6 +1,5 @@
 import * as types from '../mutation-types'
-
-import validate from '../../validate-user'
+import { validate } from '../../validate-user'
 
 const state = {
   isLoggedIn: false,
