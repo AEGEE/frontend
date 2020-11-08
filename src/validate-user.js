@@ -15,10 +15,6 @@ const validate = (user) => {
     errorsMap.bodies = 'Should have at least 1 local.'
   }
 
-  if (!user.privacy_consent) {
-    errorsMap.privacy = 'Should agree to the Privacy Policy.'
-  }
-
   return errorsMap
 }
 
