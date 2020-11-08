@@ -18,4 +18,8 @@ const validate = (user) => {
   return errorsMap
 }
 
-export default validate
+export {
+  validate,
+  RESTRICTED_EMAILS,
+  ALLOWED_BODY_TYPES
+}
