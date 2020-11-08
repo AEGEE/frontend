@@ -11,20 +11,19 @@
         </div>
 
         <b-table :data="questionLines" :loading="isLoading" :selected.sync="selectedQuestionLine" narrowed>
-          <template slot-scope="props">
-            <b-table-column field="id" label="#" numeric>
+            <b-table-column field="id" label="#" numeric v-slot="props">
               {{ props.index + 1 }}
             </b-table-column>
 
-            <b-table-column field="name" label="Name">
+            <b-table-column field="name" label="Name" v-slot="props">
               {{ props.row.name }}
             </b-table-column>
 
-            <b-table-column label="Questions" numeric>
+            <b-table-column label="Questions" numeric v-slot="props">
               {{ props.row.questions.length }}
             </b-table-column>
 
-            <b-table-column field="starts" label="Status" centered>
+            <b-table-column field="starts" label="Status" centered v-slot="props">
               <span
                 class="tag"
                 v-if="!can.manage_question_lines"
@@ -39,15 +38,15 @@
               </div>
             </b-table-column>
 
-            <b-table-column label="Edit" centered v-if="can.manage_question_lines">
+            <b-table-column label="Edit" centered v-if="can.manage_question_lines" v-slot="props">
               <a href="#" class="button is-warning is-small" @click.prevent="openEditQuestionLineModal(props.row)">Edit</a>
             </b-table-column>
 
-            <b-table-column label="Delete" centered v-if="can.manage_question_lines">
+            <b-table-column label="Delete" centered v-if="can.manage_question_lines" v-slot="props">
               <a href="#" class="button is-danger is-small" @click.prevent="askDeleteQuestionLine(props.row, props.index)">Delete</a>
             </b-table-column>
 
-            <b-table-column label="Ask a question" centered>
+            <b-table-column label="Ask a question" centered v-slot="props">
               <button
                 class="button is-small"
                 v-if="can.submit_questions && props.row.status === 'open'"
@@ -57,7 +56,6 @@
               <span v-else-if=" props.row.status !== 'open'">The question line is closed.</span>
               <span v-else>You are not a confirmed participant.</span>
             </b-table-column>
-          </template>
 
           <template slot="empty">
             <empty-table-stub />
