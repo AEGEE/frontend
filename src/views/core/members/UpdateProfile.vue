@@ -81,7 +81,7 @@
         <hr/>
 
         <div class="field">
-          <label class="label">I agree to the <router-link :to="{ name: 'oms.legal.simple' }">Privacy Policy</router-link>
+          <label class="label">I agree to the <router-link :to="{ name: 'oms.confluence', params: { page_id: 'terms-of-service' } }">Privacy Policy</router-link>
             <input type="checkbox" class="checkbox" id="checkbox" v-model="agreedToPrivacyPolicy">
           </label>
 
