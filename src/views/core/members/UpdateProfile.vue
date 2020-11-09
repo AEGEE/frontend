@@ -76,6 +76,20 @@
           </div>
         </div>
       </div>
+
+      <template v-if="validationErrors.privacy">
+        <hr/>
+
+        <div class="field">
+          <label class="label">I agree to the <router-link :to="{ name: 'oms.confluence', params: { page_id: 'terms-of-service' } }">Privacy Policy</router-link>
+            <input type="checkbox" class="checkbox" id="checkbox" v-model="agreedToPrivacyPolicy">
+          </label>
+
+          <div class="control">
+            <button class="button is-info" @click="savePrivacyConsent()" :disabled="isSaving">Update profile</button>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -83,6 +97,7 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 import { RESTRICTED_EMAILS, ALLOWED_BODY_TYPES } from '../../../validate-user'
 
 export default {
@@ -100,6 +115,7 @@ export default {
         date_of_birth: null,
         gender: null,
         phone: null,
+        privacy_consent: null,
         address: null,
         about_me: null,
         user: {},
@@ -111,7 +127,8 @@ export default {
       errors: {},
       birthday: null,
       isLoading: true,
-      isSaving: false
+      isSaving: false,
+      agreedToPrivacyPolicy: false
     }
   },
   methods: {
@@ -128,7 +145,8 @@ export default {
         'about_me',
         'address',
         'phone',
-        'date_of_birth'
+        'date_of_birth',
+        'privacy_consent'
       ])
 
       this.axios.put(this.services['core'] + '/members/me', body).then(() => {
@@ -189,6 +207,14 @@ export default {
       }).catch((err) => {
         this.$root.showError('Error changing user email', err)
       })
+    },
+    savePrivacyConsent () {
+      if (!this.agreedToPrivacyPolicy) {
+        return this.$root.showError('Should agree to the Privacy Policy')
+      }
+
+      this.user.privacy_consent = moment().format()
+      this.saveUser()
     }
   },
   computed: mapGetters({
@@ -216,3 +242,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  #checkbox {
+    margin-left: 0.5vw
+  }
+</style>

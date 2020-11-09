@@ -719,33 +719,6 @@ module.exports = [
   },
   /* Static resources. */
   {
-    name: 'oms.legal.simple',
-    path: '/legal/simple',
-    meta: {
-      label: 'Privacy policy (simple)',
-      auth: false
-    },
-    component: 'static/LegalSimple'
-  },
-  {
-    name: 'oms.legal.simple',
-    path: '/legal/simple',
-    meta: {
-      label: 'Privacy policy (simple)',
-      auth: false
-    },
-    component: 'static/LegalSimple'
-  },
-  {
-    name: 'oms.legal.full',
-    path: '/legal/full',
-    meta: {
-      label: 'Privacy policy (full)',
-      auth: false
-    },
-    component: 'static/LegalFull'
-  },
-  {
     name: 'oms.about',
     path: '/about',
     meta: {
