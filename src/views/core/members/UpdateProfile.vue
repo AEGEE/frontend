@@ -13,8 +13,8 @@
         </div>
       </template>
 
-      <!-- <form @submit.prevent="saveUser()" v-if="validationErrors.email">
-        <select-or-custom v-model="user.gender" data-cy="gender" :values="['Male', 'Female']" label="Gender">
+      <form @submit.prevent="saveUser()" v-if="validationErrors.privacy">
+        <!-- <select-or-custom v-model="user.gender" data-cy="gender" :values="['Male', 'Female']" label="Gender">
           <template slot="errors-slot">
             <p class="help is-danger" v-if="errors.gender">{{ errors.gender.join(', ')}}</p>
           </template>
@@ -34,6 +34,13 @@
             <input class="input" data-cy="about_me" type="text" v-model="user.about_me" />
           </div>
           <p class="help is-danger" v-if="errors.about_me">{{ errors.about_me.join(', ')}}</p>
+        </div> -->
+
+        <div class="field">
+          <label class="label">
+            I agree to the <router-link :to="{ name: 'oms.confluence', params: { page_id: 'terms-of-service' } }">Privacy Policy</router-link>
+            <input type="checkbox" class="checkbox" id="checkbox" v-model="agreedToPrivacyPolicy">
+          </label>
         </div>
 
         <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
@@ -43,7 +50,7 @@
             <input type="submit" value="Save user" :disabled="isSaving" class="button is-primary is-fullwidth"/>
           </div>
         </div>
-      </form> -->
+      </form>
 
       <hr v-if="validationErrors.email" />
 
@@ -76,20 +83,6 @@
           </div>
         </div>
       </div>
-
-      <template v-if="validationErrors.privacy">
-        <hr/>
-
-        <div class="field">
-          <label class="label">I agree to the <router-link :to="{ name: 'oms.confluence', params: { page_id: 'terms-of-service' } }">Privacy Policy</router-link>
-            <input type="checkbox" class="checkbox" id="checkbox" v-model="agreedToPrivacyPolicy">
-          </label>
-
-          <div class="control">
-            <button class="button is-info" @click="savePrivacyConsent()" :disabled="isSaving">Update profile</button>
-          </div>
-        </div>
-      </template>
     </div>
   </div>
 </template>
@@ -133,6 +126,12 @@ export default {
   },
   methods: {
     saveUser () {
+      if (!this.agreedToPrivacyPolicy) {
+        return this.$root.showError('Should agree to the Privacy Policy')
+      }
+
+      this.user.privacy_consent = moment().format()
+
       this.isSaving = true
       this.errors = {}
 
@@ -155,10 +154,7 @@ export default {
         this.$root.showSuccess('User is saved.')
 
         /* istanbul ignore next */
-        return this.$router.push({
-          name: 'oms.members.view',
-          params: { id: this.user.username || this.user.id }
-        })
+        this.$router.go()
       }).catch((err) => {
         this.isSaving = false
 
@@ -207,14 +203,6 @@ export default {
       }).catch((err) => {
         this.$root.showError('Error changing user email', err)
       })
-    },
-    savePrivacyConsent () {
-      if (!this.agreedToPrivacyPolicy) {
-        return this.$root.showError('Should agree to the Privacy Policy')
-      }
-
-      this.user.privacy_consent = moment().format()
-      this.saveUser()
     }
   },
   computed: mapGetters({
@@ -225,6 +213,11 @@ export default {
     validationErrors: 'validationErrors'
   }),
   mounted () {
+    if (this.isValid) {
+      console.debug('User is valid, redirecting.')
+      return this.$router.push({ name: 'oms.dashboard' })
+    }
+
     this.axios.get(this.services['core'] + '/members/me').then((response) => {
       this.user = response.data.data
 
