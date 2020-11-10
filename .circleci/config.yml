@@ -1,25 +1,18 @@
 orbs:
-  slack: circleci/slack@3.4.1
+  slack: circleci/slack@3.4.2
 version: 2.1
 jobs:
   build:
-    machine:
-      image: ubuntu-1604:201903-01
+    docker:
+      image: cimg/base:2020.11
     steps:
       - checkout
       - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml build --no-cache frontend
   eslint:
-    machine:
-      image: ubuntu-1604:201903-01
+    docker:
+      image: cimg/node:14.15
     steps:
       - checkout
-      - run:
-          name: Install Node
-          command: |
-            curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-            echo 'export PATH=/usr/bin:$PATH' >> $BASH_ENV
-            which node && node -v
       - run: npm install
       - run: mkdir -p ~/reports
       - run: npx vue-cli-service lint --no-fix --format junit > ~/reports/eslint.xml
@@ -29,40 +22,33 @@ jobs:
           path: ~/reports
   cypress:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202010-01
     steps:
       - run:
-          name: Checkout oms-docker
-          command: git clone --recursive https://github.com/AEGEE/oms-docker.git .
+          name: Checkout MyAEGEE
+          command: git clone --recursive https://github.com/AEGEE/MyAEGEE.git .
       - run:
           name: Checkout submodules
           command: git submodule foreach git checkout master
       - run:
           name: Pull latest submodules
           command: git submodule foreach git pull origin master
-      - run: sed s/BASE_URL=localhost.test/BASE_URL=localhost/ .env.example
+      - run: sed s/BASE_URL=appserver.test/BASE_URL=appserver/ .env.example
       - run: sed s/SUBDOMAIN_FRONTEND=my./SUBDOMAIN_FRONTEND=/ .env.example
       - run: ./start.sh --no-vagrant
       - run: make list
   yamllint:
-    machine:
-      image: ubuntu-1604:201903-01
+    docker:
+      image: cimg/python:3.9.0
     steps:
       - checkout
       - run: pip install yamllint
       - run: yamllint -d .yamllint.yml .
   docker-build-and-push:
-    machine:
-      image: ubuntu-1604:201903-01
+    docker:
+      image: cimg/node:14.15
     steps:
       - checkout
-      - run:
-          name: Install Node
-          command: |
-            curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-            echo 'export PATH=/usr/bin:$PATH' >> $BASH_ENV
-            which node && node -v
       - run: npm install
       - run: npx semantic-release
       - run: docker build  --tag aegee/frontend:$(node -p "require('./package.json').version") --tag aegee/frontend:latest -f docker/Dockerfile .
