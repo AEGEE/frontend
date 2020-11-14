@@ -39,6 +39,13 @@
           </div>
 
           <div class="field is-grouped" v-if="can.edit">
+            <button class="button is-fullwidth is-warning" @click="editPrimaryEmail()">
+              <span>Set primary email</span>
+              <span class="icon"><font-awesome-icon icon="envelope" /></span>
+            </button>
+          </div>
+
+          <div class="field is-grouped" v-if="can.edit">
             <button class="button is-fullwidth is-warning" @click="editPrimaryBodyModal()">
               <span>Set primary body</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
@@ -176,6 +183,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import EditPrimaryBodyModal from './EditPrimaryBodyModal.vue'
+import EditPrimaryEmailModal from './EditPrimaryEmailModal.vue'
 
 export default {
   name: 'SingleUser',
@@ -282,6 +290,18 @@ export default {
         this.$root.showSuccess('An email change is triggered. Check your new inbox for a confirmation.')
       }).catch((err) => {
         this.$root.showError('Error changing user email', err)
+      })
+    },
+    editPrimaryEmail () {
+      this.$buefy.modal.open({
+        component: EditPrimaryEmailModal,
+        hasModalCard: true,
+        props: {
+          member: this.user,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess
+        }
       })
     },
     fetchUser () {
