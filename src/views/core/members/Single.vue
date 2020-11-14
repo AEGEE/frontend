@@ -113,6 +113,10 @@
                   <td><a :href="'mailto:' + user.email" data-cy="email">{{ user.email }}</a></td>
                 </tr>
                 <tr>
+                  <th>GSuite account</th>
+                  <td><a :href="'mailto:' + user.gsuite_id" data-cy="gsuite">{{ user.gsuite_id }}</a></td>
+                </tr>
+                <tr>
                   <th>Login suspended?</th>
                   <td data-cy="active">{{ user.active ? 'No' : 'Yes' }}</td>
                 </tr>
