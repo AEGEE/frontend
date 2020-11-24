@@ -16,3 +16,11 @@ updates:
     open-pull-requests-limit: 99
     reviewers:
       - "WikiRik"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+    open-pull-requests-limit: 99
+    reviewers:
+      - "WikiRik"
