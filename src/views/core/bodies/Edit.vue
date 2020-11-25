@@ -32,6 +32,17 @@
         </div>
 
         <div class="field">
+          <label class="label">
+            Abbreviation (if applicable)
+            <tooltip text="Not applicable for locals"/>
+          </label>
+          <div class="control">
+            <input class="input" type="text" :disabled="!can.editAbbreviation" v-model="body.abbreviation" />
+          </div>
+          <p class="help is-danger" v-if="errors.abbreviation">{{ errors.abbreviation.join(', ')}}</p>
+        </div>
+
+        <div class="field">
           <label class="label">Description</label>
           <div class="control">
             <textarea class="textarea" placeholder="e.g. Hello world" required v-model="body.description"></textarea>
@@ -181,6 +192,7 @@ export default {
     return {
       body: {
         name: '',
+        abbreviation: '',
         description: '',
         task_description: '',
         id: null,
@@ -196,6 +208,7 @@ export default {
       permissions: [],
       can: {
         editName: true,
+        editAbbreviation: true,
         editCode: true,
         editShadowCircle: true,
         editType: true
@@ -270,6 +283,7 @@ export default {
 
       const editGlobalPermission = this.permissions.find(permission => permission.combined.endsWith('global:update:body'))
       this.can.editName = editGlobalPermission
+      this.can.editAbbreviation = editGlobalPermission
       this.can.editCode = editGlobalPermission
       this.can.editShadowCircle = editGlobalPermission
       this.can.editType = editGlobalPermission
