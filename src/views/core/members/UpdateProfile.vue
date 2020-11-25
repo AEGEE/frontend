@@ -7,7 +7,7 @@
           <div class="content">
             <strong>Your profile has the following issues and you have to fix them before using the system:</strong>
             <ul>
-              <li v-for="(error, key) in validationErrors" :key="key"><strong>{{ key }}</strong>: {{ error}}</li>
+              <li v-for="(error, key) in validationErrors" :key="key">{{ error }}</li>
             </ul>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default {
   methods: {
     saveUser () {
       if (!this.agreedToPrivacyPolicy) {
-        return this.$root.showError('Should agree to the Privacy Policy')
+        return this.$root.showError('You should agree to the Privacy Policy.')
       }
 
       this.user.privacy_consent = moment().format()
@@ -181,7 +181,7 @@ export default {
       this.axios.post(this.services['core'] + '/bodies/' + bodyId + '/join-requests', {
         motivation
       }).then(() => {
-        this.$root.showSuccess('Join request is sent.')
+        this.$root.showSuccess('Join request is sent. Please wait until a board members accepts it.')
         this.isLoading = false
         this.isRequestingMembership = true
       }).catch((err) => {
@@ -195,7 +195,7 @@ export default {
     },
     changeEmail (newEmail) {
       if (RESTRICTED_EMAILS.some(domain => newEmail.includes(domain))) {
-        return this.$root.showError('Cannot use @aegee.org or @aegee.eu emails.')
+        return this.$root.showError('Your email can not be in one of the following domains: ' + RESTRICTED_EMAILS.join(', ').trim() + '.')
       }
 
       this.axios.put(this.services['core'] + '/members/me/email', { new_email: newEmail }).then(() => {

@@ -8,15 +8,15 @@ const validate = (user) => {
 
   const errorsMap = {}
   if (RESTRICTED_EMAILS.some(email => user.email.endsWith(email))) {
-    errorsMap.email = 'Cannot use @aegee.org or @aegee.eu emails.'
+    errorsMap.email = 'Your email can not be in one of the following domains: ' + RESTRICTED_EMAILS.join(', ').trim() + '.'
   }
 
   if (!user.bodies.some(body => ALLOWED_BODY_TYPES.includes(body.type))) {
-    errorsMap.bodies = 'Should have at least 1 local.'
+    errorsMap.bodies = 'You should be a member of at least 1 local.'
   }
 
   if (!user.privacy_consent) {
-    errorsMap.privacy = 'Should agree to the Privacy Policy.'
+    errorsMap.privacy = 'You should agree to the Privacy Policy.'
   }
 
   return errorsMap
