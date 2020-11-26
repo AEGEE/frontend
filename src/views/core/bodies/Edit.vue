@@ -31,11 +31,8 @@
           <p class="help is-danger" v-if="errors.name">{{ errors.name.join(', ')}}</p>
         </div>
 
-        <div class="field">
-          <label class="label">
-            Abbreviation (if applicable)
-            <tooltip text="Not applicable for locals"/>
-          </label>
+        <div class="field" v-if="!['antenna', 'contact antenna', 'contact'].includes(body.type)">
+          <label class="label">Abbreviation (if applicable)</label>
           <div class="control">
             <input class="input" type="text" :disabled="!can.editAbbreviation" v-model="body.abbreviation" />
           </div>
