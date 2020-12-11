@@ -41,7 +41,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'import/no-extraneous-dependencies': 'off',
     'dot-notation': 'off',
-    'no-mutatating-props': 'off'
+    'no-mutating-props': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'
