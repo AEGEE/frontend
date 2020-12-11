@@ -41,7 +41,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'import/no-extraneous-dependencies': 'off',
     'dot-notation': 'off',
-    'no-mutating-props': 'off'
+    'vue/no-mutating-props': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'
