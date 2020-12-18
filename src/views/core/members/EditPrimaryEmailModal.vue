@@ -7,7 +7,10 @@
 
     <section class="modal-card-body">
       <div class="field">
-        <label class="label">Primary email</label>
+        <label class="label">
+          Primary email
+          <tooltip text="Your primary email is the place where you receive updates from MyAEGEE" />
+        </label>
         <b-field>
           <b-radio-button v-model="primaryEmail" native-value="personal">
             {{ member.email }}
