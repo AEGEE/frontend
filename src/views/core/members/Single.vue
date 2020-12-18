@@ -38,7 +38,7 @@
             </button>
           </div>
 
-          <div class="field is-grouped" v-if="can.edit">
+          <div class="field is-grouped" v-if="can.edit && this.user.gsuite_id != null && this.user.gsuite_id != ''">
             <button class="button is-fullwidth is-warning" @click="editPrimaryEmail()">
               <span>Set primary email</span>
               <span class="icon"><font-awesome-icon icon="envelope" /></span>
