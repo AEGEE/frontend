@@ -121,7 +121,8 @@
                 </tr>
                 <tr>
                   <th>GSuite account</th>
-                  <td><a :href="'mailto:' + user.gsuite_id" data-cy="gsuite">{{ user.gsuite_id }}</a></td>
+                  <td v-if="user.gsuite_id"><a :href="'mailto:' + user.gsuite_id" data-cy="gsuite">{{ user.gsuite_id }}</a></td>
+                  <td v-if="!user.gsuite_id"><i>Not set.</i></td>
                 </tr>
                 <tr>
                   <th>Login suspended?</th>
