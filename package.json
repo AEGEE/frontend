@@ -63,7 +63,7 @@
     "sass-loader": "10.1.0",
     "v-tooltip": "2.0.3",
     "vue": "2.6.12",
-    "vue-axios": "2.1.5",
+    "vue-axios": "3.2.2",
     "vue-bulma-collapse": "1.0.3",
     "vue-chartjs": "3.5.1",
     "vue-flatpickr-component": "8.1.6",
