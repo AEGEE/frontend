@@ -688,7 +688,7 @@ export default {
       Promise.all(endpoints.map(fetchEndpoint)).then((responses) => {
         this.autoComplete.members.values = responses
           .reduce((acc, val) => acc.concat(val), [])
-          .map(value => (this.can.viewAllMembers ? value : value.member))
+          .map(value => (this.can.viewAllMembers ? value : value.user))
           .filter((elt, index, array) => array.findIndex(e => e.id === elt.id) === index)
 
         this.autoComplete.members.loading = false
