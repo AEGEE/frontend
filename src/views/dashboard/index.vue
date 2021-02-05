@@ -165,11 +165,13 @@ export default {
     this.axios.get(this.services['events'] + '/mine/participating').then((eventsResponse) => {
       this.axios.get(this.services['statutory'] + '/mine').then((statutoryResponse) => {
         const input = eventsResponse.data.data.concat(statutoryResponse.data.data)
-        for (const event of input) {
-          if (moment().isSameOrBefore(event.starts)) {
-            this.events.future.push(event)
-          } else {
-            this.events.past.push(event)
+        for (const event of input) {)
+          if (!event.applications[0].cancelled && event.applications[0].status != 'rejected') {
+            if (moment().isSameOrBefore(event.starts)) {
+              this.events.future.push(event)
+            } else {
+              this.events.past.push(event)
+            }
           }
         }
         this.events.past.sort((e1, e2) => ((e1.starts < e2.starts) ? 1 : -1))
