@@ -165,7 +165,7 @@ export default {
     this.axios.get(this.services['events'] + '/mine/participating').then((eventsResponse) => {
       this.axios.get(this.services['statutory'] + '/mine').then((statutoryResponse) => {
         const input = eventsResponse.data.data.concat(statutoryResponse.data.data)
-        for (const event of input) {)
+        for (const event of input) {
           if (!event.applications[0].cancelled && event.applications[0].status != 'rejected') {
             if (moment().isSameOrBefore(event.starts)) {
               this.events.future.push(event)
