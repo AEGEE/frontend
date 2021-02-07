@@ -1,3 +1,87 @@
+## [1.22.3](https://github.com/AEGEE/frontend/compare/1.22.2...1.22.3) (2021-02-05)
+
+
+### Bug Fixes
+
+* **SU:** fix one small fix differently ([#861](https://github.com/AEGEE/frontend/issues/861)) ([3526531](https://github.com/AEGEE/frontend/commit/35265313d10c4a436d58f276aeb475314a8d9b4f))
+
+## [1.22.2](https://github.com/AEGEE/frontend/compare/1.22.1...1.22.2) (2021-02-05)
+
+
+### Bug Fixes
+
+* **SU:** more small fixes ([#860](https://github.com/AEGEE/frontend/issues/860)) ([b62748d](https://github.com/AEGEE/frontend/commit/b62748d1918af7de4c86b6eddf1df1c9eb692ca0))
+
+## [1.22.1](https://github.com/AEGEE/frontend/compare/1.22.0...1.22.1) (2021-02-05)
+
+
+### Bug Fixes
+
+* **SU:** small fixes ([#859](https://github.com/AEGEE/frontend/issues/859)) ([0ffcb68](https://github.com/AEGEE/frontend/commit/0ffcb689fdbc68cedbeb25c4051f482e59aea960))
+
+# [1.22.0](https://github.com/AEGEE/frontend/compare/1.21.2...1.22.0) (2021-02-05)
+
+
+### Features
+
+* **SU:** MVP SU creation ([#850](https://github.com/AEGEE/frontend/issues/850)) ([fe0b541](https://github.com/AEGEE/frontend/commit/fe0b541ecaca67f30ab44bcbd638ffbb6422ca8b))
+
+## [1.21.2](https://github.com/AEGEE/frontend/compare/1.21.1...1.21.2) (2021-01-26)
+
+
+### Bug Fixes
+
+* **resources:** add request a trainer. Fixes HELP-1459 ([#824](https://github.com/AEGEE/frontend/issues/824)) ([fd8b853](https://github.com/AEGEE/frontend/commit/fd8b8533adc7e5e8ebbfe814c297b752cbabdeb0)), closes [#811](https://github.com/AEGEE/frontend/issues/811)
+
+## [1.21.1](https://github.com/AEGEE/frontend/compare/1.21.0...1.21.1) (2020-12-08)
+
+
+### Bug Fixes
+
+* **position:** display page correctly when there are no positions ([#753](https://github.com/AEGEE/frontend/issues/753)) ([9a16855](https://github.com/AEGEE/frontend/commit/9a168550056258bb6e7fb792e87ff298e5bba4ea))
+
+# [1.21.0](https://github.com/AEGEE/frontend/compare/1.20.4...1.21.0) (2020-11-30)
+
+
+### Features
+
+* **body:** add abbreviation ([#747](https://github.com/AEGEE/frontend/issues/747)) ([e01d8a8](https://github.com/AEGEE/frontend/commit/e01d8a8af61ad449df8a1c942be87259af0bfa1d))
+
+## [1.20.4](https://github.com/AEGEE/frontend/compare/1.20.3...1.20.4) (2020-11-26)
+
+
+### Bug Fixes
+
+* **import:** combine multiple lastnames to one word ([#746](https://github.com/AEGEE/frontend/issues/746)) ([2872a19](https://github.com/AEGEE/frontend/commit/2872a19df0e1a9f2b00ebd4dc4d89ee19bba539f))
+
+## [1.20.3](https://github.com/AEGEE/frontend/compare/1.20.2...1.20.3) (2020-11-11)
+
+
+### Bug Fixes
+
+* **register:** make phone and address optional ([#716](https://github.com/AEGEE/frontend/issues/716)) ([334a676](https://github.com/AEGEE/frontend/commit/334a6765b4c49e2d8d215536122d8b9121a3aea2))
+
+## [1.20.2](https://github.com/AEGEE/frontend/compare/1.20.1...1.20.2) (2020-11-11)
+
+
+### Bug Fixes
+
+* **memberslist:** remove negation mark from length ([#715](https://github.com/AEGEE/frontend/issues/715)) ([6c602a8](https://github.com/AEGEE/frontend/commit/6c602a80690335ea9d7f9fdafc7f8d005cf9d7d5))
+
+## [1.20.1](https://github.com/AEGEE/frontend/compare/1.20.0...1.20.1) (2020-11-10)
+
+
+### Bug Fixes
+
+* **gsuitewrapper:** add gsuite-wrapper to status and about ([#705](https://github.com/AEGEE/frontend/issues/705)) ([da96a64](https://github.com/AEGEE/frontend/commit/da96a6492405631a7d8c40c947eb28fca2e51273))
+
+# [1.20.0](https://github.com/AEGEE/frontend/compare/1.19.2...1.20.0) (2020-11-08)
+
+
+### Features
+
+* **user:** save privacy consent new users ([#514](https://github.com/AEGEE/frontend/issues/514)) ([b8cc0e9](https://github.com/AEGEE/frontend/commit/b8cc0e9bf5baeda34dd9355ee83d59c6d53e2ca7))
+
 ## [1.19.2](https://github.com/AEGEE/frontend/compare/1.19.1...1.19.2) (2020-10-29)
 
 
