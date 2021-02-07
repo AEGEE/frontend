@@ -64,6 +64,13 @@
             </router-link>
           </div>
 
+          <div class="field is-grouped" v-if="true">
+            <a @click="openChangeBoardModal()" :class="['button', 'is-fullwidth', 'is-primary']">
+              <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'users']" /></span>
+              <span class="field-label">Change board</span>
+            </a>
+          </div>
+
           <div class="field is-grouped" v-if="isMember">
             <a @click="askLeaveBody()" :class="['button', 'is-fullwidth', 'is-danger']">
               <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /></span>
@@ -155,6 +162,13 @@
         </div>
       </article>
 
+      <article class="tile is-child">
+        <div class="content">
+          <p class="subtitle">Board</p>
+          <!-- TODO: Print board information here -->
+        </div>
+      </article>
+
       <article class="tile is-child" v-if="body.circles.length">
         <div class="content">
           <p class="subtitle">Bound circles</p>
@@ -184,6 +198,7 @@
 import { mapGetters } from 'vuex'
 import AddBoundCircleModal from './AddBoundCircleModal'
 import AddMemberModal from './AddMemberModal'
+import ChangeBoardModal from './ChangeBoardModal'
 
 export default {
   name: 'SingleBody',
@@ -248,6 +263,18 @@ export default {
           // and therefore store, services and notifications functions. That's why
           // I'm passing them as props.
           // More info: https://github.com/buefy/buefy/issues/55
+          body: this.body,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess
+        }
+      })
+    },
+    openChangeBoardModal() {
+      this.$buefy.modal.open({
+        component: ChangeBoardModal,
+        hasModalCard: true,
+        props: {
           body: this.body,
           services: this.services,
           showError: this.$root.showError,
