@@ -14,7 +14,7 @@
             placeholder="Select date"
             class="input"
             required
-            v-model="board.election" />
+            v-model="board.elected_date" />
         </div>
       </div>
 
@@ -28,7 +28,7 @@
               placeholder="Select date"
               class="input"
               required
-              v-model="board.start" />
+              v-model="board.start_date" />
           </div>
         </b-field>
 
@@ -37,34 +37,35 @@
             <flat-pickr
               placeholder="Select date"
               class="input"
-              v-model="board.end" />
+              v-model="board.end_date" />
           </div>
         </b-field>
       </b-field>
 
       <hr>
 
-      <b-field grouped v-for="(position, index) in board.members" v-bind:key="index" style="height: 36px;">
+      <b-field grouped v-for="(position, index) in board.positions" v-bind:key="index" style="height: 36px;">
         <b-field>
           <template v-if="position.required">
-            <strong>{{ position.position }} <span style="color: red;">*</span></strong>
+            <strong>{{ position.function }} <span style="color: red;">*</span></strong>
           </template>
 
           <template v-else>
-            <b-input slot="label" placeholder="Function" v-model="position.position" />
+            <b-input slot="label" placeholder="Function" v-model="position.function" />
           </template>
         </b-field>
 
         <b-autocomplete
           v-model="position.name"
           :data="members"
-          field="title"
           :loading="isLoading"
           @input="query => fetchMembers(query)"
-          :expanded="true">
+          @select="user => position.id = user.id"
+          :expanded="true"
+          field="name">
           <template slot-scope="props">
             <div class="media">
-              <div class="media-content">{{ props.option }}</div>
+              <div class="media-content">{{ props.option.first_name }} {{ props.option.last_name }}</div>
             </div>
           </template>
         </b-autocomplete>
@@ -112,33 +113,65 @@ export default {
   data () {
     return {
       board: {
-        election: "",
-        start: "",
-        end: "",
-        members: [
-          {position: 'President', name: "", required: true},
-          {position: 'Secretary', name: "", required: true},
-          {position: 'Treasurer', name: "", required: true}
+        elected_date: '',
+        start_date: '',
+        end_date: null,
+        positions: [
+          { function: 'President', name: '', id: '', required: true },
+          { function: 'Secretary', name: '', id: '', required: true },
+          { function: 'Treasurer', name: '', id: '', required: true }
         ],
-        message: ""
+        message: ''
       },
       members: [],
-      isLoading: false
+      isLoading: false,
+      isSaving: false
     }
   },
   methods: {
-    saveChangeBoard() {
-      // TODO: Integrate backend here
+    saveChangeBoard () {
+      this.isSaving = true
+
+      const board_export = {
+        body_id: this.body.id,
+        elected_date: this.board.elected_date,
+        start_date: this.board.start_date,
+        end_date: this.board.end_date,
+        president: this.board.positions[0].id,
+        secretary: this.board.positions[1].id,
+        treasurer: this.board.positions[2].id,
+        // TODO: Think of a good way to export other positions
+        // Probably just with function and id
+        // other_members: {
+        //
+        // },
+        message: this.board.message
+        // TODO: Add image
+        // image:
+      }
+
+      this.axios.post(
+        this.services['network'] + '/bodies/' + this.body.id + '/boards',
+        board_export
+      ).then((response) => {
+        this.isSaving = false
+        this.showSuccess('Board is saved.')
+        this.$parent.close()
+      }).catch((err) => {
+        this.isSaving = false
+        this.showError('Something went wrong', err)
+      })
     },
     addPosition () {
-      this.board.members.push({
-        position: '',
+      this.board.positions.push({
+        function: '',
         name: '',
+        id: '',
         required: false
       })
     },
     deletePosition (index) {
-      this.board.members.splice(index, 1)
+      this.board.positions.splice(index, 1)
     },
     fetchMembers (query) {
       if (!query) return
@@ -156,7 +189,8 @@ export default {
       }).then((response) => {
         const users = response.data.data
         for (const user of users) {
-          this.members.push(user.user.first_name + ' ' + user.user.last_name)
+          user.user.name = user.user.first_name + ' ' + user.user.last_name
+          this.members.push(user.user)
         }
         this.isLoading = false
       }).catch((err) => {
