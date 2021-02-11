@@ -162,10 +162,31 @@
         </div>
       </article>
 
-      <article class="tile is-child">
+      <article class="tile is-child" v-if="boards">
         <div class="content">
           <p class="subtitle">Board</p>
-          <!-- TODO: Print board information here -->
+          <div class="content" v-for="board in boards" v-bind:key="board.id">
+              <table class="table is-narrow">
+                <tbody>
+                  <tr>
+                    <th>Term</th>
+                    <td>{{ board.start_date }} - {{ board.end_date }}</td>
+                  </tr>
+                  <tr>
+                    <th>President</th>
+                    <td>{{ board.president.first_name }} {{ board.president.last_name }}</td>
+                  </tr>
+                  <tr>
+                    <th>Secretary</th>
+                    <td>{{ board.secretary.first_name }} {{ board.secretary.last_name }}</td>
+                  </tr>
+                  <tr>
+                    <th>Treasurer</th>
+                    <td>{{ board.treasurer.first_name }} {{ board.treasurer.last_name }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </div>
       </article>
 
@@ -221,6 +242,7 @@ export default {
         shadow_circle: null,
         shadow_circle_id: null
       },
+      boards: null,
       isLoading: false,
       isMember: false,
       isRequestingMembership: false,
@@ -369,8 +391,32 @@ export default {
   },
   mounted () {
     this.isLoading = true
+    // Get body for this page
     this.axios.get(this.services['core'] + '/bodies/' + this.$route.params.id).then((response) => {
       this.body = response.data.data
+
+      // Get current board(s) for this body
+      this.axios.get(this.services['network'] + '/bodies/' + this.body.id + '/boards/current').then((boardResponse) => {
+        this.boards = boardResponse.data.data
+
+        for (const board of this.boards) {
+          // Get users that are part of a board
+          this.axios.get(this.services['core'] + '/members/' + board.president).then((presidentResponse) => {
+            board.president = presidentResponse.data.data
+          })
+
+          this.axios.get(this.services['core'] + '/members/' + board.secretary).then((secretaryResponse) => {
+            board.secretary = secretaryResponse.data.data
+          })
+
+          this.axios.get(this.services['core'] + '/members/' + board.treasurer).then((treasurerResponse) => {
+            board.treasurer = treasurerResponse.data.data
+          })
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Some error happened', err)
+      })
 
       if (this.loginUser) {
         this.isMember = this.loginUser.bodies.some(body => body.id === this.body.id)
