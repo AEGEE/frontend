@@ -33,32 +33,50 @@
             </b-table-column>
 
             <b-table-column field="status" label="Change status" sortable>
-              <!-- <div class="buttons">
+              <div class="buttons">
                 <button
-                  v-if="props.row.status === 'draft'"
+                  v-if="props.row.status === 'first_draft'"
                   class="button is-small is-warning"
-                  @click="changeStatus(props.row, 'submitted')">
-                  Request approval
+                  @click="changeStatus(props.row, 'first_submission')">
+                  Submit first draft
                 </button>
                 <button
-                  v-if="props.row.status === 'submitted'"
+                  v-if="props.row.status === 'first_approval'"
+                  class="button is-small is-warning"
+                  @click="changeStatus(props.row, 'second_submission')">
+                  Submit second draft
+                </button>
+                <button
+                  v-if="props.row.status === 'second_draft'"
+                  class="button is-small is-warning"
+                  @click="changeStatus(props.row, 'second_submission')">
+                  Submit second draft
+                </button>
+                <button
+                  v-if="props.row.status === 'first_submission'"
                   class="button is-small is-primary"
-                  @click="changeStatus(props.row, 'published')">
-                  Publish
+                  @click="changeStatus(props.row, 'first_approval')">
+                  Approve first submission
                 </button>
                 <button
-                  v-if="props.row.status === 'submitted'"
-                  class="button is-small is-danger"
-                  @click="changeStatus(props.row, 'draft')">
-                  Request changes
+                  v-if="props.row.status === 'second_submission'"
+                  class="button is-small is-primary"
+                  @click="changeStatus(props.row, 'second_approval')">
+                  Approve second submission
                 </button>
                 <button
-                  v-if="props.row.status === 'published'"
+                  v-if="props.row.status === 'first_submission'"
                   class="button is-small is-danger"
-                  @click="changeStatus(props.row, 'submitted')">
-                  Unpublish
+                  @click="changeStatus(props.row, 'first_draft')">
+                  Reject first submission
                 </button>
-              </div> -->
+                <button
+                  v-if="props.row.status === 'second_submission'"
+                  class="button is-small is-danger"
+                  @click="changeStatus(props.row, 'second_draft')">
+                  Reject second submission
+                </button>
+              </div>
             </b-table-column>
           </template>
 
@@ -87,31 +105,17 @@ export default {
   },
   computed: mapGetters(['services']),
   methods: {
-    // changeStatus (event, newStatus) {
-    //   if (event.status === 'draft') {
-    //     if (!event.budget) {
-    //       this.$root.showError('The budget for the event is not set.')
-    //     }
+    changeStatus (event, newStatus) {
+      this.axios.put(this.services['summeruniversity'] + '/single/' + event.id + '/status', {
+        status: newStatus
+      }).then(() => {
+        this.$root.showSuccess(`Event status is now "${newStatus}".`)
 
-    //     if (!event.programme) {
-    //       this.$root.showError('The program for the event is not set.')
-    //     }
-
-    //     if (!event.budget || !event.programme) {
-    //       return
-    //     }
-    //   }
-
-    //   this.axios.put(this.services['summeruniversity'] + '/single/' + event.id + '/status', {
-    //     status: newStatus
-    //   }).then(() => {
-    //     this.$root.showSuccess(`Event status is now "${newStatus}".`)
-
-    //     event.status = newStatus
-    //   }).catch((err) => {
-    //     this.$root.showError('Could not update event status', err)
-    //   })
-    // },
+        event.status = newStatus
+      }).catch((err) => {
+        this.$root.showError('Could not update event status', err)
+      })
+    },
     fetchData () {
       this.isLoading = true
 

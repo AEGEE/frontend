@@ -12,17 +12,70 @@
       <div class="tile is-parent">
         <article class="tile is-child is-info">
           <div class="field is-grouped" v-if="can.edit_summeruniversity">
-            <!-- TODO go to oms.summeruniversity.edit for people with that submission -->
-            <!-- TODO go to oms.summeruniversity.edit_second if status is second_draft, second_submission or second_approval -->
-            <!-- maybe fix this in backend, two different permission stuff -->
-            <router-link :to="{ name: 'oms.summeruniversity.edit', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
+            <router-link v-if="can.approve_summeruniversity || event.status === 'first_draft' || event.status === 'first_submission'" :to="{ name: 'oms.summeruniversity.edit', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
               <span>Edit event</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
-            <router-link :to="{ name: 'oms.summeruniversity.edit_second', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
+            <router-link v-else :to="{ name: 'oms.summeruniversity.edit_second', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
               <span>Edit event</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
+          </div>
+
+          <!-- For SUCT: submit first_draft (first_draft -> first_submission) -->
+          <div class="field is-grouped" v-if="can.change_status.first_submission && event.status === 'first_draft'">
+            <a class="button is-fullwidth is-warning" @click="askChangeStatus('first_submission')">
+              <span>Submit first draft</span>
+              <span class="icon"><font-awesome-icon icon="sign-in-alt" /></span>
+            </a>
+          </div>
+
+          <!-- For SUCT: submit second_draft (second_draft -> second_submission) -->
+          <div class="field is-grouped" v-if="can.change_status.second_submission && event.status === 'second_draft'">
+            <a class="button is-fullwidth is-warning" @click="askChangeStatus('second_submission')">
+              <span>Submit second draft</span>
+              <span class="icon"><font-awesome-icon icon="sign-in-alt" /></span>
+            </a>
+          </div>
+
+          <!-- For SUCT: submit first_approval (first_approval -> second_submission) -->
+          <div class="field is-grouped" v-if="can.change_status.second_submission && event.status === 'first_approval'">
+            <a class="button is-fullwidth is-warning" @click="askChangeStatus('second_submission')">
+              <span>Submit second draft</span>
+              <span class="icon"><font-awesome-icon icon="sign-in-alt" /></span>
+            </a>
+          </div>
+
+          <!-- For SUCT: approve first_submission (first_submission -> first_approval) -->
+          <div class="field is-grouped" v-if="can.change_status.first_approval && event.status === 'first_submission'">
+            <a class="button is-fullwidth is-primary" @click="askChangeStatus('first_approval')">
+              <span>Approve first submission</span>
+              <span class="icon"><font-awesome-icon icon="check" /></span>
+            </a>
+          </div>
+
+          <!-- For SUCT: approve second_submission (second_submission -> second_approval) -->
+          <div class="field is-grouped" v-if="can.change_status.second_approval && event.status === 'second_submission'">
+            <a class="button is-fullwidth is-primary" @click="askChangeStatus('second_approval')">
+              <span>Approve second submission</span>
+              <span class="icon"><font-awesome-icon icon="check" /></span>
+            </a>
+          </div>
+
+          <!-- For SUCT: reject first_submission (first_submission -> first_draft) -->
+          <div class="field is-grouped" v-if="can.change_status.first_draft && event.status === 'first_submission'">
+            <a class="button is-fullwidth is-danger" @click="askChangeStatus('first_draft')">
+              <span>Reject first submission</span>
+              <span class="icon"><font-awesome-icon icon="times-circle" /></span>
+            </a>
+          </div>
+
+          <!-- For SUCT: reject second_submission (second_submission -> second_draft) -->
+          <div class="field is-grouped" v-if="can.change_status.second_draft && event.status === 'second_submission'">
+            <a class="button is-fullwidth is-danger" @click="askChangeStatus('second_draft')">
+              <span>Reject second submission</span>
+              <span class="icon"><font-awesome-icon icon="times-circle" /></span>
+            </a>
           </div>
 
           <div class="field is-grouped" v-if="can.delete_summeruniversity">
@@ -119,7 +172,7 @@
           </div>
 
           <div class="notification is-info" v-if="event.status !== 'published'">
-            <p><strong>This event is visible to SUCT and organizers only because it's not approved yet.</strong></p>
+            <p><strong>This event is visible to SUCT and organizers only because it's not published yet.</strong></p>
             <p>Once the event will be published, others would be able to access it.</p>
           </div>
 
@@ -180,20 +233,15 @@ export default {
         organizing_bodies: [],
         locations: [],
         circles: [],
-        application_starts: null,
-        application_ends: null,
         starts: null,
         ends: null,
-        application_status: 'closed',
         head_image: null,
         status: 'published',
         optional_fee: null,
-        meals_per_day: 0,
         optional_programme: null,
-        link_info_travel_country: null,
         accommodation_type: ''
       },
-      eventTypes: constants.EVENT_TYPES_NAMES,
+      eventTypes: constants.SUMMERUNIVERSITY_TYPES_NAMES,
       accessToken: '',
       map: {
         actions: null,
@@ -208,9 +256,12 @@ export default {
         view_applications: false,
         apply: false,
         change_status: {
-          draft: false,
-          submitted: false,
-          published: false
+          first_draft: false,
+          first_submission: false,
+          first_approval: false,
+          second_draft: false,
+          second_submission: false,
+          second_approval: false
         }
       }
     }
@@ -233,20 +284,6 @@ export default {
       }).catch((err) => this.$root.showError('Could not delete event', err))
     },
     askChangeStatus (newStatus) {
-      if (this.event.status === 'draft') {
-        if (!this.event.budget) {
-          this.$root.showError('Please set the budget for the event in the event settings.')
-        }
-
-        if (!this.event.programme) {
-          this.$root.showError('Please set the program for the event in the event settings.')
-        }
-
-        if (!this.event.budget || !this.event.programme) {
-          return
-        }
-      }
-
       this.$buefy.dialog.confirm({
         title: 'Change status',
         message: `Are you sure you want to <b>change this event status to "${newStatus}"</b>?`,
