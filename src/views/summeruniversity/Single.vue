@@ -11,14 +11,21 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child is-info">
-          <div class="field is-grouped" v-if="can.edit_event">
+          <div class="field is-grouped" v-if="can.edit_summeruniversity">
+            <!-- TODO go to oms.summeruniversity.edit for people with that submission -->
+            <!-- TODO go to oms.summeruniversity.edit_second if status is second_draft, second_submission or second_approval -->
+            <!-- maybe fix this in backend, two different permission stuff -->
             <router-link :to="{ name: 'oms.summeruniversity.edit', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
+              <span>Edit event</span>
+              <span class="icon"><font-awesome-icon icon="edit" /></span>
+            </router-link>
+            <router-link :to="{ name: 'oms.summeruniversity.edit_second', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
               <span>Edit event</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
           </div>
 
-          <div class="field is-grouped" v-if="can.delete_event">
+          <div class="field is-grouped" v-if="can.delete_summeruniversity">
             <a class="button is-fullwidth is-danger" @click="askDeleteEvent()">
               <span>Delete event</span>
               <span class="icon"><font-awesome-icon icon="times" /></span>
@@ -74,7 +81,7 @@
                   <th>Accommodation type</th>
                   <td>{{ event.accommodation_type }}</td>
                 </tr>
-                <tr v-if="can.approve_event ">
+                <tr v-if="can.approve_summeruniversity">
                   <th>Status</th>
                   <td>{{ event.status | capitalize }}</td>
                 </tr>
@@ -196,8 +203,8 @@ export default {
       },
       isLoading: false,
       can: {
-        edit_event: false,
-        approve_event: true,
+        edit_summeruniversity: false,
+        approve_summeruniversity: true,
         view_applications: false,
         apply: false,
         change_status: {
