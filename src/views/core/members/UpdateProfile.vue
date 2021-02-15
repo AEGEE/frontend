@@ -52,6 +52,22 @@
         </div>
       </form>
 
+      <hr v-if="validationErrors.username" />
+
+      <div class="field" v-if="validationErrors.username">
+        <label class="label">Username <span class="has-text-danger">*</span></label>
+          <div class="control">
+            <input
+              v-model="user.username"
+              class="input"
+              type="text"
+              pattern="^(?![0-9._-]*$)[a-zA-Z0-9._-]+$"
+              data-cy="username"
+              title="Username can only contain English letters, numbers, dots and dashes and should contain at least 1 letter."
+              placeholder="You will be able to login with it." />
+          </div>
+      </div>
+
       <hr v-if="validationErrors.email" />
 
       <div class="field" v-if="validationErrors.email">
