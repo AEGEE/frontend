@@ -247,7 +247,9 @@
         <div class="field">
           <label class="label">Course level</label>
           <div class="control">
-            <input type="text" class="input" v-model="event.course_level" />
+            <select v-model="event.course_level">
+              <option v-for="(name, course_level) in courseLevels" v-bind:key="course_level" v-bind:value="course_level">{{ name }}</option>
+            </select>
           </div>
           <p class="help is-danger" v-if="errors.course_level">{{ errors.course_level.join(', ') }}</p>
         </div>
@@ -828,9 +830,10 @@ export default {
         zoom: 8
       },
       eventTypes: constants.SUMMERUNIVERSITY_TYPES_NAMES,
-      paxConfirmations: constants.SUMMERUNIVERSITY_PAX_CONFIRMATION,
+      paxConfirmations: constants.SUMMERUNIVERSITY_PAX_CONFIRMATIONS,
       themeCategories: constants.SUMMERUNIVERSITY_THEMES_NAMES,
       roles: constants.SUMMERUNIVERSITY_ROLES,
+      courseLevels: constants.SUMMERUNIVERSITY_COURSE_LEVELS,
       file: null,
       bodies: [],
       selectedBody: null,

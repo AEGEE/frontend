@@ -83,9 +83,11 @@
         </div>
 
         <div class="field">
-          <label class="label">Course level <span class="has-text-danger">*</span></label>
+          <label class="label">Course level</label>
           <div class="control">
-            <input type="text" class="input" required v-model="event.course_level" />
+            <select v-model="event.course_level">
+              <option v-for="(name, course_level) in courseLevels" v-bind:key="course_level" v-bind:value="course_level">{{ name }}</option>
+            </select>
           </div>
           <p class="help is-danger" v-if="errors.course_level">{{ errors.course_level.join(', ') }}</p>
         </div>
@@ -431,9 +433,9 @@
         </div>
 
         <div class="field">
-          <label class="label">Link to preliminary budget <URLTooltip/></label>
+          <label class="label">Link to preliminary budget <span class="has-text-danger">*</span> <URLTooltip/></label>
           <div class="control">
-            <input class="input" type="url" v-model="event.budget" />
+            <input class="input" type="url" v-model="event.budget" required />
           </div>
           <p class="help is-danger" v-if="errors.is_budget_set">{{ errors.is_budget_set.join(', ') }}</p>
         </div>
@@ -514,8 +516,9 @@ export default {
         zoom: 8
       },
       eventTypes: constants.SUMMERUNIVERSITY_TYPES_NAMES,
-      paxConfirmations: constants.SUMMERUNIVERSITY_PAX_CONFIRMATION,
+      paxConfirmations: constants.SUMMERUNIVERSITY_PAX_CONFIRMATIONS,
       roles: constants.SUMMERUNIVERSITY_ROLES,
+      courseLevels: constants.SUMMERUNIVERSITY_COURSE_LEVELS,
       file: null,
       can: {
         editEventType: false
