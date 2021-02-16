@@ -83,9 +83,9 @@
         </div>
 
         <div class="field">
-          <label class="label">Course level</label>
-          <div class="control">
-            <select v-model="event.course_level">
+          <label class="label">Course level <span class="has-text-danger">*</span></label>
+          <div class="select">
+            <select v-model="event.course_level" required>
               <option v-for="(name, course_level) in courseLevels" v-bind:key="course_level" v-bind:value="course_level">{{ name }}</option>
             </select>
           </div>
