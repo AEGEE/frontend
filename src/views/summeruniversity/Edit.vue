@@ -477,7 +477,7 @@
             <p>People who are not listed as organizers won't be able to see and manage event applications, even if they are the board members.</p>
             <p><strong>You can only add people from the organizing bodies.</strong></p>
             <p>Please add at least:<br/>
-              - 1 main coordinator per organising local<br/>
+              - 1 main coordinator per organizing body<br/>
               - 1 content manager<br/>
               - 1 treasurer<br/>
               - 1 incoming responsible</p>
