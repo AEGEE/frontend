@@ -162,7 +162,7 @@
         </div>
       </article>
 
-      <article class="tile is-child" v-if="boards">
+      <article class="tile is-child" v-if="boards.length">
         <div class="content">
           <p class="subtitle">Board</p>
           <div class="content" v-for="board in boards" v-bind:key="board.id">
@@ -174,15 +174,19 @@
                   </tr>
                   <tr>
                     <th>President</th>
-                    <td>{{ board.president.first_name }} {{ board.president.last_name }}</td>
+                    <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
                   </tr>
                   <tr>
                     <th>Secretary</th>
-                    <td>{{ board.secretary.first_name }} {{ board.secretary.last_name }}</td>
+                    <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
                   </tr>
                   <tr>
                     <th>Treasurer</th>
-                    <td>{{ board.treasurer.first_name }} {{ board.treasurer.last_name }}</td>
+                    <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                  </tr>
+                  <tr v-for="position in board.other_members" v-bind:key="position.index">
+                    <th>{{ position.function }}</th>
+                    <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -242,7 +246,7 @@ export default {
         shadow_circle: null,
         shadow_circle_id: null
       },
-      boards: null,
+      boards: [],
       isLoading: false,
       isMember: false,
       isRequestingMembership: false,
@@ -292,7 +296,7 @@ export default {
         }
       })
     },
-    openChangeBoardModal() {
+    openChangeBoardModal () {
       this.$buefy.modal.open({
         component: ChangeBoardModal,
         hasModalCard: true,
@@ -399,22 +403,26 @@ export default {
       this.axios.get(this.services['network'] + '/bodies/' + this.body.id + '/boards/current').then((boardResponse) => {
         this.boards = boardResponse.data.data
 
+        return this.axios.get(this.services['core'] + '/bodies/' + this.body.id + '/members')
+      }).then((memberResponse) => {
+        const members = memberResponse.data.data
+        const users = []
+        for (const member of members) {
+          users.push(member.user)
+        }
+
+        // Match members of a body to members on the board
         for (const board of this.boards) {
-          // Get users that are part of a board
-          this.axios.get(this.services['core'] + '/members/' + board.president).then((presidentResponse) => {
-            board.president = presidentResponse.data.data
-          })
+          this.$set(board, 'president_user', users.find(user => user.id === board.president))
+          this.$set(board, 'secretary_user', users.find(user => user.id === board.secretary))
+          this.$set(board, 'treasurer_user', users.find(user => user.id === board.treasurer))
 
-          this.axios.get(this.services['core'] + '/members/' + board.secretary).then((secretaryResponse) => {
-            board.secretary = secretaryResponse.data.data
-          })
-
-          this.axios.get(this.services['core'] + '/members/' + board.treasurer).then((treasurerResponse) => {
-            board.treasurer = treasurerResponse.data.data
-          })
+          for (const position of board.other_members) {
+            this.$set(position, 'user', users.find(user => user.id === position.user_id))
+          }
         }
       }).catch((err) => {
-        this.isLoading = false
+        // this.isLoading = false
         this.$root.showError('Some error happened', err)
       })
 

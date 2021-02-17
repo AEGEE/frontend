@@ -1,4 +1,3 @@
-
 <template>
   <div class="modal-card" style="height: 75vh">
     <header class="modal-card-head">
@@ -117,9 +116,9 @@ export default {
         start_date: '',
         end_date: null,
         positions: [
-          { function: 'President', name: '', id: '', required: true },
-          { function: 'Secretary', name: '', id: '', required: true },
-          { function: 'Treasurer', name: '', id: '', required: true }
+          { function: 'President', name: '', user_id: '', required: true },
+          { function: 'Secretary', name: '', user_id: '', required: true },
+          { function: 'Treasurer', name: '', user_id: '', required: true }
         ],
         message: ''
       },
@@ -132,7 +131,18 @@ export default {
     saveChangeBoard () {
       this.isSaving = true
 
-      const board_export = {
+      const otherMembers = []
+
+      for (const position of this.board.positions) {
+        if (!position.required) { // For all the non-required positions
+          otherMembers.push({
+            function: position.function,
+            user_id: position.id
+          })
+        }
+      }
+
+      const boardExport = {
         body_id: this.body.id,
         elected_date: this.board.elected_date,
         start_date: this.board.start_date,
@@ -140,11 +150,7 @@ export default {
         president: this.board.positions[0].id,
         secretary: this.board.positions[1].id,
         treasurer: this.board.positions[2].id,
-        // TODO: Think of a good way to export other positions
-        // Probably just with function and id
-        // other_members: {
-        //
-        // },
+        other_members: otherMembers,
         message: this.board.message
         // TODO: Add image
         // image:
@@ -152,8 +158,8 @@ export default {
 
       this.axios.post(
         this.services['network'] + '/bodies/' + this.body.id + '/boards',
-        board_export
-      ).then((response) => {
+        boardExport
+      ).then(() => {
         this.isSaving = false
         this.showSuccess('Board is saved.')
         this.$parent.close()
@@ -166,7 +172,7 @@ export default {
       this.board.positions.push({
         function: '',
         name: '',
-        id: '',
+        user_id: '',
         required: false
       })
     },
@@ -185,7 +191,7 @@ export default {
       // Get all the members of this body, matching with what the user typed in
       this.axios.get(this.services['core'] + '/bodies/' + this.body.id + '/members', {
         cancelToken: this.token.token,
-        params: { query: query }
+        params: { query }
       }).then((response) => {
         const users = response.data.data
         for (const user of users) {
@@ -201,7 +207,7 @@ export default {
         this.isLoadingMembers = false
         this.showError('Could not fetch members', err)
       })
-    },
+    }
   }
 }
 
