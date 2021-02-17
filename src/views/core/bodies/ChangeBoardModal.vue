@@ -80,6 +80,30 @@
 
       <hr>
 
+      <div class="notification is-info">
+        <div class="content">
+          Please make sure that your contact details are (still) correct.
+        </div>
+      </div>
+
+      <b-field horizontal label="Email">
+        <b-input v-model="body.email" expanded />
+      </b-field>
+
+      <b-field horizontal label="Phone">
+        <b-input v-model="body.phone" expanded />
+      </b-field>
+
+      <b-field horizontal label="Address">
+        <b-input v-model="body.address" expanded />
+      </b-field>
+
+      <b-field horizontal label="Website">
+        <b-input v-model="body.website" expanded />
+      </b-field>
+
+      <hr>
+
       <div class="field">
         <label class="label">Message</label>
         <div class="control">
@@ -156,10 +180,17 @@ export default {
         // image:
       }
 
-      this.axios.post(
-        this.services['network'] + '/bodies/' + this.body.id + '/boards',
-        boardExport
+      // Save body details
+      this.axios.put(
+        this.services['core'] + '/bodies/' + this.body.id,
+        this.body
       ).then(() => {
+        // Save board information
+        return this.axios.post(
+          this.services['network'] + '/bodies/' + this.body.id + '/boards',
+          boardExport
+        )
+      }).then(() => {
         this.isSaving = false
         this.showSuccess('Board is saved.')
         this.$parent.close()
