@@ -308,7 +308,7 @@ export default {
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-        this.$root.showError('Could not delete event', err)
+        this.$root.showError('Could not change event status', err)
       })
     },
     onMapLoaded (event) {
