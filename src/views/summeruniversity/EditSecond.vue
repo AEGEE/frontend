@@ -217,7 +217,7 @@
             :data="event.organizers"
             :loading="isLoading">
             <template slot-scope="props">
-               <b-table-column field="first_name" label="First and last name" sortable>
+               <b-table-column field="organizer" label="First and last name" sortable>
                 <router-link :to="{ name: 'oms.members.view', params: { id: props.row.user_id } }">
                   {{ props.row.first_name }} {{ props.row.last_name }}
                 </router-link>
@@ -307,7 +307,6 @@
               <th>Longitude</th>
               <th>Name</th>
               <th>Description</th>
-              <!-- Fix that only 1 start/end city can be selected -->
               <th>Starting city</th>
               <th>Ending city</th>
               <th></th>
@@ -324,10 +323,10 @@
                 <textarea class="textarea" v-model="marker.description"></textarea>
               </td>
               <td>
-                <input type="checkbox" v-model="marker.start" />
+                <input type="checkbox" name="start_loc" v-model="marker.start" />
               </td>
               <td>
-                <input type="checkbox" v-model="marker.end" />
+                <input type="checkbox" name="end_loc" v-model="marker.end" />
               </td>
               <td>
                 <button class="button is-danger" @click="deleteLocation(index)">Delete location</button>
@@ -593,7 +592,6 @@ export default {
 
       this.event.organizers.push({
         user_id: organizer.id,
-        user: organizer,
         first_name: organizer.first_name,
         last_name: organizer.last_name
       })
@@ -717,9 +715,13 @@ export default {
         this.can.editEventType = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_type'))
 
         for (const organizer of this.event.organizers) {
+          this.axios.get(this.services['core'] + '/members/' + organizer.user_id).then((organizerResponse) => {
+            this.$set(organizer, 'first_name', organizerResponse.data.data.first_name)
+            this.$set(organizer, 'last_name', organizerResponse.data.data.last_name)
+          })
+
           if (this.loginUser.id === organizer.user_id) {
             this.$set(organizer, 'disableEdit', true)
-            break
           }
         }
 
