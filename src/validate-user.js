@@ -21,7 +21,7 @@ const validate = (user) => {
     errorsMap.privacy = 'You should agree to the Privacy Policy.'
   }
 
-  if (user.username.match(/^(?![0-9._-]*$)[a-zA-Z0-9._-]+$/)) {
+  if (!user.username.match(/^(?![0-9._-]*$)[a-zA-Z0-9._-]+$/)) {
     errorsMap.username = 'Your username cannot consist of numbers only.'
   }
 
