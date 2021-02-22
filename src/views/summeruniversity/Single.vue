@@ -12,7 +12,7 @@
       <div class="tile is-parent">
         <article class="tile is-child is-info">
           <div class="field is-grouped" v-if="can.edit_summeruniversity">
-            <router-link v-if="can.approve_summeruniversity || event.status === 'first draft' || event.status === 'first submission'" :to="{ name: 'oms.summeruniversity.edit', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
+            <router-link v-if="can.approve_summeruniversity[event.type] || event.status === 'first draft' || event.status === 'first submission'" :to="{ name: 'oms.summeruniversity.edit', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
               <span>Edit event</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
             </router-link>
@@ -252,7 +252,10 @@ export default {
       isLoading: false,
       can: {
         edit_summeruniversity: false,
-        approve_summeruniversity: true,
+        approve_summeruniversity: {
+          pilot: false,
+          regular: false
+        },
         view_applications: false,
         apply: false,
         change_status: {
