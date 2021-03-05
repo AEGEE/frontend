@@ -25,7 +25,7 @@
     }
   },
   "dependencies": {
-    "@babel/core": "7.12.9",
+    "@babel/core": "7.13.8",
     "@babel/types": "7.12.7",
     "@fortawesome/fontawesome-free": "5.15.2",
     "@fortawesome/fontawesome-svg-core": "1.2.34",
