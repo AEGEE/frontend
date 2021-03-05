@@ -5,7 +5,7 @@
       <div class="control">
         <div class="select">
           <select v-model="selectValue">
-            <option v-for="(val, index) in values" v-bind:key="index" :value="val">{{ val }}</option>
+            <option v-for.aa="(val, index) in values" v-bind:key="index" :value="val">{{ val }}</option>
             <option value="custom">Custom...</option>
           </select>
         </div>
