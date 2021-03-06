@@ -335,16 +335,16 @@ export default {
         return
       }
 
-      var min_coords = {
-        lat : Math.min.apply(null, this.event.locations.map(location => location.position.lat)),
-        lng : Math.min.apply(null, this.event.locations.map(location => location.position.lng))
+      const minCoords = {
+        lat: Math.min.apply(null, this.event.locations.map(location => location.position.lat)),
+        lng: Math.min.apply(null, this.event.locations.map(location => location.position.lng))
       }
-      var max_coords = {
-        lat : Math.max.apply(null, this.event.locations.map(location => location.position.lat)),
-        lng : Math.max.apply(null, this.event.locations.map(location => location.position.lng))
+      const maxCoords = {
+        lat: Math.max.apply(null, this.event.locations.map(location => location.position.lat)),
+        lng: Math.max.apply(null, this.event.locations.map(location => location.position.lng))
       }
 
-      this.map.actions.fitBounds([min_coords, max_coords], { padding: 50 })
+      this.map.actions.fitBounds([minCoords, maxCoords], { padding: 50 })
     }
   },
   mounted () {
