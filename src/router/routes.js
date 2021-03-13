@@ -808,6 +808,15 @@ module.exports = [
       label: 'Plenary details and marking attendance'
     }
   },
+  /* Network management. */
+  {
+    name: 'oms.network.boards.list',
+    path: '/network/boards',
+    component: 'network/BoardListing',
+    meta: {
+      label: 'View current boards'
+    }
+  },
   /* Static resources. */
   {
     name: 'oms.about',
