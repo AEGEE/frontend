@@ -92,7 +92,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
@@ -115,10 +114,11 @@ export default {
         { value: 'other', name: 'Other' }
       ],
       isLoading: false,
+      source: null,
       filters: {
         noCurrentBoard: false
       },
-      selectedTypes: [
+      selectedTypes: [ // start with having these types pre-selected
         { value: 'antenna', name: 'Antenna' },
         { value: 'contact antenna', name: 'Contact antenna' },
         { value: 'contact', name: 'Contact' }
@@ -162,8 +162,10 @@ export default {
       this.axios.get(this.services['core'] + '/bodies', { params: this.queryObject, cancelToken: this.source.token }).then((bodiesResponse) => {
         this.bodies = bodiesResponse.data.data
 
-        const types = this.selectedTypes.map((type) => type.value)
-        this.bodies = this.bodies.filter(x => types.includes(x.type))
+        if (this.selectedTypes.length > 0) {
+          const types = this.selectedTypes.map((type) => type.value)
+          this.bodies = this.bodies.filter(x => types.includes(x.type))
+        }
 
         this.axios.get(this.services['network'] + '/boards').then((boardsResponse) => {
           const boards = boardsResponse.data.data
