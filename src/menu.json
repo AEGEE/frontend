@@ -197,6 +197,17 @@
     ]
   },
   {
+    "categoryName": "Network",
+    "permissions": [],
+    "components": [
+      {
+        "name": "oms.network.boards.list",
+        "icon": "users",
+        "label": "Boards listing"
+      }
+    ]
+  },
+  {
     "categoryName": "Resources",
     "auth": "logged-in",
     "components": [
