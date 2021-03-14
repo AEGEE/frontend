@@ -192,6 +192,10 @@ export default {
           this.$root.showError('Could not fetch boards list', err)
         })
       }).catch((err) => {
+        if (this.axios.isCancel(err)) {
+          return
+        }
+
         this.$root.showError('Could not fetch bodies list', err)
       })
     }
