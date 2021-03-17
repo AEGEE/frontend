@@ -435,11 +435,11 @@ export default {
       this.event = response.data.data
       this.can = response.data.permissions
 
-      const startLocation = this.event.locations.find(location => location.start === ('true' || true))
+      const startLocation = this.event.locations.find(location => location.start === true)
       if (startLocation) {
         this.event.startLocation = startLocation.name
       }
-      const endLocation = this.event.locations.find(location => location.end === ('true' || true))
+      const endLocation = this.event.locations.find(location => location.end === true)
       if (endLocation) {
         this.event.endLocation = endLocation.name
       }
