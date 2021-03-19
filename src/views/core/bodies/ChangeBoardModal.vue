@@ -98,6 +98,10 @@
         <b-input v-model="body.address" expanded />
       </b-field>
 
+      <b-field horizontal label="Postal address">
+        <b-input v-model="body.postal_address" expanded />
+      </b-field>
+
       <b-field horizontal label="Website">
         <b-input v-model="body.website" expanded />
       </b-field>
