@@ -124,6 +124,7 @@
 
     <footer class="modal-card-foot">
       <button class="button is-primary" @click="saveChangeBoard()">Save changes</button>
+      <button class="button is-danger" v-if="edit" @click="deleteBoard()">Delete board</button>
       <button class="button" @click="$parent.close()">Cancel</button>
     </footer>
 
@@ -138,7 +139,7 @@ export default {
     MarkdownTooltip
   },
   name: 'ChangeBoardModal',
-  props: ['edit', 'oldBoard', 'body', 'services', 'showError', 'showSuccess'],
+  props: ['edit', 'oldBoard', 'body', 'services', 'showError', 'showSuccess', 'router'],
   data () {
     return {
       board: {
@@ -158,10 +159,14 @@ export default {
     }
   },
   methods: {
-    // deleteBoard () {
-    //   this.isSaving = true
-    //   this.axios.delete(this.services['network'])
-    // },
+    deleteBoard () {
+      this.isSaving = true
+      this.axios.delete(this.services['network'] + '/bodies/' + this.body.id + '/boards/' + this.oldBoard.id).then((response) => {
+        this.isSaving = false
+        this.showSuccess('Board is deleted.')
+        this.router.go(0)
+      })
+    },
     saveChangeBoard () {
       this.isSaving = true
 
@@ -196,8 +201,6 @@ export default {
         this.body
       ).then(() => {
         // Save board information
-        console.log(boardExport)
-
         const promise = this.edit
           ? this.axios.put(this.services['network'] + '/bodies/' + this.body.id + '/boards/' + this.oldBoard.id, boardExport)
           : this.axios.post(this.services['network'] + '/bodies/' + this.body.id + '/boards', boardExport)
@@ -205,9 +208,13 @@ export default {
         promise.then(() => {
           this.isSaving = false
           this.showSuccess('Board is saved.')
-          this.$parent.close()
+          this.router.go(0)
         }).catch((err) => {
           this.isSaving = false
+          if (err.response.status === 422) {
+            this.showError('Some input data is invalid')
+            return
+          }
           this.showError('Something went wrong', err)
         })
       })
