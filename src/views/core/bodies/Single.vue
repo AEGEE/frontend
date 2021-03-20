@@ -312,7 +312,8 @@ export default {
           body: this.body,
           services: this.services,
           showError: this.$root.showError,
-          showSuccess: this.$root.showSuccess
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
         }
       })
     },
@@ -430,7 +431,9 @@ export default {
           }
         }
       }).catch((err) => {
-        // this.isLoading = false
+        if (err.response.status === 404) {
+          return
+        }
         this.$root.showError('Some error happened', err)
       })
 

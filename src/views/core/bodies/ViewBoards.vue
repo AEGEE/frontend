@@ -21,38 +21,38 @@
                   </div>
               </template>
 
-            <div class="card-content">
-                <div class="content">
-                  <table class="table is-narrow">
-                    <tbody>
-                      <tr>
-                        <th>President</th>
-                        <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
-                      </tr>
-                      <tr>
-                        <th>Secretary</th>
-                        <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
-                      </tr>
-                      <tr>
-                        <th>Treasurer</th>
-                        <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
-                      </tr>
-                      <tr v-for="position in board.other_members" v-bind:key="position.index">
-                        <th>{{ position.function }}</th>
-                        <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
+              <div class="card-content">
+                  <div class="content">
+                    <table class="table is-narrow">
+                      <tbody>
+                        <tr>
+                          <th>President</th>
+                          <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Secretary</th>
+                          <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Treasurer</th>
+                          <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                        </tr>
+                        <tr v-for="position in board.other_members" v-bind:key="position.index">
+                          <th>{{ position.function }}</th>
+                          <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
               </div>
+
               <footer class="card-footer">
                 <a @click="openChangeBoardModal(index)" :class="['button', 'is-fullwidth', 'is-info']">
                   <span class="field-label">Edit board</span>
                 </a>
               </footer>
             </b-collapse>
-          <br v-bind:key="index" /> <!-- just here to give the cards some nicer spacing -->
+            <br v-bind:key="index" /> <!-- just here to give the cards some nicer spacing -->
           </template>
         </template>
       </article>
@@ -91,7 +91,8 @@ export default {
           body: this.$route.params,
           services: this.services,
           showError: this.$root.showError,
-          showSuccess: this.$root.showSuccess
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
         }
       })
     },
@@ -124,6 +125,9 @@ export default {
 
         this.isLoading = false
       }).catch((err) => {
+        if (err.response.status === 404) {
+          return
+        }
         this.$root.showError('Could not fetch boards', err)
       })
     }
