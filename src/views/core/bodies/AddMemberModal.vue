@@ -69,7 +69,6 @@ export default {
         user_id: member.id
       }).then(() => {
         this.showSuccess('Member is added.')
-        this.$parent.close()
         this.router.go(0) // Reloading the page.
       }).catch((err) => {
         if (err.response.status === 422) {
