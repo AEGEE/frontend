@@ -4,54 +4,60 @@
       <article class="tile is-child">
         <h4 class="title">Boards</h4>
 
-        <template v-for="(board, index) in boards">
-          <b-collapse class="card" animation="slide" :open="false">
-            <template #trigger="props">
-                <div class="card-header" role="button">
-                    <p class="card-header-title">
-                        {{ board.start_date }} - {{ board.end_date }}
-                    </p>
-                    <a class="card-header-icon">
-                      <span class="icon is-small is-angle">
-                        <font-awesome-icon :icon="['fa', 'angle-down']" v-if="!props.open" />
-                        <font-awesome-icon :icon="['fa', 'angle-up']" v-else />
-                      </span>
-                    </a>
-                </div>
-            </template>
+        <template v-if="boards.length > 0">
+          <template v-for="(board, index) in boards">
+            <b-collapse class="card" animation="slide" :open="false">
+              <template #trigger="props">
+                  <div class="card-header" role="button">
+                      <p class="card-header-title">
+                          {{ board.start_date }} - {{ board.end_date }}
+                      </p>
+                      <a class="card-header-icon">
+                        <span class="icon is-small is-angle">
+                          <font-awesome-icon :icon="['fa', 'angle-down']" v-if="!props.open" />
+                          <font-awesome-icon :icon="['fa', 'angle-up']" v-else />
+                        </span>
+                      </a>
+                  </div>
+              </template>
 
-            <div class="card-content">
-                <div class="content">
-                  <table class="table is-narrow">
-                    <tbody>
-                      <tr>
-                        <th>President</th>
-                        <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
-                      </tr>
-                      <tr>
-                        <th>Secretary</th>
-                        <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
-                      </tr>
-                      <tr>
-                        <th>Treasurer</th>
-                        <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
-                      </tr>
-                      <tr v-for="position in board.other_members" v-bind:key="position.index">
-                        <th>{{ position.function }}</th>
-                        <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="card-content">
+                  <div class="content">
+                    <table class="table is-narrow">
+                      <tbody>
+                        <tr>
+                          <th>President</th>
+                          <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Secretary</th>
+                          <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
+                        </tr>
+                        <tr>
+                          <th>Treasurer</th>
+                          <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                        </tr>
+                        <tr v-for="position in board.other_members" v-bind:key="position.index">
+                          <th>{{ position.function }}</th>
+                          <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                </div>
-            </div>
-            <footer class="card-footer">
-              <a @click="openChangeBoardModal(index)" :class="['button', 'is-fullwidth', 'is-info']">
-                <span class="field-label">Edit board</span>
-              </a>
-            </footer>
-          </b-collapse>
-        </br> <!-- just here to give the cards some nicer spacing -->
+                  </div>
+              </div>
+              <footer class="card-footer">
+                <a @click="openChangeBoardModal(index)" :class="['button', 'is-fullwidth', 'is-info']">
+                  <span class="field-label">Edit board</span>
+                </a>
+              </footer>
+            </b-collapse>
+          </br> <!-- just here to give the cards some nicer spacing -->
+          </template>
+        </template>
+
+        <template v-else>
+          <empty-table-stub />
         </template>
       </article>
     </div>
@@ -89,7 +95,8 @@ export default {
           body: this.$route.params,
           services: this.services,
           showError: this.$root.showError,
-          showSuccess: this.$root.showSuccess
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
         }
       })
     },
@@ -122,6 +129,9 @@ export default {
 
         this.isLoading = false
       }).catch((err) => {
+        if (err.response.status === 404) {
+          return
+        }
         this.$root.showError('Could not fetch boards', err)
       })
     }
