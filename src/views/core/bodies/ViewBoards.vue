@@ -55,6 +55,10 @@
             <br v-bind:key="index" /> <!-- just here to give the cards some nicer spacing -->
           </template>
         </template>
+
+        <template v-else>
+          <empty-table-stub />
+        </template>
       </article>
     </div>
   </div>
