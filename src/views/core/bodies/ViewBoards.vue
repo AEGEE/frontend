@@ -5,7 +5,7 @@
         <h4 class="title">Boards</h4>
 
         <template v-if="boards.length > 0">
-          <template v-for="(board, index) in boards">
+          <template v-for="(board, index) in boards" v-bind:key="index">
             <b-collapse class="card" animation="slide" :open="false">
               <template #trigger="props">
                   <div class="card-header" role="button">
@@ -52,7 +52,7 @@
                 </a>
               </footer>
             </b-collapse>
-          </br> <!-- just here to give the cards some nicer spacing -->
+          <br /> <!-- just here to give the cards some nicer spacing -->
           </template>
         </template>
 
