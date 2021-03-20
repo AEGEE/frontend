@@ -17,6 +17,13 @@
             </router-link>
           </div>
 
+          <div class="field is-grouped" v-if="can.viewBoards">
+            <router-link :to="{ name: 'oms.bodies.boards', params: { id: body.id } }" :class="['button', 'is-fullwidth']">
+              <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'users']" /></span>
+              <span class="field-label">Boards</span>
+            </router-link>
+          </div>
+
           <div class="field is-grouped" v-if="can.viewJoinRequests">
             <router-link :to="{ name: 'oms.bodies.join_requests', params: { id: body.id } }" :class="['button', 'is-fullwidth']">
               <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'users']" /></span>
@@ -254,6 +261,7 @@ export default {
       can: {
         viewMembers: false,
         viewMembersGlobal: false,
+        viewBoards: false,
         viewJoinRequests: false,
         viewCampaigns: false,
         createBoundCircles: false,
@@ -434,6 +442,7 @@ export default {
           this.permissions = permissionsResponse.data.data
           this.can.viewMembers = this.permissions.some(permission => permission.combined.endsWith('view:member'))
           this.can.viewMembersGlobal = this.permissions.some(permission => permission.combined.endsWith('global:view:member'))
+          this.can.viewBoards = this.permissions.some(permission => permission.combined.endsWith('view:board'))
           this.can.viewJoinRequests = this.permissions.some(permission => permission.combined.endsWith('view:join_request'))
           this.can.viewCampaigns = this.permissions.some(permission => permission.combined.endsWith('view:campaign'))
           this.can.viewShadowCircles = this.permissions.some(permission => permission.combined.endsWith('view:shadow_circle'))

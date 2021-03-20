@@ -1,7 +1,8 @@
 <template>
   <div class="modal-card" style="height: 75vh">
     <header class="modal-card-head">
-      <p class="modal-card-title">Change board</p>
+      <p class="modal-card-title" v-if="edit">Edit board</p>
+      <p class="modal-card-title" v-else>Add board</p>
       <button class="delete" aria-label="close" @click="$parent.close()"></button>
     </header>
     <section class="modal-card-body">
@@ -79,34 +80,35 @@
       </b-field>
 
       <hr>
-
-      <div class="notification is-info">
-        <div class="content">
-          Please make sure that your contact details are (still) correct.
+      <template v-if="!edit">
+        <div class="notification is-info">
+          <div class="content">
+            Please make sure that your contact details are (still) correct.
+          </div>
         </div>
-      </div>
 
-      <b-field horizontal label="Email">
-        <b-input v-model="body.email" expanded />
-      </b-field>
+        <b-field horizontal label="Email">
+          <b-input v-model="body.email" expanded />
+        </b-field>
 
-      <b-field horizontal label="Phone">
-        <b-input v-model="body.phone" expanded />
-      </b-field>
+        <b-field horizontal label="Phone">
+          <b-input v-model="body.phone" expanded />
+        </b-field>
 
-      <b-field horizontal label="Address">
-        <b-input v-model="body.address" expanded />
-      </b-field>
+        <b-field horizontal label="Address">
+          <b-input v-model="body.address" expanded />
+        </b-field>
 
-      <b-field horizontal label="Postal address">
-        <b-input v-model="body.postal_address" expanded />
-      </b-field>
+        <b-field horizontal label="Postal address">
+          <b-input v-model="body.postal_address" expanded />
+        </b-field>
 
-      <b-field horizontal label="Website">
-        <b-input v-model="body.website" expanded />
-      </b-field>
+        <b-field horizontal label="Website">
+          <b-input v-model="body.website" expanded />
+        </b-field>
 
-      <hr>
+        <hr>
+      </template>
 
       <div class="field">
         <label class="label">Message</label>
@@ -136,7 +138,7 @@ export default {
     MarkdownTooltip
   },
   name: 'ChangeBoardModal',
-  props: ['body', 'services', 'showError', 'showSuccess'],
+  props: ['edit', 'oldBoard', 'body', 'services', 'showError', 'showSuccess'],
   data () {
     return {
       board: {
@@ -156,6 +158,10 @@ export default {
     }
   },
   methods: {
+    // deleteBoard () {
+    //   this.isSaving = true
+    //   this.axios.delete(this.services['network'])
+    // },
     saveChangeBoard () {
       this.isSaving = true
 
@@ -190,17 +196,20 @@ export default {
         this.body
       ).then(() => {
         // Save board information
-        return this.axios.post(
-          this.services['network'] + '/bodies/' + this.body.id + '/boards',
-          boardExport
-        )
-      }).then(() => {
-        this.isSaving = false
-        this.showSuccess('Board is saved.')
-        this.$parent.close()
-      }).catch((err) => {
-        this.isSaving = false
-        this.showError('Something went wrong', err)
+        console.log(boardExport)
+
+        const promise = this.edit
+          ? this.axios.put(this.services['network'] + '/bodies/' + this.body.id + '/boards/' + this.oldBoard.id, boardExport)
+          : this.axios.post(this.services['network'] + '/bodies/' + this.body.id + '/boards', boardExport)
+
+        promise.then(() => {
+          this.isSaving = false
+          this.showSuccess('Board is saved.')
+          this.$parent.close()
+        }).catch((err) => {
+          this.isSaving = false
+          this.showError('Something went wrong', err)
+        })
       })
     },
     addPosition () {
@@ -241,6 +250,34 @@ export default {
 
         this.isLoadingMembers = false
         this.showError('Could not fetch members', err)
+      })
+    }
+  },
+  mounted () {
+    if (!this.edit) {
+      return
+    }
+
+    console.log(this.oldBoard)
+
+    // There must be a nicer way to do this, oops :p
+    this.board.elected_date = this.oldBoard.elected_date
+    this.board.start_date = this.oldBoard.start_date
+    this.board.end_date = this.oldBoard.end_date
+    this.board.positions[0].id = this.oldBoard.president
+    this.board.positions[0].name = this.oldBoard.president_user.first_name + ' ' + this.oldBoard.president_user.last_name
+    this.board.positions[1].id = this.oldBoard.secretary
+    this.board.positions[1].name = this.oldBoard.secretary_user.first_name + ' ' + this.oldBoard.secretary_user.last_name
+    this.board.positions[2].id = this.oldBoard.treasurer
+    this.board.positions[2].name = this.oldBoard.treasurer_user.first_name + ' ' + this.oldBoard.treasurer_user.last_name
+    this.board.message = this.oldBoard.message
+
+    for (const other of this.oldBoard.other_members) {
+      this.board.positions.push({
+        function: other.function,
+        name: other.user.first_name + ' ' + other.user.last_name,
+        user_id: other.user_id,
+        required: false
       })
     }
   }
