@@ -161,7 +161,7 @@ export default {
   methods: {
     deleteBoard () {
       this.isSaving = true
-      this.axios.delete(this.services['network'] + '/bodies/' + this.body.id + '/boards/' + this.oldBoard.id).then((response) => {
+      this.axios.delete(this.services['network'] + '/bodies/' + this.body.id + '/boards/' + this.oldBoard.id).then(() => {
         this.isSaving = false
         this.showSuccess('Board is deleted.')
         this.router.go(0)
@@ -264,8 +264,6 @@ export default {
     if (!this.edit) {
       return
     }
-
-    console.log(this.oldBoard)
 
     // There must be a nicer way to do this, oops :p
     this.board.elected_date = this.oldBoard.elected_date
