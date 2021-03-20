@@ -161,7 +161,7 @@ export default {
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
-          router: this.$router,
+          router: this.$router
         }
       })
     },
