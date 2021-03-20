@@ -8,7 +8,9 @@
     <section class="modal-card-body">
 
       <div class="field">
-        <label class="label required">Board election date</label>
+        <label class="label">
+          Board election date <span style="color: red;">*</span>
+        </label>
         <div class="control">
           <flat-pickr
             placeholder="Select date"

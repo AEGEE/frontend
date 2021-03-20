@@ -52,7 +52,7 @@
                 </a>
               </footer>
             </b-collapse>
-          <br /> <!-- just here to give the cards some nicer spacing -->
+          <br v-bind:key="index" /> <!-- just here to give the cards some nicer spacing -->
           </template>
         </template>
       </article>
