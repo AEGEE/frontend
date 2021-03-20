@@ -262,6 +262,14 @@ module.exports = [
       auth: false
     }
   },
+  {
+    name: 'oms.bodies.boards',
+    path: '/bodies/:id/boards',
+    component: 'core/bodies/ViewBoards',
+    meta: {
+      label: 'View boards of a body'
+    }
+  },
   /* Permissions management */
   {
     name: 'oms.permissions.list',
