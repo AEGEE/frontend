@@ -188,6 +188,17 @@
     ]
   },
   {
+    "categoryName": "Strategy",
+    "auth": false,
+    "components": [
+      {
+        "name": "oms.strategy",
+        "label": "Action Agenda",
+        "icon": "check"
+      }
+    ]
+  },
+  {
     "categoryName": "Resources",
     "auth": "logged-in",
     "components": [

@@ -776,6 +776,16 @@ module.exports = [
       label: 'Plenary details and marking attendance'
     }
   },
+  /* Strategy Module. */
+  {
+    name: 'oms.strategy',
+    path: '/strategy',
+    meta: {
+      label: 'AEGEE Strategy Module',
+      auth: false
+    },
+    component: 'strategy/Strategy'
+  },
   /* Static resources. */
   {
     name: 'oms.about',
