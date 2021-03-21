@@ -198,7 +198,7 @@
   },
   {
     "categoryName": "Network",
-    "auth": "loggen-in",
+    "auth": "logged-in",
     "components": [
       {
         "name": "oms.network.boards.list",

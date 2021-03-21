@@ -71,7 +71,7 @@
             </router-link>
           </div>
 
-          <div class="field is-grouped" v-if="true">
+          <div class="field is-grouped" v-if="can.manageBoards">
             <a @click="openChangeBoardModal()" :class="['button', 'is-fullwidth', 'is-primary']">
               <span class="field-icon icon"><font-awesome-icon :icon="['fas', 'users']" /></span>
               <span class="field-label">Change board</span>
@@ -265,6 +265,7 @@ export default {
         viewJoinRequests: false,
         viewCampaigns: false,
         createBoundCircles: false,
+        manageBoards: false,
         updateBody: false,
         deleteBody: false,
         addMembers: false
@@ -450,6 +451,7 @@ export default {
           this.can.viewCampaigns = this.permissions.some(permission => permission.combined.endsWith('view:campaign'))
           this.can.viewShadowCircles = this.permissions.some(permission => permission.combined.endsWith('view:shadow_circle'))
           this.can.createBoundCircles = this.permissions.some(permission => permission.combined.endsWith('create:bound_circle'))
+          this.can.manageBoards = this.permissions.some(permission => permission.combined.endsWith('manage_network:boards'))
           this.can.updateBody = this.permissions.some(permission => permission.combined.endsWith('update:body'))
           this.can.deleteBody = this.permissions.some(permission => permission.combined.endsWith('delete:body'))
           this.can.addMembers = this.permissions.some(permission => permission.combined.endsWith('add_member:body'))
