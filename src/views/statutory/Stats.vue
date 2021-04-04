@@ -246,7 +246,8 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'right',
+          position: 'bottom',
+          align: 'center',
           onClick: (e) => e.stopPropagation()
         }
       }
@@ -257,7 +258,8 @@ export default {
         maintainAspectRatio: false,
         legend: {
           display: false,
-          position: 'right'
+          position: 'right',
+          onClick: (e) => e.stopPropagation()
         }
       }
     },
@@ -266,7 +268,9 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'right'
+          position: 'bottom',
+          align: 'center',
+          onClick: (e) => e.stopPropagation()
         }
       }
     },
@@ -275,7 +279,9 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'right'
+          position: 'bottom',
+          align: 'center',
+          onClick: (e) => e.stopPropagation()
         }
       }
     },
@@ -288,7 +294,9 @@ export default {
           label: `Applications by number of ${this.eventTypePluralized} visited`
         },
         legend: {
-          position: 'right'
+          position: 'bottom',
+          align: 'center',
+          onClick: (e) => e.stopPropagation()
         }
       }
     },
@@ -320,7 +328,8 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'right',
+          position: 'bottom',
+          align: 'center',
           onClick: (e) => e.stopPropagation()
         }
       }
