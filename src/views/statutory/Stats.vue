@@ -257,9 +257,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          display: false,
-          position: 'right',
-          onClick: (e) => e.stopPropagation()
+          display: false
         }
       }
     },
