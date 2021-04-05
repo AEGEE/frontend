@@ -247,7 +247,7 @@
                   <th>Social media</th>
                   <td>
                     <ul>
-                      <li v-for="(social_media, index) in event.social_media" v-bind:key="index"><a :href="event.social_media[index].description" target="_blank">{{ event.social_media[index].description }}</a></li>
+                      <li v-for="social_medium in event.social_media" v-bind:key="social_medium"><a :href="social_medium.description" target="_blank">{{ social_medium.description }}</a></li>
                     </ul>
                   </td>
                 </tr>
