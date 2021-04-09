@@ -22,30 +22,29 @@
               </router-link>
             </b-table-column>
 
-            <b-table-column field="position" label="Position">
+            <b-table-column field="position" label="Position" v-slot="props">
               {{ props.row.position }}
             </b-table-column>
 
-            <!-- <b-table-column field="circle_admin" label="Is circle admin?">
+            <!-- <b-table-column field="circle_admin" label="Is circle admin?" v-slot="props">
               <span :class="{ 'tag': props.row.circle_admin, 'is-primary': props.row.circle_admin, 'is-small': props.row.circle_admin }">
                 {{ props.row.circle_admin | beautify}}
               </span>
             </b-table-column> -->
 
-            <b-table-column label="Edit" :visible="can.edit" centered>
+            <b-table-column label="Edit" :visible="can.edit" centered v-slot="props">
               <a class="button is-small is-warning" @click="editMemberModal(props.row)">
                 <span class="icon"><font-awesome-icon icon="edit" /></span>
                 <span>Edit</span>
               </a>
             </b-table-column>
 
-            <b-table-column label="Delete" :visible="can.delete" centered>
+            <b-table-column label="Delete" :visible="can.delete" centered v-slot="props">
               <a class="button is-small is-danger" @click="askDeleteMember(props.row, false)">
                 <span class="icon"><font-awesome-icon icon="minus" /></span>
                 <span>Delete</span>
               </a>
             </b-table-column>
-          </template>
 
           <template slot="empty">
             <empty-table-stub />

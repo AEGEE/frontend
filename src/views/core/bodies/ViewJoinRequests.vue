@@ -25,15 +25,15 @@
               </router-link>
             </b-table-column>
 
-            <b-table-column field="motivation" label="Motivation">
+            <b-table-column field="motivation" label="Motivation" v-slot="props">
               {{ props.row.motivation }}
             </b-table-column>
 
-            <b-table-column field="created_at" label="Date" sortable>
+            <b-table-column field="created_at" label="Date" sortable v-slot="props">
               {{ props.row.created_at | datetime }}
             </b-table-column>
 
-            <b-table-column label="Approve">
+            <b-table-column label="Approve" v-slot="props">
               <div class="field" v-if="props.row.status === 'pending'">
                 <div class="control">
                   <a class="button is-small is-info" @click="askSetMemberApproved(props.row, true)">
@@ -44,7 +44,7 @@
               </div>
             </b-table-column>
 
-            <b-table-column label="Reject">
+            <b-table-column label="Reject" v-slot="props">
               <div class="field" v-if="props.row.status === 'pending'">
                 <div class="control">
                   <a class="button is-small is-danger" @click="askSetMemberApproved(props.row, false)">
@@ -54,7 +54,6 @@
                 </div>
               </div>
             </b-table-column>
-          </template>
 
           <template slot="empty">
             <empty-table-stub />
