@@ -157,7 +157,7 @@ export default {
   }),
   mounted () {
     if (this.loginUser) {
-      this.bug.email = this.loginUser.email
+      this.bug.email = this.loginUser.notification_email
     }
   }
 }
