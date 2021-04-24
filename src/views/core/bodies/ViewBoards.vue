@@ -9,8 +9,11 @@
             <b-collapse class="card" animation="slide" :open="false" v-bind:key="index">
               <template #trigger="props">
                   <div class="card-header" role="button">
-                      <p class="card-header-title">
-                          {{ board.start_date }} - {{ board.end_date }}
+                      <p class="card-header-title" v-if="!board.name">
+                        {{ board.start_date }} - {{ board.end_date }}
+                      </p>
+                      <p class="card-header-title" v-else>
+                        {{ board.name }} ({{ board.start_date }} - {{ board.end_date }})
                       </p>
                       <a class="card-header-icon">
                         <span class="icon is-small is-angle">

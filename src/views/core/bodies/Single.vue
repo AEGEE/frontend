@@ -175,6 +175,10 @@
           <div class="content" v-for="board in boards" v-bind:key="board.id">
               <table class="table is-narrow">
                 <tbody>
+                  <tr v-if="board.name">
+                    <th>Name</th>
+                    <td>{{ board.name }}</td>
+                  </tr>
                   <tr>
                     <th>Term</th>
                     <td>{{ board.start_date }} - {{ board.end_date }}</td>

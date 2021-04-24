@@ -44,6 +44,10 @@
         </b-field>
       </b-field>
 
+      <b-field label="Board name">
+        <b-input v-model="board.name" />
+      </b-field>
+
       <hr>
 
       <b-field grouped v-for="(position, index) in board.positions" v-bind:key="index" style="height: 36px;">
@@ -82,6 +86,7 @@
       </b-field>
 
       <hr>
+
       <template v-if="!edit">
         <div class="notification is-info">
           <div class="content">
@@ -153,6 +158,7 @@ export default {
           { function: 'Secretary', name: '', user_id: '', required: true },
           { function: 'Treasurer', name: '', user_id: '', required: true }
         ],
+        name: '',
         message: ''
       },
       members: [],
@@ -192,6 +198,7 @@ export default {
         secretary: this.board.positions[1].id,
         treasurer: this.board.positions[2].id,
         other_members: otherMembers,
+        name: this.board.name,
         message: this.board.message
         // TODO: Add image
         // image:
@@ -279,6 +286,7 @@ export default {
     this.board.positions[1].name = this.oldBoard.secretary_user.first_name + ' ' + this.oldBoard.secretary_user.last_name
     this.board.positions[2].id = this.oldBoard.treasurer
     this.board.positions[2].name = this.oldBoard.treasurer_user.first_name + ' ' + this.oldBoard.treasurer_user.last_name
+    this.board.name = this.oldBoard.name
     this.board.message = this.oldBoard.message
 
     for (const other of this.oldBoard.other_members) {
