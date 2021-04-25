@@ -6,23 +6,30 @@
 
         <div class="subtitle">By antenna</div>
 
-        <div> (ofc, add an icon here, and hide this block as long as the data is not loaded) <a :href="exportVotesCSV.content" :download="exportVotesCSV.filename">download list of votes</a> </div>
+        <div class="field">
+          <div class="control">
+            <a :href="exportVotesCSV.content" :download="exportVotesCSV.filename"><button class="button is-primary">
+              Export list of votes
+            </button></a>
+          </div>
+        </div>
+
         <table class="table is-narrow is-fullwidth">
           <thead>
             <tr>
-              <th>Body</th>
               <th>Body Code</th>
+              <th>Body</th>
               <th>Votes</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="vote in antennae" v-bind:key="vote.id">
+              <td>{{ vote.body ? vote.body.code : 'Loading...' }}</td>
               <td>
                 <router-link :to="{ name: 'oms.bodies.view', params: { id: vote.body_id } }">
                   {{ vote.body ? vote.body.name : 'Loading...' }}
                 </router-link>
               </td>
-              <td>{{ vote.body ? vote.body.code : 'Loading...' }}</td>
               <td>{{ vote.votes }}</td>
             </tr>
             <tr v-if="antennae.length == 0 && !isLoading">
@@ -81,14 +88,10 @@ import { mapGetters } from 'vuex'
  */
 function prepareExportCsv (antennae, eventShortLink) {
   // we're forced to use %2C for commas and %0A for linebreak.
-  let contentT = 'data:text/csv,'
-  contentT += 'BODY_CODE%2CVOTES%0A'
-  const filenameT = 'exportVotes_' + eventShortLink + '.csv' // todo  add a date to the export?
-  console.log(antennae)
-  for (const antenna of antennae) {
-    console.log(antenna)
-    contentT += antenna.body.code + '%2C' + antenna.votes + '%0A'
-  }
+  const contentT = 'data:text/csv,' + antennae
+    .map(antenna => antenna.body.code + '%2C' + antenna.votes + '%0A')
+    .join('')
+  const filenameT = 'exportVotes_' + eventShortLink + '_' + new Date().toISOString() + '.csv'
   return {
     content: contentT,
     filename: filenameT
