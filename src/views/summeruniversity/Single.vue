@@ -95,7 +95,6 @@
             </a>
           </div>
 
-
           <!-- For SUCT: reject first submission (first submission -> first draft) -->
           <div class="field is-grouped" v-if="can.change_status.first_draft && event.status === 'first submission'">
             <a class="button is-fullwidth is-danger" @click="askChangeStatus('first draft')">
