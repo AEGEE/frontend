@@ -276,8 +276,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { MglMap, MglMarker, MglPopup, MglNavigationControl } from 'vue-mapbox'
-import credentials from '../../credentials'
 import moment from 'moment'
+import credentials from '../../credentials'
 
 export default {
   components: {
