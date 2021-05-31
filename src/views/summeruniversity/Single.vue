@@ -560,11 +560,12 @@ export default {
     },
     askStartOpenCall () {
       this.$buefy.dialog.prompt({
-        message: 'Start open call',
+        title: 'Start open call',
+        message: 'Set maximum amount of participants',
         inputAttrs: {
           type: 'number',
           required: true,
-          placeholder: this.event.max_participants
+          value: this.event.max_participants
         },
         trapFocus: true,
         onConfirm: (newMaxParticipants) => this.changeOpenCall(newMaxParticipants)
