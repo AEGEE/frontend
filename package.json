@@ -43,7 +43,7 @@
     "animate.css": "4.1.1",
     "axios": "0.21.1",
     "babel-eslint": "10.1.0",
-    "buefy": "0.9.6",
+    "buefy": "0.9.8",
     "chart.js": "2.9.4",
     "compression-webpack-plugin": "6.1.1",
     "css-loader": "5.2.6",

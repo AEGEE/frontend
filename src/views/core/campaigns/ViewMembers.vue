@@ -18,7 +18,6 @@
         :per-page="limit"
         default-sort="id"
         default-sort-direction="desc">
-        <template slot-scope="props">
           <b-table-column field="id" label="#" numeric sortable>
             {{ props.row.id }}
           </b-table-column>
