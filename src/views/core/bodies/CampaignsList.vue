@@ -10,8 +10,7 @@
         </div>
 
         <b-table :data="campaigns">
-          <template slot-scope="props">
-            <b-table-column field="name" label="Campaign name">
+            <b-table-column field="name" label="Campaign name" v-slot="props">
               <router-link :to="{ name: 'oms.bodies.campaigns.view', params: { body_id: $route.params.id, id: props.row.id } }">
                 {{ props.row.name }}
               </router-link>
@@ -21,10 +20,9 @@
               <span class="description" v-html="$options.filters.markdown(props.row.description_long)"></span>
             </b-table-column>
 
-            <b-table-column label="Link">
+            <b-table-column label="Link" v-slot="props">
               {{ '/signup/' + props.row.url }}
             </b-table-column>
-          </template>
 
           <template slot="empty">
             <empty-table-stub />
