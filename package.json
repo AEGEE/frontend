@@ -17,12 +17,8 @@
     "test": "npm run cypress:run && npm run nyc:report",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
-    "nyc:report": "nyc report"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+    "nyc:report": "nyc report",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@babel/core": "7.14.8",
