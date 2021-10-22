@@ -758,11 +758,16 @@ export default {
     },
     'dates.starts': function (newDate) {
       this.event.starts = new Date(newDate)
-      this.dates.draft_proposal_deadline = moment(this.dates.starts).subtract(45, 'days').endOf('day').second(0).toDate()
-      this.dates.final_proposal_deadline = moment(this.dates.starts).subtract(1, 'month').endOf('day').second(0).toDate()
-      this.dates.candidature_deadline = moment(this.dates.starts).subtract(2, 'week').endOf('day').second(0).toDate()
-      this.dates.booklet_publication_deadline = moment(this.dates.starts).subtract(2, 'week').endOf('day').second(0).toDate()
-      this.dates.updated_booklet_publication_deadline = moment(this.dates.starts).subtract(1, 'week').endOf('day').second(0).toDate()
+      this.dates.draft_proposal_deadline = moment(this.dates.starts).subtract(45, 'days').endOf('day').second(0)
+        .toDate()
+      this.dates.final_proposal_deadline = moment(this.dates.starts).subtract(1, 'month').endOf('day').second(0)
+        .toDate()
+      this.dates.candidature_deadline = moment(this.dates.starts).subtract(2, 'week').endOf('day').second(0)
+        .toDate()
+      this.dates.booklet_publication_deadline = moment(this.dates.starts).subtract(2, 'week').endOf('day').second(0)
+        .toDate()
+      this.dates.updated_booklet_publication_deadline = moment(this.dates.starts).subtract(1, 'week').endOf('day').second(0)
+        .toDate()
     },
     'dates.ends': function (newDate) {
       this.event.ends = new Date(newDate)
