@@ -252,6 +252,10 @@ export default {
       this.body.founded_at = moment(this.foundationDate).format('YYYY-MM-DD')
     },
     saveBody () {
+      if (['antenna', 'contact antenna', 'contact'].includes(this.body.type) && !this.body.founded_at) {
+        return this.$root.showError('Please set the founding date of the local.')
+      }
+
       this.isSaving = true
       this.errors = {}
 
