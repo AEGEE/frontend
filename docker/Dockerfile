@@ -3,7 +3,8 @@ FROM node:16.13.0-alpine AS builder
 COPY . /usr/app/src
 WORKDIR /usr/app/src
 
-RUN npm ci --production \
+RUN npm set-script prepare "" \
+ && npm ci --production \
  && npm run build
 
 FROM nginx:1.21.3-alpine
