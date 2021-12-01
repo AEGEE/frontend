@@ -48,7 +48,7 @@
             </b-table-column>
 
             <b-table-column field="name" label="Body name">
-              <router-link :to="{ name: 'oms.bodies.view', params: { id: props.row.id } }">{{ props.row.name}}</router-link>
+              <router-link :to="{ name: 'oms.bodies.view', params: { id: props.row.id } }">{{ props.row.name }}</router-link>
             </b-table-column>
 
             <b-table-column field="type" label="Type">
@@ -56,22 +56,22 @@
             </b-table-column>
 
             <b-table-column field="election" label="Election">
-              <template v-if="props.row.boards">
-                {{ props.row.boards[0].elected_date }}
+              <template v-if="props.row.board">
+                {{ props.row.board.elected_date }}
               </template>
               <span v-else>-</span>
             </b-table-column>
 
             <b-table-column field="term_start" label="Term start">
-              <template v-if="props.row.boards">
-                {{ props.row.boards[0].start_date }}
+              <template v-if="props.row.board">
+                {{ props.row.board.start_date }}
               </template>
               <span v-else>-</span>
             </b-table-column>
 
             <b-table-column field="term_end" label="Term end">
-              <template v-if="props.row.boards">
-                {{ props.row.boards[0].end_date }}
+              <template v-if="props.row.board">
+                {{ props.row.board.end_date }}
               </template>
               <span v-else>-</span>
             </b-table-column>
@@ -167,25 +167,21 @@ export default {
           this.bodies = this.bodies.filter(x => types.includes(x.type))
         }
 
-        this.axios.get(this.services['network'] + '/boards').then((boardsResponse) => {
+        this.axios.get(this.services['network'] + '/boards?sort=start_date&direction=desc').then((boardsResponse) => {
           const boards = boardsResponse.data.data
+          const today = moment().format('YYYY-MM-DD')
 
-          // TODO: sort boards based on some date-metric, such that the most recent (?) is first in list
-          // Add boards to their corresponding body
+          // Add most recent board to their corresponding body
           for (const board of boards) {
             const body = this.bodies.find(x => board.body_id === x.id)
-            if (body) {
-              if (!body.boards) {
-                body.boards = [] // allows for multiple boards per body
-              }
-              body.boards.push(board)
+            if (body && moment(board.start_date).isSameOrBefore(today, 'date')) {
+              body.board = board
             }
           }
 
           // Apply filters on the final data
           if (this.filters.noCurrentBoard) {
-            const today = moment().format('YYYY-MM-DD')
-            this.bodies = this.bodies.filter(x => !x.boards || moment(x.boards[0].end_date).isBefore(today, 'date'))
+            this.bodies = this.bodies.filter(x => !x.board || moment(x.board.end_date).isBefore(today, 'date'))
           }
           this.isLoading = false
         }).catch((err) => {

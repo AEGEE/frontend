@@ -210,8 +210,6 @@ export default {
         this.body
       ).then(() => {
         // Save board information
-        console.log(boardExport)
-
         const promise = this.edit
           ? this.axios.put(this.services['network'] + '/bodies/' + this.body.id + '/boards/' + this.oldBoard.id, boardExport)
           : this.axios.post(this.services['network'] + '/bodies/' + this.body.id + '/boards', boardExport)

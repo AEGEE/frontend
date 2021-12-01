@@ -30,19 +30,19 @@
                       <tbody>
                         <tr>
                           <th>President</th>
-                          <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
+                          <td>{{ board.president_user ? board.president_user.first_name : 'Deleted' }} {{ board.president_user ? board.president_user.last_name : 'User' }}</td>
                         </tr>
                         <tr>
                           <th>Secretary</th>
-                          <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
+                          <td>{{ board.secretary_user ? board.secretary_user.first_name : 'Deleted' }} {{ board.secretary_user ? board.secretary_user.last_name : 'User' }}</td>
                         </tr>
                         <tr>
                           <th>Treasurer</th>
-                          <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                          <td>{{ board.treasurer_user ? board.treasurer_user.first_name : 'Deleted' }} {{ board.treasurer_user ? board.treasurer_user.last_name : 'User' }}</td>
                         </tr>
                         <tr v-for="position in board.other_members" v-bind:key="position.index">
                           <th>{{ position.function }}</th>
-                          <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
+                          <td>{{ position.user ? position.user.first_name : 'Deleted' }} {{ position.user ? position.user.last_name : 'User' }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -110,7 +110,7 @@ export default {
       this.axios.get(this.services['network'] + '/bodies/' + this.$route.params.id + '?sort=start_date&direction=desc').then((response) => {
         this.boards = response.data.data
 
-        // Get mebmers of the body
+        // Get members of the body
         return this.axios.get(this.services['core'] + '/bodies/' + this.$route.params.id + '/members')
       }).then((memberResponse) => {
         const members = memberResponse.data.data
