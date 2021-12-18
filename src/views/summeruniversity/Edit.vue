@@ -102,6 +102,17 @@
           <p class="help is-danger" v-if="errors.type">{{ errors.type.join(', ') }}</p>
         </div>
 
+        <div class="field" v-if="can.editSeason">
+          <label class="label">Season <span class="has-text-danger">*</span></label>
+          <div class="select">
+              <select v-model="season">
+                <option value="2021">2021</option>
+                <option selected value="2022">2022</option>
+              </select>
+          </div>
+          <p class="help is-danger" v-if="errors.season">{{ errors.season.join(', ') }}</p>
+        </div>
+
         <timezone-notification />
 
         <!-- TODO: start with datePicker on first possible SU start date set by CIA/SUCT -->
@@ -870,6 +881,7 @@ export default {
       },
       can: {
         editEventType: false,
+        editSeason: false,
         editFee: false
       },
       errors: {},
@@ -1147,6 +1159,7 @@ export default {
       return this.axios.get(this.services['core'] + '/my_permissions/')
     }).then((response) => {
       this.can.editEventType = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_type'))
+      this.can.editSeason = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_season'))
       this.can.editFee = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_fee'))
 
       if (!this.$route.params.id) {
@@ -1164,6 +1177,7 @@ export default {
         this.event = eventsResponse.data.data
         this.can = eventsResponse.data.permissions
         this.can.editEventType = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_type'))
+        this.can.editSeason = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_season'))
         this.can.editFee = response.data.data.some(permission => permission.combined.endsWith('global:edit:su_fee'))
 
         this.dates.starts = this.event.starts = new Date(this.event.starts)
