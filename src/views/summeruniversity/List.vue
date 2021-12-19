@@ -30,7 +30,7 @@
           <label class="label">Select year</label>
           <div class="control">
             <div class="select">
-              <select v-model="season">
+              <select v-model="season" @change="refetch()">
                 <option value="2021">2021</option>
                 <option selected value="2022">2022</option>
               </select>

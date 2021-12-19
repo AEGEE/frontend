@@ -105,9 +105,9 @@
         <div class="field" v-if="can.editSeason">
           <label class="label">Season <span class="has-text-danger">*</span></label>
           <div class="select">
-              <select v-model="season">
+              <select v-model="event.season">
                 <option value="2021">2021</option>
-                <option selected value="2022">2022</option>
+                <option value="2022">2022</option>
               </select>
           </div>
           <p class="help is-danger" v-if="errors.season">{{ errors.season.join(', ') }}</p>
@@ -254,6 +254,7 @@
           <p class="help is-danger" v-if="errors.activities_list">{{ errors.activities_list.join(', ') }}</p>
         </div>
 
+        <!-- Not used in 2022
         <div class="field">
           <label class="label">Course level</label>
           <div class="select">
@@ -270,7 +271,7 @@
             <textarea class="textarea" placeholder="List your courses here." v-model="event.courses"></textarea>
           </div>
           <p class="help is-danger" v-if="errors.courses">{{ errors.courses.join(', ') }}</p>
-        </div>
+        </div> -->
 
         <div class="field">
           <label class="label">Trainers</label>
