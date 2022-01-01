@@ -7,7 +7,7 @@ RUN npm set-script prepare "" \
  && npm ci --production \
  && npm run build
 
-FROM nginx:1.21.4-alpine
+FROM nginx:1.21.5-alpine
 
 RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
 
