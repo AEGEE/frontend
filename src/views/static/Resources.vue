@@ -69,12 +69,6 @@ export default {
             description: 'Official website',
             color: '#4CA0FF'
           },
-          // {
-          //   url: 'https://aegee.blogactiv.eu/',
-          //   title: 'External Blog',
-          //   description: 'Blog hosted on Blogactiv platform',
-          //   color: '#4CA0FF'
-          // },
           {
             url: 'https://aegee.us7.list-manage.com/subscribe?u=7a170c64e0d3990f3f6629d21&id=fc8908d780',
             title: 'External Newsletter',
