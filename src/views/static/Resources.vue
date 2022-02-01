@@ -154,6 +154,12 @@ export default {
             title: 'CD House Guest Request',
             description: 'Visiting the CD house',
             color: '#FFDB4C'
+          },
+          {
+            url: 'https://forms.gle/ZMfSByo5QEUAwoY4A',
+            title: 'ASRF Application Form',
+            description: 'Apply for the AEGEE Social Responsibility Fund',
+            color: '#FFDB4C'
           }
         ],
         'Network': [
