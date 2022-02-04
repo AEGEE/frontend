@@ -9,9 +9,12 @@
             <div class="control is-expanded">
               <input class="input" type="text" v-model="query" placeholder="Search by name or description" @input="refetch()" />
             </div>
+             <div class="control">
+              <a class="button is-info" v-if=" can.viewUnpublishedStatutoryEvents && includeUnPublishedStatutoryEvents" @click="toggleUnpublishedStatutoryEvents()">Show only published events</a>
+              <a class="button is-info" v-if=" can.viewUnpublishedStatutoryEvents && !includeUnPublishedStatutoryEvents"  @click="toggleUnpublishedStatutoryEvents()">Show also draft events</a>
+             </div>
           </div>
         </div>
-
         <div class="field">
           <div class="control">
             <router-link class="button is-primary" v-if="can.create" :to="{ name: 'oms.statutory.create' }">Create event</router-link>
@@ -19,7 +22,7 @@
         </div>
 
         <div class="card" v-for="event in events" v-bind:key="event.id">
-          <div class="card-content">
+          <div :class="event.status ==='published'? 'card-content' : 'card-content-draft-events'">
             <div class="media">
               <div class="media-left">
                 <figure class="image image-96px">
@@ -52,7 +55,7 @@
                     :to="{ name: 'oms.statutory.view', params: { id: event.url || event.id } }"
                     class="button">Go to event page</router-link>
                 </p>
-                <p class="control" v-if="event.can_apply">
+                <p class="control" v-if="event.can_apply && event.status ==='published'">
                   <router-link
                     :to="{ name: 'oms.statutory.applications.view', params: { id: event.url || event.id, application_id: 'me' } }"
                     class="button is-warning">
@@ -91,6 +94,10 @@
 .image-96px {
   width:96px;
 }
+.card-content-draft-events{
+background-color: rgb(230, 228, 228);
+padding: 1.5rem;
+}
 </style>
 
 <script>
@@ -107,8 +114,12 @@ export default {
       offset: 0,
       canLoadMore: true,
       source: null,
-      can: { create: false },
-      permissions: []
+      can: {
+        create: false,
+        viewUnpublishedStatutoryEvents: false
+      },
+      permissions: [],
+      includeUnPublishedStatutoryEvents: false
     }
   },
   computed: {
@@ -124,11 +135,15 @@ export default {
     ...mapGetters(['services'])
   },
   methods: {
+    toggleUnpublishedStatutoryEvents () {
+      this.includeUnPublishedStatutoryEvents = !this.includeUnPublishedStatutoryEvents
+      this.refetch()
+    },
     refetch () {
       this.events = []
       this.offset = 0
       this.canLoadMore = true
-      this.fetchData()
+      if (!this.can.viewUnpublishedStatutoryEvents || !this.includeUnPublishedStatutoryEvents) { this.fetchData() } else { this.fetchAlsoDraftEvents() }
     },
     fetchData () {
       this.isLoading = true
@@ -143,8 +158,33 @@ export default {
         return this.axios.get(this.services['core'] + '/my_permissions')
       }).then((response) => {
         this.permissions = response.data.data
+        this.can.create = this.permissions.some(permission => permission.combined.endsWith('manage_event:agora') || permission.combined.endsWith('manage_event:epm'))
+        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:event'))
+        this.isLoading = false
+      }).catch((err) => {
+        if (this.axios.isCancel(err)) {
+          return
+        }
+
+        this.$root.showError('Could not fetch statutory events list', err)
+      })
+    },
+    fetchAlsoDraftEvents () {
+      this.isLoading = true
+      if (this.source) this.source.cancel()
+      this.source = this.axios.CancelToken.source()
+
+      this.axios.get(this.services['statutory'] + '/all', { params: this.queryObject, cancelToken: this.source.token }).then((response) => {
+        this.events = this.events.concat(response.data.data)
+        this.offset += this.limit
+        this.canLoadMore = response.data.data.length === this.limit
+
+        return this.axios.get(this.services['core'] + '/my_permissions')
+      }).then((response) => {
+        this.permissions = response.data.data
 
         this.can.create = this.permissions.some(permission => permission.combined.endsWith('manage_event:agora') || permission.combined.endsWith('manage_event:epm'))
+        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:event'))
         this.isLoading = false
       }).catch((err) => {
         if (this.axios.isCancel(err)) {
