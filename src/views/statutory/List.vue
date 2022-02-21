@@ -10,8 +10,8 @@
               <input class="input" type="text" v-model="query" placeholder="Search by name or description" @input="refetch()" />
             </div>
              <div class="control">
-              <a class="button is-info" v-if=" can.viewUnpublishedStatutoryEvents && includeUnPublishedStatutoryEvents" @click="toggleUnpublishedStatutoryEvents()">Show only published events</a>
-              <a class="button is-info" v-if=" can.viewUnpublishedStatutoryEvents && !includeUnPublishedStatutoryEvents"  @click="toggleUnpublishedStatutoryEvents()">Show also draft events</a>
+              <a class="button is-info" v-if=" can.viewUnpublishedStatutoryEvents && includeUnpublishedStatutoryEvents" @click="toggleUnpublishedStatutoryEvents()">Show only published events</a>
+              <a class="button is-info" v-if=" can.viewUnpublishedStatutoryEvents && !includeUnpublishedStatutoryEvents"  @click="toggleUnpublishedStatutoryEvents()">Show also draft events</a>
              </div>
           </div>
         </div>
@@ -119,14 +119,15 @@ export default {
         viewUnpublishedStatutoryEvents: false
       },
       permissions: [],
-      includeUnPublishedStatutoryEvents: false
+      includeUnpublishedStatutoryEvents: false
     }
   },
   computed: {
     queryObject () {
       const queryObj = {
         limit: this.limit,
-        offset: this.offset
+        offset: this.offset,
+        all: this.includeUnpublishedStatutoryEvents
       }
 
       if (this.query) queryObj.search = this.query
@@ -136,14 +137,14 @@ export default {
   },
   methods: {
     toggleUnpublishedStatutoryEvents () {
-      this.includeUnPublishedStatutoryEvents = !this.includeUnPublishedStatutoryEvents
+      this.includeUnpublishedStatutoryEvents = !this.includeUnpublishedStatutoryEvents
       this.refetch()
     },
     refetch () {
       this.events = []
       this.offset = 0
       this.canLoadMore = true
-      if (!this.can.viewUnpublishedStatutoryEvents || !this.includeUnPublishedStatutoryEvents) { this.fetchData() } else { this.fetchAlsoDraftEvents() }
+      this.fetchData()
     },
     fetchData () {
       this.isLoading = true
@@ -159,32 +160,7 @@ export default {
       }).then((response) => {
         this.permissions = response.data.data
         this.can.create = this.permissions.some(permission => permission.combined.endsWith('manage_event:agora') || permission.combined.endsWith('manage_event:epm'))
-        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:event'))
-        this.isLoading = false
-      }).catch((err) => {
-        if (this.axios.isCancel(err)) {
-          return
-        }
-
-        this.$root.showError('Could not fetch statutory events list', err)
-      })
-    },
-    fetchAlsoDraftEvents () {
-      this.isLoading = true
-      if (this.source) this.source.cancel()
-      this.source = this.axios.CancelToken.source()
-
-      this.axios.get(this.services['statutory'] + '/all', { params: this.queryObject, cancelToken: this.source.token }).then((response) => {
-        this.events = this.events.concat(response.data.data)
-        this.offset += this.limit
-        this.canLoadMore = response.data.data.length === this.limit
-
-        return this.axios.get(this.services['core'] + '/my_permissions')
-      }).then((response) => {
-        this.permissions = response.data.data
-
-        this.can.create = this.permissions.some(permission => permission.combined.endsWith('manage_event:agora') || permission.combined.endsWith('manage_event:epm'))
-        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:event'))
+        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:agora') || permission.combined.endsWith('global:show_unpublished:epm') || permission.combined.endsWith('global:show_unpublished:spm'))
         this.isLoading = false
       }).catch((err) => {
         if (this.axios.isCancel(err)) {
