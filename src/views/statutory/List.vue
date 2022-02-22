@@ -160,7 +160,7 @@ export default {
       }).then((response) => {
         this.permissions = response.data.data
         this.can.create = this.permissions.some(permission => permission.combined.endsWith('manage_event:agora') || permission.combined.endsWith('manage_event:epm'))
-        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:agora') || permission.combined.endsWith('global:show_unpublished:epm') || permission.combined.endsWith('global:show_unpublished:spm'))
+        this.can.viewUnpublishedStatutoryEvents = this.permissions.some(permission => permission.combined.endsWith('global:show_unpublished:agora'))
         this.isLoading = false
       }).catch((err) => {
         if (this.axios.isCancel(err)) {
