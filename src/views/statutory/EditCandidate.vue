@@ -327,14 +327,13 @@ export default {
   mounted () {
     this.bodies = this.loginUser.bodies
       .filter(body => ['contact', 'contact antenna', 'antenna'].includes(body.type))
-
     if (!this.$route.params.candidate_id) {
       // Prefilling values
       this.candidate.first_name = this.loginUser.first_name
       this.candidate.last_name = this.loginUser.last_name
-      this.candidate.email = this.loginUser.user.email
-      this.candidate.date_of_birth = this.loginUser.date_of_birth
-      this.candidate.member_since = moment(this.loginUser.user.inserted_at).format('YYYY-MM-DD')
+      this.candidate.email = this.loginUser.email
+      this.candidate.date_of_birth = moment(this.loginUser.date_of_birth).format('YYYY-MM-DD')
+      this.candidate.member_since = moment(this.loginUser.created_at).format('YYYY-MM-DD')
 
       if (this.bodies.length) {
         this.candidate.body_id = this.bodies[0].id
