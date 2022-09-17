@@ -327,6 +327,7 @@ export default {
   mounted () {
     this.bodies = this.loginUser.bodies
       .filter(body => ['contact', 'contact antenna', 'antenna'].includes(body.type))
+
     if (!this.$route.params.candidate_id) {
       // Prefilling values
       this.candidate.first_name = this.loginUser.first_name
