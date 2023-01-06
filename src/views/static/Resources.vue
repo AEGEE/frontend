@@ -103,7 +103,7 @@ export default {
           },
           {
             url: 'https://drive.google.com/drive/folders/1TSLKDPKUFe7k3POjlW1XzJdxgz5mfhrQ',
-            title: 'Strategic Plans && Action Agendas',
+            title: 'Strategic Plans & Action Agendas',
             description: 'Strategic Plans and their Action Agendas',
             color: '#FFDB4C'
           },
