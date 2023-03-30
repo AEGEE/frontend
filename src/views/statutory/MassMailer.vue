@@ -138,7 +138,7 @@ export default {
         last_name: 'Surname'
       },
       stabBody: { name: 'AEGEE-Europe' },
-      stabApplication: { statutory_id: 001-0001, participant_type: 'delegate', participant_order: 1 }
+      stabApplication: { statutory_id: '001-0001', participant_type: 'delegate', participant_order: 1 }
     }
   },
   computed: {
