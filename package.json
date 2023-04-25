@@ -25,7 +25,7 @@
     "@babel/eslint-parser": "^7.19.1",
     "@babel/types": "^7.16.8",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^2.0.6",
     "@fullcalendar/core": "^5.10.1",
