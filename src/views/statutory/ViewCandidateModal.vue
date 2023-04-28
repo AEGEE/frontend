@@ -89,11 +89,15 @@
           </tr>
           <tr>
             <th>Motivation</th>
-            <td class="has-text-pre-wrap">{{ candidate.motivation }}</td>
+            <td>
+              <div class="content" v-html="$options.filters.markdown(candidate.motivation)" />
+            </td>
           </tr>
           <tr>
             <th>Program</th>
-            <td class="has-text-pre-wrap">{{ candidate.program }}</td>
+            <td>
+              <div class="content" v-html="$options.filters.markdown(candidate.program)" />
+            </td>
           </tr>
         </tbody>
       </table>
