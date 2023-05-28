@@ -32,6 +32,8 @@
           :data="applications"
           :row-class="row => calculateClassForApplication(row)"
           :loading="isLoading"
+          default-sort="updated_at"
+          default-sort-direction="desc"
           v-if="selectedBody && boardBodies.length > 0">
           <template slot-scope="props">
             <b-table-column field="updated_at" label="Date modified" sortable>
