@@ -66,9 +66,7 @@
             </b-table-column>
 
             <b-table-column field="board_comment" label="Board comment">
-              <div class="control">
-                <input class="input" v-model="props.row.board_comment" />
-              </div>
+              <textarea class="textarea" v-model="props.row.board_comment" />
             </b-table-column>
 
             <b-table-column label="Save">
