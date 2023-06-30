@@ -4,7 +4,7 @@ COPY . /usr/app/src
 WORKDIR /usr/app/src
 
 RUN npm set-script prepare "" \
- && npm ci --production \
+ && npm ci --production --legacy-peer-deps \
  && npm run build
 
 FROM nginx:1.25.1-alpine
