@@ -21,9 +21,9 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@babel/core": "^7.22.1",
-    "@babel/eslint-parser": "^7.21.8",
-    "@babel/types": "^7.22.4",
+    "@babel/core": "^7.22.5",
+    "@babel/eslint-parser": "^7.22.5",
+    "@babel/types": "^7.22.5",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
@@ -44,9 +44,9 @@
     "compression-webpack-plugin": "^6.1.1",
     "css-loader": "^5.2.7",
     "dompurify": "^2.4.3",
-    "eslint": "^8.41.0",
+    "eslint": "^8.43.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-vue": "^9.14.1",
+    "eslint-plugin-vue": "^9.15.0",
     "eslint-plugin-vuejs-accessibility": "^1.2.0",
     "ical": "^0.8.0",
     "lodash": "^4.17.21",
@@ -80,12 +80,12 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "commitlint": "^17.6.5",
-    "conventional-changelog": "^3.1.25",
-    "cypress": "^12.13.0",
+    "conventional-changelog": "^4.0.0",
+    "cypress": "^12.15.0",
     "husky": "^8.0.3",
     "istanbul-instrumenter-loader": "^3.0.1",
     "istanbul-lib-coverage": "^3.2.0",
-    "semantic-release": "^21.0.2"
+    "semantic-release": "^21.0.5"
   },
   "optionalDependencies": {
     "iltorb": "^2.4.5"
