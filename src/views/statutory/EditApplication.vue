@@ -63,6 +63,10 @@
                 <p class="help is-danger" v-if="errors.meals">{{ errors.meals.join(', ') }}</p>
               </div>
 
+              <div class="notification is-success" v-if="event.vegetarian">
+                This event is fully vegetarian!
+              </div>
+
               <div class="field is-fullwidth">
                 <label class="label">Allergies</label>
                 <div class="control">
