@@ -46,7 +46,7 @@
     "dompurify": "^2.4.3",
     "eslint": "^8.43.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-vue": "^9.15.0",
+    "eslint-plugin-vue": "^9.15.1",
     "eslint-plugin-vuejs-accessibility": "^1.2.0",
     "ical": "^0.8.0",
     "lodash": "^4.17.21",
@@ -75,17 +75,17 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^17.6.5",
-    "@cypress/code-coverage": "^3.10.7",
+    "@commitlint/config-conventional": "^17.6.6",
+    "@cypress/code-coverage": "^3.10.8",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "commitlint": "^17.6.5",
+    "commitlint": "^17.6.6",
     "conventional-changelog": "^4.0.0",
-    "cypress": "^12.15.0",
+    "cypress": "^12.16.0",
     "husky": "^8.0.3",
     "istanbul-instrumenter-loader": "^3.0.1",
     "istanbul-lib-coverage": "^3.2.0",
-    "semantic-release": "^21.0.5"
+    "semantic-release": "^21.0.6"
   },
   "optionalDependencies": {
     "iltorb": "^2.4.5"
