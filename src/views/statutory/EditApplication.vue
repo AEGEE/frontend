@@ -56,7 +56,7 @@
                     <select v-model="application.meals">
                       <option>Vegetarian</option>
                       <option>Vegan</option>
-                      <option v-if="event.url !== 'spring-agora-enschede-2023'">Meat-eater</option>
+                      <option v-if="event.vegetarian !== true">Meat-eater</option>
                     </select>
                   </div>
                 </div>
