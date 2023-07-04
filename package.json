@@ -11,7 +11,7 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --openssl-legacy-provider",
     "build-and-test": "NODE_ENV=test npm run build && npm test",
     "lint": "eslint --ext .js,.vue .",
     "test": "npm run cypress:run && npm run nyc:report",

@@ -4,7 +4,7 @@ COPY . /usr/app/src
 WORKDIR /usr/app/src
 
 RUN npm pkg delete scripts.prepare \
- && npm ci --production --legacy-peer-deps \
+ && npm ci --omit=dev --legacy-peer-deps \
  && npm run build
 
 FROM nginx:1.25.1-alpine
