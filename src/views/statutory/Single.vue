@@ -206,7 +206,7 @@
         </div>
       </article>
 
-      <div class="notification is-success" v-if="$event.vegetarian">
+      <div class="notification is-success" v-if="event.vegetarian">
         This event is fully vegetarian!
       </div>
 

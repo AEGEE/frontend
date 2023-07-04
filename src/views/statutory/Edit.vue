@@ -92,7 +92,7 @@
         <div class="field" v-if="!$route.params.id">
           <label class="label">Is the event going to be fully vegetarian?</label>
           <div class="control">
-            <input type="checkbox" data-cy="vegetarian" v-model="vegetarian" />
+            <input type="checkbox" v-model="event.vegetarian" />
             <label class="checkbox"> Yes, the event will be without any meat</label>
           </div>
         </div>
