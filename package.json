@@ -10,8 +10,8 @@
     "url": "https://github.com/serge1pescoff"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --openssl-legacy-provider",
+    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
     "build-and-test": "NODE_ENV=test npm run build && npm test",
     "lint": "eslint --ext .js,.vue .",
     "test": "npm run cypress:run && npm run nyc:report",
