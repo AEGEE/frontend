@@ -3,7 +3,7 @@ FROM node:18.16.1-alpine AS builder
 COPY . /usr/app/src
 WORKDIR /usr/app/src
 
-RUN npm pkg set scripts.prepare="" \
+RUN npm pkg delete scripts.prepare \
  && npm ci --production --legacy-peer-deps \
  && npm run build
 
