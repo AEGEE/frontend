@@ -116,13 +116,13 @@
         <div class="field">
           <label class="label">
             Languages
-            <tooltip text="To add a language to the list, press either 'tab' or 'enter', or add a comma"/>
+            <tooltip text="To add a language to the list, press either 'tab' or 'enter', or add a comma" />
           </label>
           <div class="control">
             <input-tag
-                v-if="!isLoading"
-                v-model="candidate.languages"
-                :before-adding="value => value.trim()"></input-tag>
+              v-if="!isLoading"
+              v-model="candidate.languages"
+              :before-adding="value => value.trim()" />
           </div>
           <p class="help is-danger" v-if="errors.languages">{{ errors.languages.join(', ') }}</p>
         </div>
@@ -132,6 +132,10 @@
           <div class="control">
             <input class="input" type="text" required v-model="candidate.studies" />
           </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.studies)" />
+          </div>
           <p class="help is-danger" v-if="errors.studies">{{ errors.studies.join(', ') }}</p>
         </div>
 
@@ -139,6 +143,10 @@
           <label class="label">Attended Agorae</label>
           <div class="control">
             <textarea class="textarea" required v-model="candidate.attended_agorae" />
+          </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.attended_agorae)" />
           </div>
           <p class="help is-danger" v-if="errors.attended_agorae">{{ errors.attended_agorae.join(', ') }}</p>
         </div>
@@ -148,6 +156,10 @@
           <div class="control">
             <textarea class="textarea" required v-model="candidate.attended_epm" />
           </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.attended_epm)" />
+          </div>
           <p class="help is-danger" v-if="errors.attended_epm">{{ errors.attended_epm.join(', ') }}</p>
         </div>
 
@@ -155,6 +167,10 @@
           <label class="label">Attended AEGEE conferences</label>
           <div class="control">
             <textarea class="textarea" required v-model="candidate.attended_conferences" />
+          </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.attended_conferences)" />
           </div>
           <p class="help is-danger" v-if="errors.attended_conferences">{{ errors.attended_conferences.join(', ') }}</p>
         </div>
@@ -164,6 +180,10 @@
           <div class="control">
             <textarea class="textarea" required v-model="candidate.european_experience" />
           </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.european_experience)" />
+          </div>
           <p class="help is-danger" v-if="errors.european_experience">{{ errors.european_experience.join(', ') }}</p>
         </div>
 
@@ -171,6 +191,10 @@
           <label class="label">Local level experience</label>
           <div class="control">
             <textarea class="textarea" required v-model="candidate.local_experience" />
+          </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.local_experience)" />
           </div>
           <p class="help is-danger" v-if="errors.local_experience">{{ errors.local_experience.join(', ') }}</p>
         </div>
@@ -180,6 +204,10 @@
           <div class="control">
             <textarea class="textarea" required v-model="candidate.related_experience" />
           </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.related_experience)" />
+          </div>
           <p class="help is-danger" v-if="errors.related_experience">{{ errors.related_experience.join(', ') }}</p>
         </div>
 
@@ -187,6 +215,10 @@
           <label class="label">Non-AEGEE experience</label>
           <div class="control">
             <textarea class="textarea" required v-model="candidate.external_experience" />
+          </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.external_experience)" />
           </div>
           <p class="help is-danger" v-if="errors.external_experience">{{ errors.external_experience.join(', ') }}</p>
         </div>
@@ -196,6 +228,10 @@
           <div class="control">
             <textarea class="textarea" required v-model="candidate.motivation" />
           </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.motivation)" />
+          </div>
           <p class="help is-danger" v-if="errors.motivation">{{ errors.motivation.join(', ') }}</p>
         </div>
 
@@ -204,8 +240,14 @@
           <div class="control">
             <textarea class="textarea" required v-model="candidate.program" />
           </div>
+          <label class="label">Preview <MarkdownTooltip /></label>
+          <div class="content">
+            <span v-html="$options.filters.markdown(candidate.program)" />
+          </div>
           <p class="help is-danger" v-if="errors.program">{{ errors.program.join(', ') }}</p>
         </div>
+
+        <hr />
 
         <div class="field">
           <label class="checkbox">
@@ -219,12 +261,12 @@
 
         <div class="field">
           <div class="control">
-            <input type="submit" value="Save candidature" :disabled="isSaving" class="button is-primary is-fullwidth"/>
+            <input type="submit" value="Save candidature" :disabled="isSaving" class="button is-primary is-fullwidth" />
           </div>
         </div>
       </form>
 
-      <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
+      <b-loading is-full-page="false" :active.sync="isLoading" />
     </div>
   </div>
 </template>
@@ -234,8 +276,12 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 import nationalities from '../../nationalities'
+import MarkdownTooltip from '../../components/tooltips/MarkdownTooltip'
 
 export default {
+  components: {
+    MarkdownTooltip
+  },
   name: 'EditCandidate',
   data () {
     return {
@@ -332,9 +378,9 @@ export default {
       // Prefilling values
       this.candidate.first_name = this.loginUser.first_name
       this.candidate.last_name = this.loginUser.last_name
-      this.candidate.email = this.loginUser.user.email
-      this.candidate.date_of_birth = this.loginUser.date_of_birth
-      this.candidate.member_since = moment(this.loginUser.user.inserted_at).format('YYYY-MM-DD')
+      this.candidate.email = this.loginUser.email
+      this.candidate.date_of_birth = moment(this.loginUser.date_of_birth).format('YYYY-MM-DD')
+      this.candidate.member_since = moment(this.loginUser.created_at).format('YYYY-MM-DD')
 
       if (this.bodies.length) {
         this.candidate.body_id = this.bodies[0].id

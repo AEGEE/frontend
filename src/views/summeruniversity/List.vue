@@ -27,6 +27,19 @@
         </div>
 
         <div class="field">
+          <label class="label">Select year</label>
+          <div class="control">
+            <div class="select">
+              <select v-model="season" @change="refetch()">
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option selected value="2023">2023</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
           <label class="label">Event types</label>
           <label v-for="(value, index) in eventTypes" v-bind:key="index">
             <input class="checkbox" type="checkbox" v-model="value.enabled" @change="refetch()" />
@@ -66,7 +79,7 @@
 
             <div class="content">
               <span v-if="event.application_status === 'open'" style="color: #647A16; font-weight: bold">Applications are open!</span>
-              <span v-html="$options.filters.markdown(event.description)"></span>
+              <span v-html="$options.filters.markdown(event.description)" />
               <ul>
                 <li><strong>Type:</strong> {{ eventTypesNames[event.type] }} </li>
                 <li><strong>From:</strong> {{ event.starts | date }} </li>
@@ -77,12 +90,12 @@
                 <li v-if="event.open_call === true"><strong>Spots available:</strong> {{ event.available_spots }} </li>
                 <li>
                   <strong>Organizing bodies: </strong>
-                    <router-link
-                      v-for="(body, index) in event.organizing_bodies"
-                      v-bind:key="index"
-                      :to="{ name: 'oms.bodies.view', params: { id: body.body_id } }">
-                      {{ body.body_name }}
-                    </router-link>
+                  <router-link
+                    v-for="(body, index) in event.organizing_bodies"
+                    v-bind:key="index"
+                    :to="{ name: 'oms.bodies.view', params: { id: body.body_id } }">
+                    {{ body.body_name }}
+                  </router-link>
                 </li>
               </ul>
 
@@ -152,6 +165,7 @@ export default {
       eventTypes,
       eventTypesNames: constants.SUMMERUNIVERSITY_TYPES_NAMES,
       applicationStatuses,
+      season: 2023,
       isLoading: {
         events: false,
         permissions: false
@@ -174,7 +188,8 @@ export default {
         limit: this.limit,
         offset: this.offset,
         type: this.eventTypes.filter(type => type.enabled).map(type => type.value),
-        application_status: this.applicationStatuses.filter(type => type.enabled).map(type => type.value)
+        application_status: this.applicationStatuses.filter(type => type.enabled).map(type => type.value),
+        season: this.season
       }
 
       if (!this.displayPast) queryObj.starts = moment().format('YYYY-MM-DD')

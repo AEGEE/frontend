@@ -19,6 +19,10 @@
               <td>{{ stats.numbers.pending }}</td>
             </tr>
             <tr>
+              <th>Waiting list applications:</th>
+              <td>{{ stats.numbers.waiting_list }}</td>
+            </tr>
+            <tr>
               <th>Rejected applications:</th>
               <td>{{ stats.numbers.rejected }}</td>
             </tr>
@@ -46,39 +50,39 @@
         </table>
 
         <div class="subtitle">By date</div>
-        <line-chart class="chart" :chart-data="byDateData" :options="byDateOptions"></line-chart>
+        <line-chart class="chart" :chart-data="byDateData" :options="byDateOptions" />
 
         <div class="subtitle">By date (cumulative)</div>
-        <line-chart class="chart" :chart-data="byDateCumulativeData" :options="byDateCumulativeOptions"></line-chart>
+        <line-chart class="chart" :chart-data="byDateCumulativeData" :options="byDateCumulativeOptions" />
 
         <div class="subtitle">By participant type</div>
-        <pie-chart class="chart" :chart-data="byTypeData" :options="byTypeOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byTypeData" :options="byTypeOptions" />
 
         <div class="subtitle">By body</div>
-        <pie-chart class="chart" :chart-data="byBodyData()" :options="byBodyOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byBodyData()" :options="byBodyOptions" />
         <div class="content">
           <div class="tags">
             <span
               v-for="(body, index) in stats.by_body"
               v-bind:key="index"
               class="tag"
-              :style="{ 'background-color': index >= colors.length ? '' : colors[index], 'color': index >= backgroundColors.length ? '' : backgroundColors[index] }">
+              :style="{ 'background-color': index >= colors.length ? '' : colors[index], color: index >= backgroundColors.length ? '' : backgroundColors[index] }">
               {{ body.body ? body.body.name : body.body_id }} ({{ body.value }})
             </span>
           </div>
         </div>
 
         <div class="subtitle">By gender</div>
-        <pie-chart class="chart" :chart-data="byGenderData()" :options="byGenderOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byGenderData()" :options="byGenderOptions" />
 
         <div class="subtitle">By meal preference</div>
-        <pie-chart class="chart" :chart-data="byMealData()" :options="byMealOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byMealData()" :options="byMealOptions" />
 
         <div class="subtitle">By number of {{ eventTypePluralized }} visited</div>
-        <pie-chart class="chart" :chart-data="byNumOfEventsData()" :options="byNumOfEventsOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byNumOfEventsData()" :options="byNumOfEventsOptions" />
 
         <div class="subtitle">Quorum</div>
-        <pie-chart class="chart" :chart-data="byQuorumData" :options="byQuorumOptions"></pie-chart>
+        <pie-chart class="chart" :chart-data="byQuorumData" :options="byQuorumOptions" />
       </div>
     </div>
   </div>
@@ -136,6 +140,7 @@ export default {
           accepted: 0,
           rejected: 0,
           pending: 0,
+          waiting_list: 0,
           confirmed: 0,
           attended: 0,
           registered: 0,

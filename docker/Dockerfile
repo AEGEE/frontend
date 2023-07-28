@@ -1,12 +1,14 @@
-FROM node:14.18.1-alpine AS builder
+# FIXME use alpine
+FROM node:18.17.0 AS builder
 
 COPY . /usr/app/src
 WORKDIR /usr/app/src
 
-RUN npm ci --production \
+RUN npm pkg delete scripts.prepare \
+ && npm ci --omit=dev \
  && npm run build
 
-FROM nginx:1.21.3-alpine
+FROM nginx:1.25.1-alpine
 
 RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
 
@@ -17,7 +19,7 @@ COPY ./docker/frontend-nginx/sites/default.conf /etc/nginx/sites-available/defau
 # it has some default settings there which result in displaying
 # the default nginx page, which is not what we need
 RUN rm -rf /etc/nginx/conf.d \
- && apk --no-cache add curl=7.78.0-r0 \
+ && apk --no-cache add curl=8.1.2-r0 \
  && chown -R www-data:www-data /usr/app/
 
 WORKDIR /usr/app/src/dist

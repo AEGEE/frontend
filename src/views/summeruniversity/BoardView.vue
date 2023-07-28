@@ -32,6 +32,8 @@
           :data="applications"
           :row-class="row => calculateClassForApplication(row)"
           :loading="isLoading"
+          default-sort="updated_at"
+          default-sort-direction="desc"
           v-if="selectedBody && boardBodies.length > 0">
           <template slot-scope="props">
             <b-table-column field="updated_at" label="Date modified" sortable>
@@ -46,7 +48,7 @@
 
             <b-table-column field="first_name" label="Name" sortable>
               <router-link :to="{ name: 'oms.members.view', params: { id: props.row.user_id } }">
-                {{ props.row.first_name }} {{ props.row.last_name  }}
+                {{ props.row.first_name }} {{ props.row.last_name }}
               </router-link>
             </b-table-column>
 
@@ -64,9 +66,7 @@
             </b-table-column>
 
             <b-table-column field="board_comment" label="Board comment">
-              <div class="control">
-                <input class="input" v-model="props.row.board_comment" />
-              </div>
+              <textarea class="textarea" v-model="props.row.board_comment" />
             </b-table-column>
 
             <b-table-column label="Save">

@@ -53,14 +53,26 @@
           </div>
 
           <div class="field is-grouped" v-if="can.setActive">
-            <a v-if="user.active" class="button is-fullwidth is-danger" :class="{'is-loading': isSwitchingStatus }" @click="askToggleActive()" data-cy="suspend-user-link">
+            <a v-if="user.active" class="button is-fullwidth is-danger" :class="{ 'is-loading': isSwitchingStatus }" @click="askToggleActive()" data-cy="suspend-user-link">
               <span>Suspend user</span>
               <span class="icon"><font-awesome-icon icon="minus" /></span>
             </a>
 
-            <a v-if="!user.active" class="button is-fullwidth is-primary" :class="{'is-loading': isSwitchingStatus }" @click="askToggleActive()" data-cy="activate-user-link">
+            <a v-if="!user.active" class="button is-fullwidth is-primary" :class="{ 'is-loading': isSwitchingStatus }" @click="askToggleActive()" data-cy="activate-user-link">
               <span>Activate user</span>
               <span class="icon"><font-awesome-icon icon="plus" /></span>
+            </a>
+          </div>
+
+          <div class="field is-grouped" v-if="can.setSuperadmin">
+            <a v-if="!user.superadmin" class="button is-fullwidth is-danger" :class="{ 'is-loading': isSwitchingSuperadmin }" @click="askToggleSuperadmin()">
+              <span>Add superadmin status</span>
+              <span class="icon"><font-awesome-icon icon="plus" /></span>
+            </a>
+
+            <a v-if="user.superadmin" class="button is-fullwidth is-danger" :class="{ 'is-loading': isSwitchingSuperadmin }" @click="askToggleSuperadmin()">
+              <span>Remove superadmin status</span>
+              <span class="icon"><font-awesome-icon icon="minus" /></span>
             </a>
           </div>
 
@@ -84,7 +96,7 @@
               <tbody>
                 <tr>
                   <th>Profile link</th>
-                  <td>/members/<span data-cy="username">{{ user.username || user.id }}</span></td>
+                  <td><router-link :to="{ name: 'oms.members.view', params: { id: user.username || user.id } }"><span data-cy="username">https://my.aegee.eu/members/{{ user.username || user.id }}</span></router-link></td>
                 </tr>
                 <tr>
                   <th>Primary body</th>
@@ -116,8 +128,8 @@
                   <td data-cy="superadmin">{{ (user.superadmin) ? 'Yes' : 'No' }}</td>
                 </tr>
                 <tr>
-                  <th>Email</th>
-                  <td><a :href="'mailto:' + user.email" data-cy="email">{{ user.email }}</a></td>
+                  <th>Notification email</th>
+                  <td><a :href="'mailto:' + user.email" data-cy="notification_email">{{ user.notification_email }}</a></td>
                 </tr>
                 <tr>
                   <th>GSuite account</th>
@@ -177,7 +189,7 @@
       </article>
     </div>
 
-    <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
+    <b-loading :is-full-page="false" :active.sync="isLoading" />
   </div>
 </template>
 
@@ -200,7 +212,7 @@ export default {
         date_of_birth: null,
         gender: null,
         phone: null,
-        email: null,
+        notification_email: null,
         active: null,
         superadmin: null,
         username: null
@@ -212,6 +224,7 @@ export default {
       can: {
         edit: false,
         setActive: false,
+        setSuperadmin: false,
         delete: false
       }
     }
@@ -275,6 +288,29 @@ export default {
         this.isSwitchingStatus = false
       })
     },
+    askToggleSuperadmin () {
+      const superadmin = this.user.superadmin
+      this.$buefy.dialog.confirm({
+        title: superadmin ? 'Remove superadmin status' : 'Add superadmin status',
+        message: 'Are you sure you want to <b>' + (superadmin ? 'remove superadmin status' : 'add superadmin status') + '</b> for this user?',
+        confirmText: superadmin ? 'Remove superadmin status' : 'Add superadmin status',
+        type: 'is-danger',
+        icon: 'exclamation-circle',
+        hasIcon: true,
+        onConfirm: () => this.toggleSuperadmin()
+      })
+    },
+    toggleSuperadmin () {
+      this.isSwitchingSuperadmin = true
+      this.axios.put(this.services['core'] + '/members/' + this.user.id + '/superadmin', { superadmin: !this.user.superadmin }).then((response) => {
+        this.user.superadmin = response.data.data.superadmin
+        this.$root.showSuccess('User has ' + (this.user.superadmin ? '' : 'no ') + 'superadmin powers')
+        this.isSwitchingSuperadmin = false
+      }).catch((err) => {
+        this.$root.showError('Error changing superadmin powers', err)
+        this.isSwitchingSuperadmin = false
+      })
+    },
     askChangeEmail () {
       this.$buefy.dialog.prompt({
         message: 'Change email',
@@ -325,6 +361,7 @@ export default {
         // set the permission to true if at least one set of permissions have
         // the required permission (either first for global, or others for local).
         this.can.setActive = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('update_active:member')))
+        this.can.setSuperadmin = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('update_superadmin:member')))
         this.can.edit = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('update:member'))) || this.isOwnProfile
         this.can.delete = responses.some(list => list.data.data.some(permission => permission.combined.endsWith('delete:member')))
 

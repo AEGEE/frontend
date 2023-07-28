@@ -7,7 +7,7 @@
 
         <section class="resources-block">
           <div class="resources-item" v-for="resource in block" v-bind:key="resource.url">
-            <a :href="resource.url" target="_blank">
+            <a :href="resource.url" target="_blank" rel="noopener noreferrer">
               <div class="card">
                 <header role="tab" class="card-header">
                   <div class="card-header-title" :style="{ 'background-color': resource.color }">
@@ -15,7 +15,7 @@
                   </div>
                 </header>
                 <div class="card-content">
-                  <div class="card-content-box" v-html="resource.description"></div>
+                  <div class="card-content-box" v-html="resource.description" />
                 </div>
               </div>
             </a>
@@ -70,12 +70,6 @@ export default {
             color: '#4CA0FF'
           },
           {
-            url: 'https://aegee.blogactiv.eu/',
-            title: 'External Blog',
-            description: 'Blog hosted on Blogactiv platform',
-            color: '#4CA0FF'
-          },
-          {
             url: 'https://aegee.us7.list-manage.com/subscribe?u=7a170c64e0d3990f3f6629d21&id=fc8908d780',
             title: 'External Newsletter',
             description: 'Bi-monthly newsletter for Partners & Supporters',
@@ -108,6 +102,12 @@ export default {
             color: '#FFDB4C'
           },
           {
+            url: 'https://drive.google.com/drive/folders/1TSLKDPKUFe7k3POjlW1XzJdxgz5mfhrQ',
+            title: 'Strategic Plans & Action Agendas',
+            description: 'Strategic Plans and their Action Agendas',
+            color: '#FFDB4C'
+          },
+          {
             url: 'https://www.facebook.com/groups/aegeeans/',
             title: 'Facebook Group',
             description: 'AEGEE\'s official group on Facebook',
@@ -117,18 +117,6 @@ export default {
             url: 'https://www.zeus.aegee.org/magazine/',
             title: 'The AEGEEan Magazine',
             description: 'AEGEE\'s online Magazine',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'https://drive.google.com/file/d/17uspGKtGdrA60B0WbebVYhoNTyBZvWY0/view',
-            title: 'Strategic Plan',
-            description: 'Strategic Plan of AEGEE-Europe 2020-2023',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'https://drive.google.com/file/d/1XU-1S_QkPRybkVfgYuFnZvCWfXFcjmjt/view',
-            title: 'Action Agenda',
-            description: 'Action Agenda 2021-2022',
             color: '#FFDB4C'
           },
           {
@@ -153,6 +141,12 @@ export default {
             url: 'https://podio.com/webforms/13269615/901752',
             title: 'CD House Guest Request',
             description: 'Visiting the CD house',
+            color: '#FFDB4C'
+          },
+          {
+            url: 'https://forms.gle/ZMfSByo5QEUAwoY4A',
+            title: 'ASRF Application Form',
+            description: 'Apply for the AEGEE Social Responsibility Fund',
             color: '#FFDB4C'
           }
         ],

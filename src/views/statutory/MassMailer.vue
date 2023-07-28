@@ -33,6 +33,17 @@
               </div>
 
               <div class="field is-fullwidth">
+                <label class="label">Filter on incoming form filled (LO)</label>
+                <div class="select">
+                  <select v-model="incoming">
+                    <option :value="null">Everybody</option>
+                    <option :value="true">Participants that did fill incoming form</option>
+                    <option :value="false">Participants that did not fill incoming form</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field is-fullwidth">
                 <label class="label">Filter on participant type</label>
                 <div class="select">
                   <select v-model="participant_type">
@@ -55,6 +66,7 @@
                         <li><i>{last_name}</i> - user's last name</li>
                         <li><i>{participant_type_order}</i> - applicant's type order, in this format: <strong>type (order)</strong>, or <strong>not set</strong> if it's not set by the board.</li>
                         <li><i>{body_name}</i> - name of the body</li>
+                        <li><i>{statutory_id}</i> - applicant's statutory id</li>
                       </ul>
                       <span>Also you can use Markdown for text markup. For example, you can:</span>
                       <ul>
@@ -91,7 +103,7 @@
               <div class="field is-fullwidth">
                 <label class="label">Preview:</label>
                 <div class="content box">
-                  <div v-html="filledTemplate"></div>
+                  <div v-html="filledTemplate" />
                 </div>
               </div>
 
@@ -128,6 +140,7 @@ export default {
       text: '',
       status: null,
       confirmed: null,
+      incoming: null,
       participant_type: null,
       subject: '',
       reply_to: '',
@@ -137,7 +150,7 @@ export default {
         last_name: 'Surname'
       },
       stabBody: { name: 'AEGEE-Europe' },
-      stabApplication: { participant_type: 'delegate', participant_order: 1 }
+      stabApplication: { statutory_id: '001-0001', participant_type: 'delegate', participant_order: 1 }
     }
   },
   computed: {
@@ -154,12 +167,14 @@ export default {
         .replace(/\{last_name\}/ig, this.stabUser.last_name)
         .replace(/\{participant_type_order\}/ig, typeAndOrder)
         .replace(/\{body_name\}/ig, this.stabBody.name)
+        .replace(/\{statutory_id\}/ig, this.stabApplication.statutory_id)
     },
     filter () {
       const filterObj = {}
 
       if (this.status !== null) filterObj.status = this.status
       if (this.confirmed !== null) filterObj.confirmed = this.confirmed
+      if (this.incoming !== null) filterObj.incoming = this.incoming
       if (this.participant_type !== null) filterObj.participant_type = this.participant_type
 
       return filterObj

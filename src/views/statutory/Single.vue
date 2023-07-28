@@ -11,12 +11,12 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child is-info">
-          <div class="field is-grouped" v-if="duringAgora">
+          <!-- <div class="field is-grouped" v-if="duringAgora">
             <a href="https://aegeeagora-streaming.westeurope.cloudapp.azure.com/" class="button is-danger is-fullwidth">
               <span>Watch live</span>
               <span class="icon"><font-awesome-icon icon="circle" /></span>
             </a>
-          </div>
+          </div> -->
 
           <div class="field is-grouped" v-if="can.see_applications">
             <router-link :to="{ name: 'oms.statutory.applications', params: { id: event.url || event.id } }" class="button is-fullwidth">
@@ -117,7 +117,7 @@
           </div>
 
           <div class="field is-grouped">
-            <router-link :to="{ name: 'oms.statutory.applications.stats', params: { id: event.url || event.id} }" class="button is-fullwidth">
+            <router-link :to="{ name: 'oms.statutory.applications.stats', params: { id: event.url || event.id } }" class="button is-fullwidth">
               <span>Applications stats</span>
               <span class="icon"><font-awesome-icon icon="table" /></span>
             </router-link>
@@ -166,12 +166,12 @@
                 <tr>
                   <th>Description</th>
                   <td>
-                    <div class="content" v-html="$options.filters.markdown(event.description)"></div>
+                    <div class="content" v-html="$options.filters.markdown(event.description)" />
                   </td>
                 </tr>
                 <tr v-if="event.booklet_folder && canSeeBooklet">
                   <th>Booklet</th>
-                  <td><a :href="event.booklet_folder" target="_blank">{{ event.booklet_folder }}</a></td>
+                  <td><a :href="event.booklet_folder" target="_blank" rel="noopener noreferrer">{{ event.booklet_folder }}</a></td>
                 </tr>
                 <tr>
                   <th>Type</th>
@@ -206,6 +206,10 @@
         </div>
       </article>
 
+      <div class="notification is-success" v-if="event.vegetarian">
+        This event is fully vegetarian!
+      </div>
+
       <article class="tile is-child">
         <div class="content">
           <p class="subtitle">Deadlines</p>
@@ -214,7 +218,7 @@
             <table class="table is-narrow">
               <thead>
                 <tr>
-                  <th></th>
+                  <th />
                   <th>From</th>
                   <th>To</th>
                 </tr>
@@ -293,7 +297,7 @@
       </article>
     </div>
 
-    <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
+    <b-loading is-full-page="false" :active.sync="isLoading" />
   </div>
 </template>
 
@@ -380,7 +384,10 @@ export default {
 
       // if it's a single point, then just centering on it
       if (this.event.locations.length === 1) {
-        this.map.actions.flyTo({ center: this.event.locations[0].position })
+        this.map.actions.jumpTo({
+          center: this.event.locations[0].position,
+          zoom: 10
+        })
         return
       }
 
@@ -441,7 +448,7 @@ export default {
       return this.event.type === 'agora' && moment().isBetween(this.event.starts, this.event.ends, null, '[]')
     },
     canSeeBooklet () {
-      return this.event.type !== 'agora' || moment().isAfter(this.booklet_publication_deadline) || this.can.edit_event
+      return this.event.type !== 'agora' || moment().isAfter(this.event.booklet_publication_deadline) || this.can.edit_event
     }
   }
 }

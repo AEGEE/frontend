@@ -95,7 +95,7 @@
                 <tr>
                   <th>Description</th>
                   <td>
-                    <div class="content" v-html="$options.filters.markdown(event.description)"></div>
+                    <div class="content" v-html="$options.filters.markdown(event.description)" />
                   </td>
                 </tr>
                 <tr>
@@ -141,12 +141,19 @@
                 </tr>
                 <tr v-if="event.link_info_travel_country">
                   <th>Useful information to travel to this country</th>
-                  <td><a :href="event.link_info_travel_country" target="_blank">{{ event.link_info_travel_country }}</a>
+                  <td><a :href="event.link_info_travel_country" target="_blank" rel="noopener noreferrer">{{ event.link_info_travel_country }}</a>
                   </td>
                 </tr>
                 <tr>
                   <th>Number of meals provided per day</th>
                   <td>{{ event.meals_per_day }}</td>
+                </tr>
+                <tr v-if="event.vegetarian">
+                  <td colspan="2">
+                    <div class="notification is-success">
+                      This event is fully vegetarian!
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <th>Accommodation type</th>
@@ -176,13 +183,13 @@
                 <tr>
                   <th>Budget link</th>
                   <td>
-                    <a v-if="event.budget" :href="event.budget" target="_blank">{{ event.budget }}</a>
+                    <a v-if="event.budget" :href="event.budget" target="_blank" rel="noopener noreferrer">{{ event.budget }}</a>
                   </td>
                 </tr>
                 <tr>
                   <th>Program link</th>
                   <td>
-                    <a v-if="event.programme" :href="event.programme" target="_blank">{{ event.programme }}</a>
+                    <a v-if="event.programme" :href="event.programme" target="_blank" rel="noopener noreferrer">{{ event.programme }}</a>
                   </td>
                 </tr>
               </tbody>
@@ -232,7 +239,7 @@
       </article>
     </div>
 
-    <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
+    <b-loading is-full-page="false" :active.sync="isLoading" />
   </div>
 </template>
 
@@ -374,8 +381,10 @@ export default {
 
       // if it's a single point, then just centering on it
       if (this.event.locations.length === 1) {
-        this.map.actions.flyTo({ center: this.event.locations[0].position })
-        this.map.actions.zoomTo(10)
+        this.map.actions.jumpTo({
+          center: this.event.locations[0].position,
+          zoom: 10
+        })
         return
       }
 

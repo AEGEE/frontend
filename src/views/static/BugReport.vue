@@ -2,6 +2,10 @@
   <div class="tile is-ancestor ">
     <div class="tile is-child">
       <div class="subtitle">Attach screenshot</div>
+      <div class="notification is-info">
+        Attaching a screenshot is not mandatory, but it will help us with reproducing the bug.
+        If you do not attach a screenshot, do click the 'Remove screenshot' button before submitting.
+      </div>
 
       <div class="field is-grouped" v-for="(file, index) in files" v-bind:key="index">
         <div class="control">
@@ -39,8 +43,8 @@
         <div class="content">
           <ul>
             <li>Please follow
-              <a href="https://oms-project.atlassian.net/wiki/spaces/HEL/pages/230555649/Submitting+bug+reports" >
-              this guide on submitting bug reports.
+              <a href="https://oms-project.atlassian.net/wiki/spaces/HEL/pages/230555649/Submitting+bug+reports">
+                this guide on submitting bug reports.
               </a>
             </li>
             <li>We can (and we most likely will) contact you for more details, please answer it with email, otherwise we won't be able to get more information from you and will close your ticket.</li>
@@ -72,7 +76,7 @@
 
         <div class="field">
           <div class="control">
-            <input type="submit" value="Send bug report" :disabled="isSaving" class="button is-primary is-fullwidth"/>
+            <input type="submit" value="Send bug report" :disabled="isSaving" class="button is-primary is-fullwidth" />
           </div>
         </div>
       </form>

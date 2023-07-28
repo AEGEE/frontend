@@ -212,7 +212,7 @@
                 <tr>
                   <th>Description</th>
                   <td>
-                    <div class="content" v-html="$options.filters.markdown(event.description)"></div>
+                    <div class="content" v-html="$options.filters.markdown(event.description)" />
                   </td>
                 </tr>
                 <tr>
@@ -344,13 +344,13 @@
                 </tr>
                 <tr v-if="event.website">
                   <th>Website</th>
-                  <td><a :href="event.website" target="_blank">{{ event.website }}</a></td>
+                  <td><a :href="event.website" target="_blank" rel="noopener noreferrer">{{ event.website }}</a></td>
                 </tr>
                 <tr v-if="event.social_media">
                   <th>Social media</th>
                   <td>
                     <ul>
-                      <li v-for="social_medium in event.social_media" v-bind:key="social_medium"><a :href="social_medium.description" target="_blank">{{ social_medium.description }}</a></li>
+                      <li v-for="social_medium in event.social_media" v-bind:key="social_medium"><a :href="social_medium.description" target="_blank" rel="noopener noreferrer">{{ social_medium.description }}</a></li>
                     </ul>
                   </td>
                 </tr>
@@ -362,13 +362,13 @@
                 <tr>
                   <th>Budget link</th>
                   <td>
-                    <a v-if="event.budget" :href="event.budget" target="_blank">{{ event.budget }}</a>
+                    <a v-if="event.budget" :href="event.budget" target="_blank" rel="noopener noreferrer">{{ event.budget }}</a>
                   </td>
                 </tr>
                 <tr>
                   <th>Programme link</th>
                   <td>
-                    <a v-if="event.programme_suct" :href="event.programme_suct" target="_blank">{{ event.programme_suct }}</a>
+                    <a v-if="event.programme_suct" :href="event.programme_suct" target="_blank" rel="noopener noreferrer">{{ event.programme_suct }}</a>
                   </td>
                 </tr>
               </tbody>
@@ -408,7 +408,7 @@
       </article>
     </div>
 
-    <b-loading is-full-page="false" :active.sync="isLoading"></b-loading>
+    <b-loading is-full-page="false" :active.sync="isLoading" />
   </div>
 </template>
 
@@ -619,8 +619,10 @@ export default {
 
       // if it's a single point, then just centering on it
       if (this.event.locations.length === 1) {
-        this.map.actions.flyTo({ center: this.event.locations[0].position })
-        this.map.actions.zoomTo(10)
+        this.map.actions.jumpTo({
+          center: this.event.locations[0].position,
+          zoom: 10
+        })
         return
       }
 
@@ -643,11 +645,11 @@ export default {
       this.event = response.data.data
       this.can = response.data.permissions
 
-      const startLocation = this.event.locations.find(location => location.start === true)
+      const startLocation = this.event.locations.find(location => location.start === 'true') || this.event.locations.find(location => location.start === true)
       if (startLocation) {
         this.event.startLocation = startLocation.name
       }
-      const endLocation = this.event.locations.find(location => location.end === true)
+      const endLocation = this.event.locations.find(location => location.end === 'true') || this.event.locations.find(location => location.end === true)
       if (endLocation) {
         this.event.endLocation = endLocation.name
       }

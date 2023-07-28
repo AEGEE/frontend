@@ -13,16 +13,16 @@
           </div>
 
           <div class="notification is-info">
-              Keep in mind that the passwords for OpenSlides are generated at the runtime.
-              If you'll export this data 2 times, you'll get 2 different set of passwords.
-              Therefore it's more reasonable to do it only when you'll have the participants list finalized.
+            Keep in mind that the passwords for OpenSlides are generated at the runtime.
+            If you'll export this data 2 times, you'll get 2 different set of passwords.
+            Therefore it's more reasonable to do it only when you'll have the participants list finalized.
           </div>
 
           <hr />
         </div>
 
         <div>
-          <div class="field is-fullwidth">
+          <div class="field is-fullwidth" v-if="this.can.export.all">
             <label class="label">Filter on participant status</label>
             <div class="select">
               <select v-model="filter.status">
@@ -34,7 +34,7 @@
             </div>
           </div>
 
-          <div class="field is-fullwidth">
+          <div class="field is-fullwidth" v-if="this.can.export.all">
             <label class="label">Filter on confirmation</label>
             <div class="select">
               <select v-model="filter.confirmed">
@@ -45,7 +45,7 @@
             </div>
           </div>
 
-          <div class="field is-fullwidth">
+          <div class="field is-fullwidth" v-if="this.can.export.all">
             <label class="label">Filter on participant type</label>
             <div class="select">
               <select v-model="filter.participant_type">

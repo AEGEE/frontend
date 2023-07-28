@@ -10,7 +10,7 @@
           <template slot-scope="props">
             <b-table-column field="body_name" label="Body name" sortable>
               <router-link :to="{ name: 'oms.bodies.view', params: { id: props.row.body_id } }">
-                {{ props.row.body ?  props.row.body.name : 'Loading...' }}
+                {{ props.row.body ? props.row.body.name : 'Loading...' }}
               </router-link>
             </b-table-column>
 
@@ -26,8 +26,8 @@
               <button class="button is-small is-primary" @click="openMembersListModal(props.row)">View memberslist</button>
             </b-table-column>
 
-            <b-table-column label="Last updated at" sortable>
-                {{ props.row.updated_at | datetime }}
+            <b-table-column field="updated_at" label="Last updated at" sortable>
+              {{ props.row.updated_at | datetime }}
             </b-table-column>
 
             <b-table-column field="fee_to_aegee" label="Fee to AEGEE-Europe" numeric sortable>

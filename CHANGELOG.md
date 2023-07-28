@@ -1,3 +1,227 @@
+## [1.33.34](https://github.com/AEGEE/frontend/compare/1.33.33...1.33.34) (2023-07-10)
+
+
+### Bug Fixes
+
+* **events:** add option to create fully vegetarian events ([#1792](https://github.com/AEGEE/frontend/issues/1792)) ([0d8b901](https://github.com/AEGEE/frontend/commit/0d8b901fc7967480d7fc23a634f9b8d0d7d32b7d))
+
+## [1.33.33](https://github.com/AEGEE/frontend/compare/1.33.32...1.33.33) (2023-07-05)
+
+
+### Bug Fixes
+
+* **statutory:** add option to make events vegetarian ([#1784](https://github.com/AEGEE/frontend/issues/1784)) ([84188b8](https://github.com/AEGEE/frontend/commit/84188b8e67fec642e8a6f807c6a16db83d0be83c))
+
+## [1.33.32](https://github.com/AEGEE/frontend/compare/1.33.31...1.33.32) (2023-06-30)
+
+
+### Bug Fixes
+
+* **core:** display notification email instead of email in user profile ([#1766](https://github.com/AEGEE/frontend/issues/1766)) ([458dd76](https://github.com/AEGEE/frontend/commit/458dd76d325a70817b7a9732ed56041a70c4b63e))
+
+## [1.33.31](https://github.com/AEGEE/frontend/compare/1.33.30...1.33.31) (2023-05-01)
+
+
+### Bug Fixes
+
+* **statutory:** update question line information ([#1718](https://github.com/AEGEE/frontend/issues/1718)) ([e968bd4](https://github.com/AEGEE/frontend/commit/e968bd4cd8438a67b96ee4dc095bb60cd6534661))
+
+## [1.33.30](https://github.com/AEGEE/frontend/compare/1.33.29...1.33.30) (2023-05-01)
+
+
+### Bug Fixes
+
+* **statutory:** additional markdown fields in candidatures ([#1717](https://github.com/AEGEE/frontend/issues/1717)) ([af9206d](https://github.com/AEGEE/frontend/commit/af9206d9e7f8673334669eb64cde1797575ac195))
+
+## [1.33.29](https://github.com/AEGEE/frontend/compare/1.33.28...1.33.29) (2023-04-28)
+
+
+### Bug Fixes
+
+* **statutory:** allow candidates to use markdown in their application ([#1715](https://github.com/AEGEE/frontend/issues/1715)) ([843ccfd](https://github.com/AEGEE/frontend/commit/843ccfd1325b42c694fc50ecf590a4688c81ce97))
+
+## [1.33.28](https://github.com/AEGEE/frontend/compare/1.33.27...1.33.28) (2023-04-25)
+
+
+### Bug Fixes
+
+* **summeruniversity:** improve equality start/end location ([#1714](https://github.com/AEGEE/frontend/issues/1714)) ([642b2da](https://github.com/AEGEE/frontend/commit/642b2da90bfa441e208aea1e54a8f4f7f272b882))
+
+## [1.33.27](https://github.com/AEGEE/frontend/compare/1.33.26...1.33.27) (2023-04-23)
+
+
+### Bug Fixes
+
+* add Hong Kongese to nationalities list ([#1710](https://github.com/AEGEE/frontend/issues/1710)) ([2db86cc](https://github.com/AEGEE/frontend/commit/2db86cc6adca11d6953250e7cf800b222a6bc235))
+
+## [1.33.26](https://github.com/AEGEE/frontend/compare/1.33.25...1.33.26) (2023-04-20)
+
+
+### Bug Fixes
+
+* **events:** add information about sustainable events ([#1705](https://github.com/AEGEE/frontend/issues/1705)) ([4e72bf9](https://github.com/AEGEE/frontend/commit/4e72bf9ad5ea83b652b1ccef248411e74dc92bba))
+
+## [1.33.25](https://github.com/AEGEE/frontend/compare/1.33.24...1.33.25) (2023-04-20)
+
+
+### Bug Fixes
+
+* **statutory:** allow LO to check if incoming form is filled ([#1704](https://github.com/AEGEE/frontend/issues/1704)) ([e45a5b0](https://github.com/AEGEE/frontend/commit/e45a5b0c139b45a82d5804be01eaf1a343723978))
+
+## [1.33.24](https://github.com/AEGEE/frontend/compare/1.33.23...1.33.24) (2023-04-12)
+
+
+### Bug Fixes
+
+* **summeruniversity:** loosen equality for SU locations ([#1700](https://github.com/AEGEE/frontend/issues/1700)) ([064625f](https://github.com/AEGEE/frontend/commit/064625f75396f127639fa2e8c3294695be63240c))
+
+## [1.33.23](https://github.com/AEGEE/frontend/compare/1.33.22...1.33.23) (2023-04-11)
+
+
+### Bug Fixes
+
+* **statutory:** show amount of waiting list participants ([#1697](https://github.com/AEGEE/frontend/issues/1697)) ([9e7a760](https://github.com/AEGEE/frontend/commit/9e7a76026cedc92299ba54add56410ab6c623de4))
+
+## [1.33.22](https://github.com/AEGEE/frontend/compare/1.33.21...1.33.22) (2023-03-30)
+
+
+### Bug Fixes
+
+* **statutory:** fix typo in permission ([#1690](https://github.com/AEGEE/frontend/issues/1690)) ([d6f0598](https://github.com/AEGEE/frontend/commit/d6f05985512f85d2fb038f8b3f7c28101c109f0c))
+
+## [1.33.21](https://github.com/AEGEE/frontend/compare/1.33.20...1.33.21) (2023-03-30)
+
+
+### Bug Fixes
+
+* **statutory:** replace statutory id in massmailer preview ([#1689](https://github.com/AEGEE/frontend/issues/1689)) ([96bbe5c](https://github.com/AEGEE/frontend/commit/96bbe5c4512b3ffe520fe3ac8d393ab1fb239cd1))
+
+## [1.33.20](https://github.com/AEGEE/frontend/compare/1.33.19...1.33.20) (2023-03-30)
+
+
+### Bug Fixes
+
+* **statutory:** add statutory id to massmailer ([#1678](https://github.com/AEGEE/frontend/issues/1678)) ([91e5860](https://github.com/AEGEE/frontend/commit/91e586007e716a0afa4d79dcadc67ff87200333b))
+
+## [1.33.19](https://github.com/AEGEE/frontend/compare/1.33.18...1.33.19) (2023-03-23)
+
+
+### Bug Fixes
+
+* **statutory:** sort updated_at in members lists ([#1671](https://github.com/AEGEE/frontend/issues/1671)) ([da4d327](https://github.com/AEGEE/frontend/commit/da4d32799d4103fa0fb8cf245ca3c710b17c606c))
+
+## [1.33.18](https://github.com/AEGEE/frontend/compare/1.33.17...1.33.18) (2023-03-20)
+
+
+### Bug Fixes
+
+* **statutory:** only show answers when given ([#1670](https://github.com/AEGEE/frontend/issues/1670)) ([8ac8cbe](https://github.com/AEGEE/frontend/commit/8ac8cbed83a0613e7c42fdb54237bb447a5f1332))
+
+## [1.33.17](https://github.com/AEGEE/frontend/compare/1.33.16...1.33.17) (2023-03-19)
+
+
+### Bug Fixes
+
+* **statutory:** only filter on participant type when allowed to export all ([#1669](https://github.com/AEGEE/frontend/issues/1669)) ([cc1f28f](https://github.com/AEGEE/frontend/commit/cc1f28f50122d7fa5ffb36695e5d9718e22d8340))
+
+## [1.33.16](https://github.com/AEGEE/frontend/compare/1.33.15...1.33.16) (2023-03-19)
+
+
+### Bug Fixes
+
+* **statutory:** only filter on participant status and confirmation when all ([#1667](https://github.com/AEGEE/frontend/issues/1667)) ([20004ff](https://github.com/AEGEE/frontend/commit/20004ff1ade6f6afb24af6d955e778d1b0417920))
+
+## [1.33.15](https://github.com/AEGEE/frontend/compare/1.33.14...1.33.15) (2023-02-14)
+
+
+### Bug Fixes
+
+* **statutory:** disable meat-eater application option for Spring Agora Enschede 2023 ([#1643](https://github.com/AEGEE/frontend/issues/1643)) ([03f49e8](https://github.com/AEGEE/frontend/commit/03f49e80b41e1d48f70194671ace2db853dfcd55))
+
+## [1.33.14](https://github.com/AEGEE/frontend/compare/1.33.13...1.33.14) (2023-01-18)
+
+
+### Bug Fixes
+
+* **su:** updates for 2023 ([#1621](https://github.com/AEGEE/frontend/issues/1621)) ([bf9b7e5](https://github.com/AEGEE/frontend/commit/bf9b7e5861917f957699315d8ba442e944b34f0a))
+
+## [1.33.13](https://github.com/AEGEE/frontend/compare/1.33.12...1.33.13) (2022-09-17)
+
+
+### Bug Fixes
+
+* **statutory:** prefill email and date of birth for candidates ([#1504](https://github.com/AEGEE/frontend/issues/1504)) ([259f0b2](https://github.com/AEGEE/frontend/commit/259f0b2510b298628d95df0728a3b43af7aff67a))
+
+## [1.33.12](https://github.com/AEGEE/frontend/compare/1.33.11...1.33.12) (2022-05-11)
+
+
+### Bug Fixes
+
+* **question line:** add specific text for Novi Sad ([#1370](https://github.com/AEGEE/frontend/issues/1370)) ([61db7fc](https://github.com/AEGEE/frontend/commit/61db7fc51d91a5f81fc5c906084a3946c07662d1))
+
+## [1.33.11](https://github.com/AEGEE/frontend/compare/1.33.10...1.33.11) (2022-02-01)
+
+
+### Bug Fixes
+
+* **resources:** add ASRF form ([#1290](https://github.com/AEGEE/frontend/issues/1290)) ([b62b01c](https://github.com/AEGEE/frontend/commit/b62b01c7d867fee5ff73c6e82c47d9d42b7b2aa2))
+
+## [1.33.10](https://github.com/AEGEE/frontend/compare/1.33.9...1.33.10) (2022-01-26)
+
+
+### Bug Fixes
+
+* **map:** fix single location centering. Fixes HELP-1897 ([#1260](https://github.com/AEGEE/frontend/issues/1260)) ([2f080c0](https://github.com/AEGEE/frontend/commit/2f080c001be55eb24a8b6c565aee17ede0da3484))
+
+## [1.33.9](https://github.com/AEGEE/frontend/compare/1.33.8...1.33.9) (2022-01-04)
+
+
+### Bug Fixes
+
+* **body:** allow email to be null. Fixes HELP-1864 ([#1261](https://github.com/AEGEE/frontend/issues/1261)) ([ca085c5](https://github.com/AEGEE/frontend/commit/ca085c5cc11cbacee81faf9600a79e7a8c1f197a))
+
+## [1.33.8](https://github.com/AEGEE/frontend/compare/1.33.7...1.33.8) (2021-12-25)
+
+
+### Bug Fixes
+
+* **body:** validate body code to be 3 letters ([#1254](https://github.com/AEGEE/frontend/issues/1254)) ([a59071a](https://github.com/AEGEE/frontend/commit/a59071ab50eaf88d78901c5d31766cb2dde88153))
+
+## [1.33.7](https://github.com/AEGEE/frontend/compare/1.33.6...1.33.7) (2021-12-19)
+
+
+### Bug Fixes
+
+* **su:** add seasons ([#1253](https://github.com/AEGEE/frontend/issues/1253)) ([44764a8](https://github.com/AEGEE/frontend/commit/44764a881e367da982f3d48148f6a27ee8013ecb))
+
+## [1.33.6](https://github.com/AEGEE/frontend/compare/1.33.5...1.33.6) (2021-12-09)
+
+
+### Bug Fixes
+
+* **superadmin:** add superadmin buttons ([#1235](https://github.com/AEGEE/frontend/issues/1235)) ([6476e49](https://github.com/AEGEE/frontend/commit/6476e491c7026d01378513d804b903d59f1fcac4))
+
+## [1.33.5](https://github.com/AEGEE/frontend/compare/1.33.4...1.33.5) (2021-12-09)
+
+
+### Bug Fixes
+
+* **members:** provide full profile link ([#1239](https://github.com/AEGEE/frontend/issues/1239)) ([41754ac](https://github.com/AEGEE/frontend/commit/41754ac62d149d370595ab3fd64f63200ee03857))
+
+## [1.33.4](https://github.com/AEGEE/frontend/compare/1.33.3...1.33.4) (2021-12-01)
+
+
+### Bug Fixes
+
+* **deps:** update to Node 16 and upgrade deps and CI config ([#1220](https://github.com/AEGEE/frontend/issues/1220)) ([56b247f](https://github.com/AEGEE/frontend/commit/56b247fe646525c1cf0d2f2d7457a1df89b98f62))
+
+## [1.33.3](https://github.com/AEGEE/frontend/compare/1.33.2...1.33.3) (2021-11-19)
+
+
+### Bug Fixes
+
+* **agora:** make booklet link visible after deadline ([#1225](https://github.com/AEGEE/frontend/issues/1225)) ([47ae443](https://github.com/AEGEE/frontend/commit/47ae443a4e87657d8eade242379def853f109d9a))
+
 ## [1.33.2](https://github.com/AEGEE/frontend/compare/1.33.1...1.33.2) (2021-10-27)
 
 
