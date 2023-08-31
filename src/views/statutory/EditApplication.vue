@@ -269,6 +269,17 @@
                 </div>
               </div>
 
+              <div class="field is-fullwidth">
+                <label class="has-text-weight-bold checkbox">
+                  Do you wish to subscribe to AEGEE's internal mailing lists?
+                  <tooltip text="We add your @aegee.eu account for you to be up-to-date with all the opportunities" />
+                  <input
+                    class="checkbox"
+                    type="checkbox"
+                    v-model="application.listserv" />
+                </label>
+              </div>
+
               <div class="field">
                 <button type="submit" class="button is-primary">
                   Save application!
