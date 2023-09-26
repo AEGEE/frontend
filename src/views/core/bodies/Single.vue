@@ -436,7 +436,8 @@ export default {
           }
         }
       }).catch((err) => {
-        if (err.response.status === 404) {
+        // TODO: remove 403 once all members can view boards
+        if (err.response.status === 403 || err.response.status === 404) {
           return
         }
         this.$root.showError('Some error happened', err)
