@@ -1,3 +1,24 @@
+## [1.33.37](https://github.com/AEGEE/frontend/compare/1.33.36...1.33.37) (2023-09-13)
+
+
+### Bug Fixes
+
+* **core:** sort some fields in bodies list. Fixes HELP-2298 ([#1853](https://github.com/AEGEE/frontend/issues/1853)) ([a42ae3d](https://github.com/AEGEE/frontend/commit/a42ae3deb55b97865aeb1ab0adc59751950bb4c0))
+
+## [1.33.36](https://github.com/AEGEE/frontend/compare/1.33.35...1.33.36) (2023-09-11)
+
+
+### Bug Fixes
+
+* **statutory:** add views for missing and without fee memberlists ([#1852](https://github.com/AEGEE/frontend/issues/1852)) ([526e8c7](https://github.com/AEGEE/frontend/commit/526e8c7fb8f6c6175a975c5fee064e9bd033159d))
+
+## [1.33.35](https://github.com/AEGEE/frontend/compare/1.33.34...1.33.35) (2023-08-15)
+
+
+### Bug Fixes
+
+* **events:** add email to application modal ([#1827](https://github.com/AEGEE/frontend/issues/1827)) ([b6cc741](https://github.com/AEGEE/frontend/commit/b6cc74146704677937872be167e5eb448494c335))
+
 ## [1.33.34](https://github.com/AEGEE/frontend/compare/1.33.33...1.33.34) (2023-07-10)
 
 
