@@ -173,35 +173,35 @@
         <div class="content">
           <p class="subtitle">Board</p>
           <div class="content" v-for="board in boards" v-bind:key="board.id">
-              <table class="table is-narrow">
-                <tbody>
-                  <tr v-if="board.name">
-                    <th>Name</th>
-                    <td>{{ board.name }}</td>
-                  </tr>
-                  <tr>
-                    <th>Term</th>
-                    <td>{{ board.start_date }} - {{ board.end_date }}</td>
-                  </tr>
-                  <tr>
-                    <th>President</th>
-                    <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
-                  </tr>
-                  <tr>
-                    <th>Secretary</th>
-                    <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
-                  </tr>
-                  <tr>
-                    <th>Treasurer</th>
-                    <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
-                  </tr>
-                  <tr v-for="position in board.other_members" v-bind:key="position.index">
-                    <th>{{ position.function }}</th>
-                    <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <table class="table is-narrow">
+              <tbody>
+                <tr v-if="board.name">
+                  <th>Name</th>
+                  <td>{{ board.name }}</td>
+                </tr>
+                <tr>
+                  <th>Term</th>
+                  <td>{{ board.start_date }} - {{ board.end_date }}</td>
+                </tr>
+                <tr>
+                  <th>President</th>
+                  <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
+                </tr>
+                <tr>
+                  <th>Secretary</th>
+                  <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
+                </tr>
+                <tr>
+                  <th>Treasurer</th>
+                  <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                </tr>
+                <tr v-for="position in board.other_members" v-bind:key="position.index">
+                  <th>{{ position.function }}</th>
+                  <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
 

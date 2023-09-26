@@ -3,7 +3,7 @@
     <header class="modal-card-head">
       <p class="modal-card-title" v-if="edit">Edit board</p>
       <p class="modal-card-title" v-else>Add board</p>
-      <button class="delete" aria-label="close" @click="$parent.close()"></button>
+      <button class="delete" aria-label="close" @click="$parent.close()" />
     </header>
     <section class="modal-card-body">
 
@@ -122,7 +122,7 @@
         <div class="control">
           <b-input type="textarea" v-model="board.message" />
         </div>
-        <label class="label">Preview <MarkdownTooltip/></label>
+        <label class="label">Preview <MarkdownTooltip /></label>
         <div class="content">
           <span v-html="$options.filters.markdown(board.message)" />
         </div>

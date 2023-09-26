@@ -8,45 +8,45 @@
           <template v-for="(board, index) in boards">
             <b-collapse class="card" animation="slide" :open="false" v-bind:key="index">
               <template #trigger="props">
-                  <div class="card-header" role="button">
-                      <p class="card-header-title" v-if="!board.name">
-                        {{ board.start_date }} - {{ board.end_date }}
-                      </p>
-                      <p class="card-header-title" v-else>
-                        {{ board.name }} ({{ board.start_date }} - {{ board.end_date }})
-                      </p>
-                      <a class="card-header-icon">
-                        <span class="icon is-small is-angle">
-                          <font-awesome-icon :icon="['fa', 'angle-down']" v-if="!props.open" />
-                          <font-awesome-icon :icon="['fa', 'angle-up']" v-else />
-                        </span>
-                      </a>
-                  </div>
+                <div class="card-header" role="button">
+                  <p class="card-header-title" v-if="!board.name">
+                    {{ board.start_date }} - {{ board.end_date }}
+                  </p>
+                  <p class="card-header-title" v-else>
+                    {{ board.name }} ({{ board.start_date }} - {{ board.end_date }})
+                  </p>
+                  <a class="card-header-icon">
+                    <span class="icon is-small is-angle">
+                      <font-awesome-icon :icon="['fa', 'angle-down']" v-if="!props.open" />
+                      <font-awesome-icon :icon="['fa', 'angle-up']" v-else />
+                    </span>
+                  </a>
+                </div>
               </template>
 
               <div class="card-content">
-                  <div class="content">
-                    <table class="table is-narrow">
-                      <tbody>
-                        <tr>
-                          <th>President</th>
-                          <td>{{ board.president_user ? board.president_user.first_name : 'Deleted' }} {{ board.president_user ? board.president_user.last_name : 'User' }}</td>
-                        </tr>
-                        <tr>
-                          <th>Secretary</th>
-                          <td>{{ board.secretary_user ? board.secretary_user.first_name : 'Deleted' }} {{ board.secretary_user ? board.secretary_user.last_name : 'User' }}</td>
-                        </tr>
-                        <tr>
-                          <th>Treasurer</th>
-                          <td>{{ board.treasurer_user ? board.treasurer_user.first_name : 'Deleted' }} {{ board.treasurer_user ? board.treasurer_user.last_name : 'User' }}</td>
-                        </tr>
-                        <tr v-for="position in board.other_members" v-bind:key="position.index">
-                          <th>{{ position.function }}</th>
-                          <td>{{ position.user ? position.user.first_name : 'Deleted' }} {{ position.user ? position.user.last_name : 'User' }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                <div class="content">
+                  <table class="table is-narrow">
+                    <tbody>
+                      <tr>
+                        <th>President</th>
+                        <td>{{ board.president_user ? board.president_user.first_name : 'Deleted' }} {{ board.president_user ? board.president_user.last_name : 'User' }}</td>
+                      </tr>
+                      <tr>
+                        <th>Secretary</th>
+                        <td>{{ board.secretary_user ? board.secretary_user.first_name : 'Deleted' }} {{ board.secretary_user ? board.secretary_user.last_name : 'User' }}</td>
+                      </tr>
+                      <tr>
+                        <th>Treasurer</th>
+                        <td>{{ board.treasurer_user ? board.treasurer_user.first_name : 'Deleted' }} {{ board.treasurer_user ? board.treasurer_user.last_name : 'User' }}</td>
+                      </tr>
+                      <tr v-for="position in board.other_members" v-bind:key="position.index">
+                        <th>{{ position.function }}</th>
+                        <td>{{ position.user ? position.user.first_name : 'Deleted' }} {{ position.user ? position.user.last_name : 'User' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               <footer class="card-footer">
