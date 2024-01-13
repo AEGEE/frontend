@@ -131,7 +131,6 @@ export default {
             this.$set(position, 'user', users.find(user => user.id === position.user_id))
           }
         }
-
       }).catch((err) => {
         if (err.response.status === 404) {
           return
