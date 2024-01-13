@@ -1,3 +1,17 @@
+## [1.34.4](https://github.com/AEGEE/frontend/compare/1.34.3...1.34.4) (2024-01-13)
+
+
+### Bug Fixes
+
+* **network:** fix seeing buttons without permission ([#2009](https://github.com/AEGEE/frontend/issues/2009)) ([7b59194](https://github.com/AEGEE/frontend/commit/7b59194f97331a5357c7b42f71de7060be3eacc5))
+
+## [1.34.3](https://github.com/AEGEE/frontend/compare/1.34.2...1.34.3) (2024-01-13)
+
+
+### Bug Fixes
+
+* **menu:** Open KMS in same window, instead of new tab ([#2008](https://github.com/AEGEE/frontend/issues/2008)) ([37d6683](https://github.com/AEGEE/frontend/commit/37d6683c42a260071c36e91dcf1deea64ef81cc1))
+
 ## [1.34.2](https://github.com/AEGEE/frontend/compare/1.34.1...1.34.2) (2024-01-13)
 
 
