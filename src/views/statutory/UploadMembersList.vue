@@ -247,8 +247,7 @@ export default {
         return this.$root.showError('Memberslist should contain at least 1 member.')
       }
 
-      for (let index = 0; index < this.memberslist.members.length; index++) {
-        const member = this.memberslist.members[index]
+      for (const [index, member] of this.memberslist.members.entries()) {
         if (typeof member.fee !== 'number') {
           return this.$root.showError(`Please set the fee for member number ${index + 1}.`)
         }

@@ -255,7 +255,8 @@ export default {
         address: null,
         postal_address: null,
         shadow_circle: null,
-        shadow_circle_id: null
+        shadow_circle_id: null,
+        members: null
       },
       boards: [],
       isLoading: false,
@@ -441,6 +442,17 @@ export default {
           return
         }
         this.$root.showError('Some error happened', err)
+      })
+
+      this.axios.get(this.services['statutory'] + '/members/' + this.$route.params.id).then((response) => {
+        this.body.members = response.data.data
+      }).catch((err) => {
+        this.isLoading = false
+        this.body.members = null
+
+        if (err.response && err.response.status !== 404) {
+          this.$root.showError('Could not fetch memberslist', err)
+        }
       })
 
       if (this.loginUser) {

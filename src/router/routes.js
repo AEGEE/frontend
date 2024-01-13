@@ -859,6 +859,14 @@ module.exports = [
     },
     component: 'static/Resources'
   },
+  {
+    name: 'oms.contact',
+    path: '/contact',
+    meta: {
+      label: 'Contact'
+    },
+    component: 'static/Contact'
+  },
   /* Discounts distribution */
   {
     name: 'oms.discounts',

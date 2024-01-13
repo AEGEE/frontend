@@ -229,6 +229,11 @@
         "icon": "book-reader"
       },
       {
+        "name": "oms.contact",
+        "label": "Contact",
+        "icon": "address-book"
+      },
+      {
         "name": "oms.helpdesk",
         "link": "https://myaegee.atlassian.net/servicedesk/customer/portals",
         "label": "Helpdesk",
