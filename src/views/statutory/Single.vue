@@ -275,11 +275,11 @@
                   <td colspan="2">{{ event.candidature_deadline | datetime }}</td>
                 </tr>
                 <tr v-if="event.type === 'agora'">
-                  <th>KMS page publication</th>
+                  <th>Documents publication</th>
                   <td colspan="2">{{ event.booklet_publication_deadline | datetime }}</td>
                 </tr>
                 <tr v-if="event.type === 'agora'">
-                  <th>Updated KMS page publication</th>
+                  <th>Updated documents publication</th>
                   <td colspan="2">{{ event.updated_booklet_publication_deadline | datetime }}</td>
                 </tr>
               </tbody>

@@ -241,7 +241,7 @@
         </div>
 
         <div class="field" v-if="event.type === 'agora'">
-          <label class="label">KMS page publication deadline <span class="has-text-danger">*</span></label>
+          <label class="label">Documents publication deadline <span class="has-text-danger">*</span></label>
           <div class="control">
             <flat-pickr
               placeholder="Select date"
@@ -254,7 +254,7 @@
         </div>
 
         <div class="field" v-if="event.type === 'agora'">
-          <label class="label">Updated KMS page publication deadline <span class="has-text-danger">*</span></label>
+          <label class="label">Updated documents publication deadline <span class="has-text-danger">*</span></label>
           <div class="control">
             <flat-pickr
               placeholder="Select date"
@@ -702,13 +702,13 @@ export default {
       }
 
       if (this.event.type === 'agora' && !this.event.booklet_publication_deadline) {
-        return this.$root.showError('Please set the KMS page publication deadline.')
+        return this.$root.showError('Please set the documents publication deadline.')
       } if (this.event.type !== 'agora') {
         this.event.booklet_publication_deadline = null
       }
 
       if (this.event.type === 'agora' && !this.event.updated_booklet_publication_deadline) {
-        return this.$root.showError('Please set the updated KMS page publication deadline.')
+        return this.$root.showError('Please set the updated documents publication deadline.')
       } if (this.event.type !== 'agora') {
         this.event.updated_booklet_publication_deadline = null
       }
