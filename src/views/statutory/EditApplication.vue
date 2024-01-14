@@ -433,7 +433,7 @@ export default {
       promise.then((application) => {
         if (this.selectedMailinglists.length > 0) {
           this.axios.post(this.services['core'] + '/members/' + this.loginUser.id + '/listserv', { mailinglists: this.selectedMailinglists }).then(() => {
-            this.$root.showSuccess('Application is saved.')
+            this.$root.showSuccess('Application is saved. Check your email to confirm your subscription to the mailing lists.')
           })
             .catch((err) => {
               this.$root.showWarning('Application is saved, but subscribing to mailing lists failed.', err)
