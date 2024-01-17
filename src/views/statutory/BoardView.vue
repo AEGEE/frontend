@@ -230,6 +230,7 @@ export default {
         { name: 'First name', get: (pax) => pax.first_name },
         { name: 'Last name', get: (pax) => pax.last_name },
         { name: 'Gender', get: (pax) => pax.gender },
+        // TODO: this should be pax.notification_email and fetched from core in backend
         { name: 'Email', get: (pax) => pax.email },
         { name: 'Created at', get: (pax) => pax.created_at },
         { name: 'Updated at', get: (pax) => pax.updated_at },

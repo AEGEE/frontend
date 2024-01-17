@@ -61,6 +61,7 @@
                   <th>Date of birth</th>
                   <td>{{ application.date_of_birth }}</td>
                 </tr>
+                <!-- TODO: this should be application.notification_email fetched from core in backend -->
                 <tr>
                   <th>Email</th>
                   <td>{{ application.email }}</td>

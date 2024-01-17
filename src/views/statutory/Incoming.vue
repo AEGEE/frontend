@@ -42,6 +42,7 @@
               {{ props.row.last_name | beautify }}
             </b-table-column>
 
+            <!-- TODO: this should be props.row.notification_email fetched from core in backend -->
             <b-table-column field="email" label="Email" centered sortable>
               {{ props.row.email }}
             </b-table-column>

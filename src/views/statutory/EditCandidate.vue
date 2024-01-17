@@ -51,6 +51,7 @@
           </div>
         </div>
 
+        <!-- TODO: this field should not be editable, and should be fetch from core in backend as candidate.first_name  -->
         <div class="field">
           <label class="label">First name</label>
           <div class="control">
@@ -59,6 +60,7 @@
           <p class="help is-danger" v-if="errors.first_name">{{ errors.first_name.join(', ') }}</p>
         </div>
 
+        <!-- TODO: this field should not be editable, and should be fetch from core in backend as candidate.last_name  -->
         <div class="field">
           <label class="label">Last name</label>
           <div class="control">
@@ -67,6 +69,7 @@
           <p class="help is-danger" v-if="errors.last_name">{{ errors.last_name.join(', ') }}</p>
         </div>
 
+        <!-- TODO: this field should not be shown, and should be fetch from core in backend as candidate.notification_email  -->
         <div class="field">
           <label class="label">Email</label>
           <div class="control">
@@ -378,7 +381,7 @@ export default {
       // Prefilling values
       this.candidate.first_name = this.loginUser.first_name
       this.candidate.last_name = this.loginUser.last_name
-      this.candidate.email = this.loginUser.email
+      this.candidate.notification_email = this.loginUser.notification_email
       this.candidate.date_of_birth = moment(this.loginUser.date_of_birth).format('YYYY-MM-DD')
       this.candidate.member_since = moment(this.loginUser.created_at).format('YYYY-MM-DD')
 

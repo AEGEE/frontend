@@ -23,6 +23,7 @@
 
         <tr>
           <td><b>Email</b></td>
+          <!-- TODO: this should be participant.notification_email and backend should fetch that from core -->
           <td>{{ participant.email }}</td>
         </tr>
 
