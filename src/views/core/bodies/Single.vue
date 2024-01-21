@@ -149,7 +149,7 @@
                 </tr>
                 <tr v-if="can.editGsuite">
                   <th>Google Group</th>
-                  <td v-if="body.google_group"><a :href="'mailto:' + body.google_group" data-cy="google_group">{{ user.body.google_group }}</a></td>
+                  <td v-if="body.google_group"><a :href="'mailto:' + body.google_group" data-cy="google_group">{{ body.google_group }}</a></td>
                   <td v-if="!body.google_group"><i>Not set.</i></td>
                 </tr>
                 <tr v-if="body.phone">
