@@ -1,3 +1,17 @@
+## [1.35.1](https://github.com/AEGEE/frontend/compare/1.35.0...1.35.1) (2024-01-24)
+
+
+### Bug Fixes
+
+* **statutory:** refer to KMS page instead of booklet. Fixes HELP-2399 ([#2013](https://github.com/AEGEE/frontend/issues/2013)) ([cd561d5](https://github.com/AEGEE/frontend/commit/cd561d5754d99f2e1085b83ddc95eeccaa2a46da))
+
+# [1.35.0](https://github.com/AEGEE/frontend/compare/1.34.6...1.35.0) (2024-01-24)
+
+
+### Features
+
+* **statutory:** add ability to subscribe to mailinglist when applying to event ([#2014](https://github.com/AEGEE/frontend/issues/2014)) ([716b889](https://github.com/AEGEE/frontend/commit/716b889403aba71ee490fe9fddace9028f1d8001))
+
 ## [1.34.6](https://github.com/AEGEE/frontend/compare/1.34.5...1.34.6) (2024-01-20)
 
 
