@@ -4,6 +4,12 @@
       <article class="tile is-child">
         <h4 class="title">Boards</h4>
 
+        <div class="field is-grouped" v-if="can.manageBoards">
+          <div class="control">
+            <a class="button is-primary" @click="openCreateBoardModal()">Add board</a>
+          </div>
+        </div>
+
         <template v-if="boards.length > 0">
           <template v-for="(board, index) in boards">
             <b-collapse class="card" animation="slide" :open="false" v-bind:key="index">
@@ -92,6 +98,19 @@ export default {
     })
   },
   methods: {
+    openCreateBoardModal () {
+      this.$buefy.modal.open({
+        component: ChangeBoardModal,
+        hasModalCard: true,
+        props: {
+          body: this.$route.params,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     openChangeBoardModal (index) {
       this.$buefy.modal.open({
         component: ChangeBoardModal,
