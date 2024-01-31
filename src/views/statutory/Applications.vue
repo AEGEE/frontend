@@ -152,8 +152,7 @@ export default {
         { name: 'Gender', get: (pax) => pax.gender },
         { name: 'Nationality', get: (pax) => pax.nationality },
         { name: 'Date of birth', get: (pax) => pax.date_of_birth },
-        // TODO: this should be pax.notification_email and that should be fetched from core in backend
-        { name: 'Email', get: (pax) => pax.email },
+        { name: 'Email', get: (pax) => pax.notification_email },
         { name: 'Meals', get: (pax) => pax.meals },
         { name: 'Allergies', get: (pax) => pax.allergies },
         { name: 'Number of events visited', get: (pax) => pax.number_of_events_visited },

@@ -27,10 +27,10 @@
             <th>Last name</th>
             <td class="has-text-pre-wrap">{{ candidate.last_name }}</td>
           </tr>
-          <!-- TODO: this should be candidate.notification_email fetched from core in backend -->
-          <tr v-if="candidate.email">
+          <!-- TODO: this should be fetched from backend -->
+          <tr v-if="candidate.notification_email">
             <th>Email</th>
-            <td class="has-text-pre-wrap">{{ candidate.email }}</td>
+            <td class="has-text-pre-wrap">{{ candidate.notification_email }}</td>
           </tr>
           <tr>
             <th>Applied on</th>

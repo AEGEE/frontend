@@ -135,9 +135,8 @@
               {{ props.row.created_at | datetimeseconds }}
             </b-table-column>
 
-            <!-- TODO: this should be props.row.notification_email fetched from core in backend -->
             <b-table-column field="email" label="Email" :visible="prefix === 'all'">
-              {{ props.row.email }}
+              {{ props.row.notification_email }} <!-- TODO: this should be fetched from backend -->
             </b-table-column>
 
             <b-table-column label="View">
