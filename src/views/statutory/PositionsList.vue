@@ -136,7 +136,7 @@
             </b-table-column>
 
             <b-table-column field="email" label="Email" :visible="prefix === 'all'">
-              {{ props.row.notification_email }} <!-- TODO: this should be fetched from backend -->
+              {{ props.row.notification_email }}
             </b-table-column>
 
             <b-table-column label="View">

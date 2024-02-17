@@ -27,7 +27,6 @@
             <th>Last name</th>
             <td class="has-text-pre-wrap">{{ candidate.last_name }}</td>
           </tr>
-          <!-- TODO: this should be fetched from backend -->
           <tr v-if="candidate.notification_email">
             <th>Email</th>
             <td class="has-text-pre-wrap">{{ candidate.notification_email }}</td>
