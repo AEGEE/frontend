@@ -28,11 +28,11 @@
             <b-table-column field="communication" label="Communication (C)" />
 
             <b-table-column field="boardElection" label="Board election (BE)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.elections_last_year && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.elections_last_year && showDetails">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && showDetails">
                 {{ props.row.board_term_elected }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.elections_last_year">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year">No</b-tag>
             </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)" />
@@ -40,11 +40,11 @@
             <b-table-column field="membershipFee" label="Membership fee (F)" />
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.latest_event_done && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.latest_event_done && showDetails">
-                {{ props.row.next_needed_event }}
+              <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && showDetails">
+                {{ props.row.latest_event }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.latest_event_done">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events">No</b-tag>
             </b-table-column>
 
             <b-table-column field="attendance" label="Agora attendance (AA)" />
@@ -110,7 +110,7 @@ export default {
 
         for (const body in this.bodies) {
           // TODO: Add all the antenna criteria here when they are automatically computed
-          this.bodies[body].status = this.bodies[body].latest_event_done && this.bodies[body].elections_last_year
+          this.bodies[body].status = this.bodies[body].check_events && this.bodies[body].check_elections_last_year
         }
 
         this.isLoading = false
@@ -133,8 +133,8 @@ export default {
 
         for (const body in this.bodies) {
           // Check if the last event is in the past 2 years
-          this.bodies[body].latest_event_done = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(), 'years', true) <= 2
-          this.bodies[body].next_needed_event = moment(this.bodies[body].latest_event).add(2, 'years').format('M[/]YYYY')
+          this.bodies[body].check_events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(), 'years', true) <= 2
+          this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
         }
       }).catch((err) => {
         this.isLoading = false
@@ -150,7 +150,7 @@ export default {
 
         for (const body in this.bodies) {
           // Check if the current board was elected within the past year
-          this.bodies[body].elections_last_year = this.bodies[body].board_term_elected !== undefined && moment(this.bodies[body].board_term_elected).diff(moment(), 'years', true) <= 1
+          this.bodies[body].check_elections_last_year = this.bodies[body].board_term_elected !== undefined && moment(this.bodies[body].board_term_elected).diff(moment(), 'years', true) <= 1
           this.bodies[body].board_term_elected = moment(this.bodies[body].board_term_elected).format('D[/]M[/]YYYY')
         }
       }).catch((err) => {
