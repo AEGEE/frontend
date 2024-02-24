@@ -10,7 +10,27 @@
             </b-table-column>
 
             <b-table-column field="type" label="Type">
-              {{ props.row.type }}
+              {{ props.row.type | capitalize }}
+            </b-table-column>
+
+            <b-table-column field="" label="Status">
+
+            </b-table-column>
+
+            <b-table-column field="" label="Communication (C)">
+              
+            </b-table-column>
+
+            <b-table-column field="" label="Board election (BE)">
+              
+            </b-table-column>
+
+            <b-table-column field="" label="Members list (ML)">
+              
+            </b-table-column>
+
+            <b-table-column field="" label="Membership fee (F)">
+              
             </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
@@ -19,6 +39,18 @@
                 <b-tag type="is-dark" size="is-medium">{{ props.row.next_needed_event }}</b-tag>
               </b-taglist>
               <b-tag type="is-danger" size="is-medium" v-else>No</b-tag>
+            </b-table-column>
+
+            <b-table-column field="" label="Agora attendance (AA)">
+              
+            </b-table-column>
+
+            <b-table-column field="" label="Development plan (DP)">
+              
+            </b-table-column>
+
+            <b-table-column field="" label="Fulfillment report (FR)">
+              
             </b-table-column>
 
           </template>
@@ -60,6 +92,7 @@ export default {
         this.bodies = this.bodies.filter(x => ["antenna", "contact antenna", "contact"].includes(x.type))
 
         // Check if the last event is in the past 2 years
+        // TODO: Also get the most recent statutory event and SU organised
         this.axios.get(this.services['events'] + '/recents').then((response) => {
           this.latest_events = response.data.data
           for (const event in this.latest_events) {
@@ -67,7 +100,7 @@ export default {
               const body = this.bodies.find(x => x.id === this.latest_events[event].organizing_bodies[organizer].body_id)
               // TODO: What happens if there are multiple last events
               // Can happen if locals organised events with two locals together
-              body.latest_event = this.latest_events[event].LatestEvent
+              body.latest_event = this.latest_events[event].latest_event
             }
           }
 
