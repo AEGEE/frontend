@@ -27,7 +27,13 @@
 
             <b-table-column field="communication" label="Communication (C)" />
 
-            <b-table-column field="boardElection" label="Board election (BE)" />
+            <b-table-column field="boardElection" label="Board election (BE)">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.elections_last_year && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.elections_last_year && showDetails">
+                {{ props.row.board_term_elected }}
+              </b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.elections_last_year">No</b-tag>
+            </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)" />
 
@@ -100,14 +106,14 @@ export default {
         promises.push(this.checkEventsCriterium())
         promises.push(this.checkBoardCriterium())
 
-        await Promise.all(promises);
+        await Promise.all(promises)
 
         for (const body in this.bodies) {
           // TODO: Add all the antenna criteria here when they are automatically computed
-          this.bodies[body].status = this.bodies[body].latest_event_done && true
+          this.bodies[body].status = this.bodies[body].latest_event_done && this.bodies[body].elections_last_year
         }
-        
-      this.isLoading = false
+
+        this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch bodies', err)
@@ -118,7 +124,7 @@ export default {
       await this.axios.get(this.services['events'] + '/recents').then((eventsResponse) => {
         for (const event of eventsResponse.data.data) {
           for (const organizer in event.organizing_bodies) {
-            const body = this.bodies.find(x => x.id === event.organizing_bodies[organizer].body_id)
+            const body = this.bodies.find(body => body.id === event.organizing_bodies[organizer].body_id)
             // TODO: What happens if there are multiple last events
             // Can happen if locals organised events with two locals together
             body.latest_event = event.latest_event
@@ -137,7 +143,16 @@ export default {
     },
     async checkBoardCriterium () {
       await this.axios.get(this.services['network'] + '/boards/current').then((boardsResponse) => {
-        console.log(boardsResponse.data.data)
+        for (const board of boardsResponse.data.data) {
+          const body = this.bodies.find(body => body.id === board.body_id)
+          body.board_term_elected = board.elected_date
+        }
+
+        for (const body in this.bodies) {
+          // Check if the current board was elected within the past year
+          this.bodies[body].elections_last_year = this.bodies[body].board_term_elected !== undefined && moment(this.bodies[body].board_term_elected).diff(moment(), 'years', true) <= 1
+          this.bodies[body].board_term_elected = moment(this.bodies[body].board_term_elected).format('D[/]M[/]YYYY')
+        }
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch boards data', err)
