@@ -3,6 +3,10 @@
     <div class="tile is-parent is-vertical">
       <article class="tile is-child">
         <h4 class="title">Antenna Criteria Check</h4>
+        <div class="control">
+          <a class="button is-info" v-if="showDetails" @click="toggleShowDetails()">Show basic information</a>
+          <a class="button is-info" v-if="!showDetails" @click="toggleShowDetails()">Show detailed information</a>
+        </div>
         <b-table :data="bodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
             <b-table-column field="name" label="Body name">
@@ -34,11 +38,11 @@
             </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
-              <b-taglist attached v-if="props.row.latest_event_done">
-                <b-tag type="is-success" size="is-medium">Yes</b-tag>
-                <b-tag type="is-dark" size="is-medium">{{ props.row.next_needed_event }}</b-tag>
-              </b-taglist>
-              <b-tag type="is-danger" size="is-medium" v-else>No</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.latest_event_done && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.latest_event_done && showDetails">
+                {{ props.row.next_needed_event }}
+              </b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.latest_event_done">No</b-tag>
             </b-table-column>
 
             <b-table-column field="" label="Agora attendance (AA)">
@@ -74,6 +78,7 @@ export default {
     return {
       bodies: [],
       latest_events: [],
+      showDetails: false,
       isLoading: false
     }
   },
@@ -84,6 +89,9 @@ export default {
     })
   },
   methods: {
+    toggleShowDetails () {
+      this.showDetails = !this.showDetails
+    },
     fetchData () {
       this.isLoading = true
 
