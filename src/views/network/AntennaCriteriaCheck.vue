@@ -3,11 +3,14 @@
     <div class="tile is-parent is-vertical">
       <article class="tile is-child">
         <h4 class="title">Antenna Criteria Check</h4>
-        <div class="control">
+        <div class="buttons">
           <a class="button is-info" v-if="showDetails" @click="toggleShowDetails()">Show basic information</a>
           <a class="button is-info" v-if="!showDetails" @click="toggleShowDetails()">Show detailed information</a>
+
+          <a class="button is-info" v-if="hideSafeLocals" @click="toggleHideSafeLocals()">Show all Locals</a>
+          <a class="button is-info" v-if="!hideSafeLocals" @click="toggleHideSafeLocals()">Show only Locals in danger</a>
         </div>
-        <b-table :data="bodies" :loading="isLoading" narrowed>
+        <b-table :data="filteredBodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
             <b-table-column field="name" label="Body name">
               <router-link :to="{ name: 'oms.bodies.view', params: { id: props.row.id } }">{{ props.row.name }}</router-link>
@@ -17,8 +20,9 @@
               {{ props.row.type | capitalize }}
             </b-table-column>
 
-            <b-table-column field="" label="Status">
-
+            <b-table-column field="status" label="Status">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.status">Safe</b-tag>
+              <b-tag type="is-warning" size="is-medium" v-else>Danger</b-tag>
             </b-table-column>
 
             <b-table-column field="" label="Communication (C)">
@@ -79,6 +83,7 @@ export default {
       bodies: [],
       latest_events: [],
       showDetails: false,
+      hideSafeLocals: false,
       isLoading: false
     }
   },
@@ -86,11 +91,18 @@ export default {
     ...mapGetters({
       services: 'services',
       loginUser: 'user'
-    })
+    }),
+    filteredBodies () {
+      if (!this.hideSafeLocals) return this.bodies
+      return this.bodies.filter(body => { return body.status === false })
+    }
   },
   methods: {
     toggleShowDetails () {
       this.showDetails = !this.showDetails
+    },
+    toggleHideSafeLocals () {
+      this.hideSafeLocals = !this.hideSafeLocals
     },
     fetchData () {
       this.isLoading = true
@@ -117,6 +129,11 @@ export default {
             this.bodies[body].next_needed_event = moment(this.bodies[body].latest_event).add(2, 'years').format("M[/]YYYY")
           }
 
+
+          for (const body in this.bodies) {
+            // TODO: Add all the antenna criteria here when they are automatically computed
+            this.bodies[body].status = this.bodies[body].latest_event_done
+          }
           this.isLoading = false
         }).catch((err) => {
           this.isLoading = false
