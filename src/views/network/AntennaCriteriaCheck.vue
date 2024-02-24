@@ -3,7 +3,16 @@
     <div class="tile is-parent is-vertical">
       <article class="tile is-child">
         <h4 class="title">Antenna Criteria Check</h4>
-        <h2 class="subtitle">{{ statutory.name }}</h2>
+
+        <div class="field">
+          <label class="label">Selected Agora</label>
+          <div class="select">
+            <select v-model="selectedAgora" @change="fetchData()">
+              <option v-for="agora in agorae" v-bind:key="agora.id" :value="agora">{{ agora.name }}</option>
+            </select>
+          </div>
+        </div>
+
         <div class="buttons">
           <a class="button is-info" v-if="showDetails" @click="toggleShowDetails()">Show basic information</a>
           <a class="button is-info" v-if="!showDetails" @click="toggleShowDetails()">Show detailed information</a>
@@ -13,15 +22,15 @@
         </div>
         <b-table :data="filteredBodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
-            <b-table-column field="name" label="Body name">
+            <b-table-column sortable field="name" label="Body name">
               <router-link :to="{ name: 'oms.bodies.view', params: { id: props.row.id } }">{{ props.row.name }}</router-link>
             </b-table-column>
 
-            <b-table-column field="type" label="Type">
+            <b-table-column sortable field="type" label="Type">
               {{ props.row.type | capitalize }}
             </b-table-column>
 
-            <b-table-column field="status" label="Status">
+            <b-table-column sortable field="status" label="Status">
               <b-tag type="is-success" size="is-medium" v-if="props.row.status">Safe</b-tag>
               <b-tag type="is-warning" size="is-medium" v-else>Danger</b-tag>
             </b-table-column>
@@ -94,7 +103,8 @@ export default {
   data () {
     return {
       bodies: [],
-      statutory: null,
+      agorae: null,
+      selectedAgora: null,
       showDetails: false,
       hideSafeLocals: false,
       isLoading: false
@@ -117,12 +127,14 @@ export default {
     toggleHideSafeLocals () {
       this.hideSafeLocals = !this.hideSafeLocals
     },
-    async fetchUpcomingAgora () {
-      await this.axios.get(this.services['statutory'] + '/events/latest').then((response) => {
-        this.statutory = response.data.data
+    fetchAgorae () {
+      this.isLoading = true
+      this.axios.get(this.services['statutory'], { params: { type: 'agora'} }).then((response) => {
+        this.agorae = response.data.data
+        this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-        this.$root.showError('Could not fetch next Agora data', err)
+        this.$root.showError('Could not fetch statutory data', err)
       })
     },
     fetchData () {
@@ -166,8 +178,8 @@ export default {
       // TODO: Also get the most recent statutory event and SU organised
       await this.axios.get(this.services['events'] + '/recents').then((eventsResponse) => {
         for (const event of eventsResponse.data.data) {
-          for (const organizer in event.organizing_bodies) {
-            const body = this.bodies.find(body => body.id === event.organizing_bodies[organizer].body_id)
+          for (const organizer of event.organizing_bodies) {
+            const body = this.bodies.find(body => body.id === organizer.body_id)
             // TODO: What happens if there are multiple last events
             // Can happen if locals organised events with two locals together
             body.latest_event = event.latest_event
@@ -202,9 +214,7 @@ export default {
       })
     },
     async checkMembersList () {
-      await this.fetchUpcomingAgora()
-
-      await this.axios.get(this.services['statutory'] + '/events/' + this.statutory.id + '/memberslists/missing').then((membersListResponse) => {
+      await this.axios.get(this.services['statutory'] + '/events/' + this.selectedAgora.id + '/memberslists/missing').then((membersListResponse) => {
         for (const body in this.bodies) {
           this.bodies[body].submitted_members_list = this.bodies[body].id in membersListResponse.data.data.map(body => body.id)
         }
@@ -215,7 +225,7 @@ export default {
     }
   },
   mounted () {
-    this.fetchData()
+    this.fetchAgorae()
   }
 }
 
