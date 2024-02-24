@@ -26,7 +26,9 @@
               <b-tag type="is-warning" size="is-medium" v-else>Danger</b-tag>
             </b-table-column>
 
-            <b-table-column field="communication" label="Communication (C)" />
+            <b-table-column field="communication" label="Communication (C)">
+              <b-tag type="is-light" size="is-medium">Empty</b-tag>
+            </b-table-column>
 
             <b-table-column field="boardElection" label="Board election (BE)">
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && !showDetails">Yes</b-tag>
@@ -43,7 +45,10 @@
               <b-tag type="is-info" size="is-medium" v-if="!props.row.submitted_members_list && props.row.type === 'contact'">Else</b-tag>
             </b-table-column>
 
-            <b-table-column field="membershipFee" label="Membership fee (F)" />
+            <b-table-column field="membershipFee" label="Membership fee (F)">
+              <b-tag type="is-light" size="is-medium" v-if="props.row.type !== 'contact'">Empty</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact'">Else</b-tag>
+            </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && !showDetails">Yes</b-tag>
@@ -54,11 +59,20 @@
               <b-tag type="is-info" size="is-medium" v-if="!props.row.check_events && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
-            <b-table-column field="attendance" label="Agora attendance (AA)" />
+            <b-table-column field="attendance" label="Agora attendance (AA)">
+              <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+            </b-table-column>
 
-            <b-table-column field="development" label="Development plan (DP)" />
+            <b-table-column field="development" label="Development plan (DP)">
+              <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+            </b-table-column>
 
-            <b-table-column field="fulfillment" label="Fulfillment report (FR)" />
+            <b-table-column field="fulfillment" label="Fulfillment report (FR)">
+              <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+            </b-table-column>
 
           </template>
 
