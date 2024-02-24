@@ -25,21 +25,13 @@
               <b-tag type="is-warning" size="is-medium" v-else>Danger</b-tag>
             </b-table-column>
 
-            <b-table-column field="" label="Communication (C)">
-              
-            </b-table-column>
+            <b-table-column field="communication" label="Communication (C)" />
 
-            <b-table-column field="" label="Board election (BE)">
-              
-            </b-table-column>
+            <b-table-column field="boardElection" label="Board election (BE)" />
 
-            <b-table-column field="" label="Members list (ML)">
-              
-            </b-table-column>
+            <b-table-column field="membersList" label="Members list (ML)" />
 
-            <b-table-column field="" label="Membership fee (F)">
-              
-            </b-table-column>
+            <b-table-column field="membershipFee" label="Membership fee (F)" />
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
               <b-tag type="is-success" size="is-medium" v-if="props.row.latest_event_done && !showDetails">Yes</b-tag>
@@ -49,17 +41,11 @@
               <b-tag type="is-danger" size="is-medium" v-if="!props.row.latest_event_done">No</b-tag>
             </b-table-column>
 
-            <b-table-column field="" label="Agora attendance (AA)">
-              
-            </b-table-column>
+            <b-table-column field="attendance" label="Agora attendance (AA)" />
 
-            <b-table-column field="" label="Development plan (DP)">
-              
-            </b-table-column>
+            <b-table-column field="development" label="Development plan (DP)" />
 
-            <b-table-column field="" label="Fulfillment report (FR)">
-              
-            </b-table-column>
+            <b-table-column field="fulfillment" label="Fulfillment report (FR)" />
 
           </template>
 
@@ -107,9 +93,9 @@ export default {
     fetchData () {
       this.isLoading = true
 
-      this.axios.get(this.services['core'] + '/bodies').then((response) => {
-        this.bodies = response.data.data
-        this.bodies = this.bodies.filter(x => ["antenna", "contact antenna", "contact"].includes(x.type))
+      this.axios.get(this.services['core'] + '/bodies').then((bodiesResponse) => {
+        this.bodies = bodiesResponse.data.data
+        this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
 
         // Check if the last event is in the past 2 years
         // TODO: Also get the most recent statutory event and SU organised
@@ -126,9 +112,8 @@ export default {
 
           for (const body in this.bodies) {
             this.bodies[body].latest_event_done = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(), 'years', true) <= 2
-            this.bodies[body].next_needed_event = moment(this.bodies[body].latest_event).add(2, 'years').format("M[/]YYYY")
+            this.bodies[body].next_needed_event = moment(this.bodies[body].latest_event).add(2, 'years').format('M[/]YYYY')
           }
-
 
           for (const body in this.bodies) {
             // TODO: Add all the antenna criteria here when they are automatically computed
@@ -140,9 +125,9 @@ export default {
           this.$root.showError('Could not fetch event data', err)
         })
       }).catch((err) => {
-          this.isLoading = false
-          this.$root.showError('Could not fetch bodies', err)
-      })   
+        this.isLoading = false
+        this.$root.showError('Could not fetch bodies', err)
+      })
     }
   },
   mounted () {
