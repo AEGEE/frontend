@@ -1,6 +1,9 @@
 <template>
   <div class="tile is-ancestor ">
     <div class="tile is-child">
+      <span class="notification is-info" v-if="$route.params.candidate_id">
+        To redraw your candidature, you should send an email to the Juridical Commission via <u>jc@aegee.eu</u>.
+      </span>
       <form @submit.prevent="saveCandidate()">
         <div class="field">
           <label class="label">Body <span class="has-text-danger">*</span></label>
