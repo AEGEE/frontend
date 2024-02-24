@@ -32,7 +32,8 @@
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && showDetails">
                 {{ props.row.board_term_elected }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.check_elections_last_year && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)" />
@@ -44,7 +45,8 @@
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && showDetails">
                 {{ props.row.latest_event }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.check_events && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="attendance" label="Agora attendance (AA)" />
@@ -108,9 +110,17 @@ export default {
 
         await Promise.all(promises)
 
+        // TODO: Add all the antenna criteria here when they are automatically computed
         for (const body in this.bodies) {
-          // TODO: Add all the antenna criteria here when they are automatically computed
-          this.bodies[body].status = this.bodies[body].check_events && this.bodies[body].check_elections_last_year
+          if (this.bodies[body].type === 'antenna') {
+            this.bodies[body].status = (this.bodies[body].check_events && this.bodies[body].check_elections_last_year)
+          }
+          if (this.bodies[body].type === 'contact antenna') {
+            this.bodies[body].status = true
+          }
+          if (this.bodies[body].type === 'contact') {
+            this.bodies[body].status = true
+          }
         }
 
         this.isLoading = false
