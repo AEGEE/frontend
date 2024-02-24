@@ -3,6 +3,7 @@
     <div class="tile is-parent is-vertical">
       <article class="tile is-child">
         <h4 class="title">Antenna Criteria Check</h4>
+        <h2 class="subtitle">{{ statutory.name }}</h2>
         <div class="buttons">
           <a class="button is-info" v-if="showDetails" @click="toggleShowDetails()">Show basic information</a>
           <a class="button is-info" v-if="!showDetails" @click="toggleShowDetails()">Show detailed information</a>
@@ -36,7 +37,11 @@
               <b-tag type="is-info" size="is-medium" v-if="!props.row.check_elections_last_year && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
-            <b-table-column field="membersList" label="Members list (ML)" />
+            <b-table-column field="membersList" label="Members list (ML)">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.submitted_members_list">Yes</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.submitted_members_list && props.row.type !== 'contact'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.submitted_members_list && props.row.type === 'contact'">Else</b-tag>
+            </b-table-column>
 
             <b-table-column field="membershipFee" label="Membership fee (F)" />
 
@@ -75,6 +80,7 @@ export default {
   data () {
     return {
       bodies: [],
+      statutory: null,
       showDetails: false,
       hideSafeLocals: false,
       isLoading: false
@@ -97,6 +103,14 @@ export default {
     toggleHideSafeLocals () {
       this.hideSafeLocals = !this.hideSafeLocals
     },
+    async fetchUpcomingAgora () {
+      await this.axios.get(this.services['statutory'] + '/events/latest').then((response) => {
+        this.statutory = response.data.data
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch next Agora data', err)
+      })
+    },
     fetchData () {
       this.isLoading = true
 
@@ -105,18 +119,23 @@ export default {
         this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
 
         const promises = []
-        promises.push(this.checkEventsCriterium())
         promises.push(this.checkBoardCriterium())
+        promises.push(this.checkMembersList())
+        promises.push(this.checkEventsCriterium())
 
         await Promise.all(promises)
 
         // TODO: Add all the antenna criteria here when they are automatically computed
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
-            this.bodies[body].status = (this.bodies[body].check_events && this.bodies[body].check_elections_last_year)
+            this.bodies[body].status = (
+              this.bodies[body].check_events && 
+              this.bodies[body].check_elections_last_year && 
+              this.bodies[body].submitted_members_list
+            )
           }
           if (this.bodies[body].type === 'contact antenna') {
-            this.bodies[body].status = true
+            this.bodies[body].status = this.bodies[body].submitted_members_list
           }
           if (this.bodies[body].type === 'contact') {
             this.bodies[body].status = true
@@ -166,6 +185,18 @@ export default {
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch boards data', err)
+      })
+    },
+    async checkMembersList () {
+      await this.fetchUpcomingAgora()
+
+      await this.axios.get(this.services['statutory'] + '/events/' + this.statutory.id + '/memberslists/missing').then((membersListResponse) => {
+        for (const body in this.bodies) {
+          this.bodies[body].submitted_members_list = this.bodies[body].id in membersListResponse.data.data.map(body => body.id)
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch members list data', err)
       })
     }
   },
