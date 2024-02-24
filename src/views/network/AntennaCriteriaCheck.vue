@@ -67,7 +67,6 @@ export default {
   data () {
     return {
       bodies: [],
-      latest_events: [],
       showDetails: false,
       hideSafeLocals: false,
       isLoading: false
@@ -93,40 +92,55 @@ export default {
     fetchData () {
       this.isLoading = true
 
-      this.axios.get(this.services['core'] + '/bodies').then((bodiesResponse) => {
+      this.axios.get(this.services['core'] + '/bodies').then(async (bodiesResponse) => {
         this.bodies = bodiesResponse.data.data
         this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
 
-        // Check if the last event is in the past 2 years
-        // TODO: Also get the most recent statutory event and SU organised
-        this.axios.get(this.services['events'] + '/recents').then((response) => {
-          this.latest_events = response.data.data
-          for (const event in this.latest_events) {
-            for (const organizer in this.latest_events[event].organizing_bodies) {
-              const body = this.bodies.find(x => x.id === this.latest_events[event].organizing_bodies[organizer].body_id)
-              // TODO: What happens if there are multiple last events
-              // Can happen if locals organised events with two locals together
-              body.latest_event = this.latest_events[event].latest_event
-            }
-          }
+        const promises = []
+        promises.push(this.checkEventsCriterium())
+        promises.push(this.checkBoardCriterium())
 
-          for (const body in this.bodies) {
-            this.bodies[body].latest_event_done = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(), 'years', true) <= 2
-            this.bodies[body].next_needed_event = moment(this.bodies[body].latest_event).add(2, 'years').format('M[/]YYYY')
-          }
+        await Promise.all(promises);
 
-          for (const body in this.bodies) {
-            // TODO: Add all the antenna criteria here when they are automatically computed
-            this.bodies[body].status = this.bodies[body].latest_event_done
-          }
-          this.isLoading = false
-        }).catch((err) => {
-          this.isLoading = false
-          this.$root.showError('Could not fetch event data', err)
-        })
+        for (const body in this.bodies) {
+          // TODO: Add all the antenna criteria here when they are automatically computed
+          this.bodies[body].status = this.bodies[body].latest_event_done && true
+        }
+        
+      this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch bodies', err)
+      })
+    },
+    async checkEventsCriterium () {
+      // TODO: Also get the most recent statutory event and SU organised
+      await this.axios.get(this.services['events'] + '/recents').then((eventsResponse) => {
+        for (const event of eventsResponse.data.data) {
+          for (const organizer in event.organizing_bodies) {
+            const body = this.bodies.find(x => x.id === event.organizing_bodies[organizer].body_id)
+            // TODO: What happens if there are multiple last events
+            // Can happen if locals organised events with two locals together
+            body.latest_event = event.latest_event
+          }
+        }
+
+        for (const body in this.bodies) {
+          // Check if the last event is in the past 2 years
+          this.bodies[body].latest_event_done = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(), 'years', true) <= 2
+          this.bodies[body].next_needed_event = moment(this.bodies[body].latest_event).add(2, 'years').format('M[/]YYYY')
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch event data', err)
+      })
+    },
+    async checkBoardCriterium () {
+      await this.axios.get(this.services['network'] + '/boards/current').then((boardsResponse) => {
+        console.log(boardsResponse.data.data)
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch boards data', err)
       })
     }
   },
