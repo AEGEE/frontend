@@ -128,7 +128,7 @@ export default {
     },
     fetchData () {
       // Get boards of the body
-      this.axios.get(this.services['network'] + '/bodies/' + this.$route.params.id + '?sort=start_date&direction=desc').then((response) => {
+      this.axios.get(this.services['network'] + '/bodies/' + this.$route.params.id + '/boards?sort=start_date&direction=desc').then((response) => {
         this.boards = response.data.data
 
         // Get members of the body
