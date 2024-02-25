@@ -64,7 +64,11 @@
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && showDetails">
                 {{ props.row.latest_event }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && !showDetails && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && showDetails && props.row.latest_event && props.row.type === 'antenna'">
+                {{ props.row.latest_event }}
+              </b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && showDetails && !props.row.latest_event && props.row.type === 'antenna'">No</b-tag>
               <b-tag type="is-info" size="is-medium" v-if="!props.row.check_events && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
@@ -129,7 +133,7 @@ export default {
     },
     fetchAgorae () {
       this.isLoading = true
-      this.axios.get(this.services['statutory'], { params: { type: 'agora'} }).then((response) => {
+      this.axios.get(this.services['statutory'], { params: { type: 'agora' } }).then((response) => {
         this.agorae = response.data.data
         this.isLoading = false
       }).catch((err) => {
@@ -155,9 +159,9 @@ export default {
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
-              this.bodies[body].check_events && 
-              this.bodies[body].check_elections_last_year && 
-              this.bodies[body].submitted_members_list
+              this.bodies[body].check_events
+              && this.bodies[body].check_elections_last_year
+              && this.bodies[body].submitted_members_list
             )
           }
           if (this.bodies[body].type === 'contact antenna') {
@@ -176,10 +180,10 @@ export default {
     },
     async checkEventsCriterium () {
       // TODO: Also get the most recent statutory event and SU organised
-      await this.axios.get(this.services['events'] + '/recents').then((eventsResponse) => {
+      await this.axios.get(this.services['events'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((eventsResponse) => {
         for (const event of eventsResponse.data.data) {
           for (const organizer of event.organizing_bodies) {
-            const body = this.bodies.find(body => body.id === organizer.body_id)
+            const body = this.bodies.find(x => x.id === organizer.body_id)
             // TODO: What happens if there are multiple last events
             // Can happen if locals organised events with two locals together
             body.latest_event = event.latest_event
@@ -188,7 +192,7 @@ export default {
 
         for (const body in this.bodies) {
           // Check if the last event is in the past 2 years
-          this.bodies[body].check_events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(), 'years', true) <= 2
+          this.bodies[body].check_events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2
           this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
         }
       }).catch((err) => {
@@ -199,7 +203,7 @@ export default {
     async checkBoardCriterium () {
       await this.axios.get(this.services['network'] + '/boards/current').then((boardsResponse) => {
         for (const board of boardsResponse.data.data) {
-          const body = this.bodies.find(body => body.id === board.body_id)
+          const body = this.bodies.find(x => x.id === board.body_id)
           body.board_term_elected = board.elected_date
         }
 
@@ -216,7 +220,7 @@ export default {
     async checkMembersList () {
       await this.axios.get(this.services['statutory'] + '/events/' + this.selectedAgora.id + '/memberslists/missing').then((membersListResponse) => {
         for (const body in this.bodies) {
-          this.bodies[body].submitted_members_list = this.bodies[body].id in membersListResponse.data.data.map(body => body.id)
+          this.bodies[body].submitted_members_list = this.bodies[body].id in membersListResponse.data.data.map(x => x.id)
         }
       }).catch((err) => {
         this.isLoading = false
