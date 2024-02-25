@@ -42,9 +42,13 @@
             <b-table-column field="boardElection" label="Board election (BE)">
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && !showDetails">Yes</b-tag>
               <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && showDetails">
-                {{ props.row.board_term_elected }}
+                {{ props.row.latest_election }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && !showDetails && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && showDetails && props.row.latest_election && props.row.type === 'antenna'">
+                {{ props.row.latest_election }}
+              </b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && showDetails && !props.row.latest_election && props.row.type === 'antenna'">No</b-tag>
               <b-tag type="is-info" size="is-medium" v-if="!props.row.check_elections_last_year && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
@@ -196,7 +200,7 @@ export default {
         for (const body in this.bodies) {
           // Check if the last event is in the past 2 years
           this.bodies[body].check_events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2
-          this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
+          if (this.bodies[body].latest_event !== undefined) this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
         }
       }).catch((err) => {
         this.isLoading = false
@@ -204,16 +208,16 @@ export default {
       })
     },
     async checkBoardCriterium () {
-      await this.axios.get(this.services['network'] + '/boards/current').then((boardsResponse) => {
+      await this.axios.get(this.services['network'] + '/boards/recents', { params: { ends: this.selectedAgora.ends } }).then((boardsResponse) => {
         for (const board of boardsResponse.data.data) {
           const body = this.bodies.find(x => x.id === board.body_id)
-          body.board_term_elected = board.elected_date
+          body.latest_election = board.latest_election
         }
 
         for (const body in this.bodies) {
           // Check if the current board was elected within the past year
-          this.bodies[body].check_elections_last_year = this.bodies[body].board_term_elected !== undefined && moment(this.bodies[body].board_term_elected).diff(moment(), 'years', true) <= 1
-          this.bodies[body].board_term_elected = moment(this.bodies[body].board_term_elected).format('D[/]M[/]YYYY')
+          this.bodies[body].check_elections_last_year = this.bodies[body].latest_election !== undefined && moment(this.bodies[body].latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1
+          if (this.bodies[body].latest_election !== undefined) this.bodies[body].latest_election = moment(this.bodies[body].latest_election).format('D[/]M[/]YYYY')
         }
       }).catch((err) => {
         this.isLoading = false
