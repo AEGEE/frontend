@@ -1,3 +1,38 @@
+## [1.35.8](https://github.com/AEGEE/frontend/compare/1.35.7...1.35.8) (2024-02-20)
+
+
+### Bug Fixes
+
+* removed unnecessary paddings in the mobile breakpoint ([#2049](https://github.com/AEGEE/frontend/issues/2049)) ([79011d3](https://github.com/AEGEE/frontend/commit/79011d31bb9c279c5f231f8c7fe69a5277085946))
+
+## [1.35.7](https://github.com/AEGEE/frontend/compare/1.35.6...1.35.7) (2024-02-20)
+
+
+### Bug Fixes
+
+* **statutory:** add special permissions for memberslist views ([#2058](https://github.com/AEGEE/frontend/issues/2058)) ([ce84a7e](https://github.com/AEGEE/frontend/commit/ce84a7eb4a1dac717c00e1844c14b69e7115a61b))
+
+## [1.35.6](https://github.com/AEGEE/frontend/compare/1.35.5...1.35.6) (2024-02-09)
+
+
+### Bug Fixes
+
+* **su:** add new theme categories ([#2047](https://github.com/AEGEE/frontend/issues/2047)) ([3c3ea8c](https://github.com/AEGEE/frontend/commit/3c3ea8c5423a119e95fcc79e8cd6d122801c3128))
+
+## [1.35.5](https://github.com/AEGEE/frontend/compare/1.35.4...1.35.5) (2024-02-06)
+
+
+### Bug Fixes
+
+* **statutory:** add warning when fee is 0 ([#2045](https://github.com/AEGEE/frontend/issues/2045)) ([cb2d868](https://github.com/AEGEE/frontend/commit/cb2d8681c5dbff943bc332fbb51af4b8e386671e))
+
+## [1.35.4](https://github.com/AEGEE/frontend/compare/1.35.3...1.35.4) (2024-02-04)
+
+
+### Bug Fixes
+
+* **su:** update booklet link ([#2043](https://github.com/AEGEE/frontend/issues/2043)) ([daa8dc1](https://github.com/AEGEE/frontend/commit/daa8dc1e441f890bbbe75310262cee11a5710b80))
+
 ## [1.35.3](https://github.com/AEGEE/frontend/compare/1.35.2...1.35.3) (2024-01-24)
 
 
