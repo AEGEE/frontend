@@ -1,3 +1,24 @@
+## [1.35.11](https://github.com/AEGEE/frontend/compare/1.35.10...1.35.11) (2024-03-09)
+
+
+### Bug Fixes
+
+* increase the mapbox popup width ([#2077](https://github.com/AEGEE/frontend/issues/2077)) ([b1b9d44](https://github.com/AEGEE/frontend/commit/b1b9d44f6934f235e8fa53996b9c47a8a7677410))
+
+## [1.35.10](https://github.com/AEGEE/frontend/compare/1.35.9...1.35.10) (2024-03-09)
+
+
+### Bug Fixes
+
+* **calendar:** remove not nice border around calendar events ([#2068](https://github.com/AEGEE/frontend/issues/2068)) ([18bbadd](https://github.com/AEGEE/frontend/commit/18bbadd69a6758a32d214958891ad164f1188f2b))
+
+## [1.35.9](https://github.com/AEGEE/frontend/compare/1.35.8...1.35.9) (2024-03-09)
+
+
+### Bug Fixes
+
+* use notification_email in event modules ([#2057](https://github.com/AEGEE/frontend/issues/2057)) ([e4e788c](https://github.com/AEGEE/frontend/commit/e4e788c1c44dc8e79be68f3f534286d2088fde45))
+
 ## [1.35.8](https://github.com/AEGEE/frontend/compare/1.35.7...1.35.8) (2024-02-20)
 
 
