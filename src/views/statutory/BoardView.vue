@@ -98,37 +98,15 @@
 
         <div v-show="scope === 'view' && selectedBody">
           <div class="field">
-            <label class="label">Search by name, surname or email</label>
+            <label class="label">Search by name or surname</label>
             <div class="field has-addons">
               <div class="control is-expanded">
-                <input class="input" type="text" v-model="query" placeholder="Search by name, surname or email" />
+                <input class="input" type="text" v-model="query" placeholder="Search by name or surname" />
               </div>
               <div class="control">
                 <button class="button is-primary" v-if="!displayCancelled" @click="displayCancelled = true">Display all applications</button>
                 <button class="button is-primary" v-if="displayCancelled" @click="displayCancelled = false">Display only not cancelled applications</button>
               </div>
-            </div>
-          </div>
-
-          <div class="field" v-if="allowedToSendAnyPax && selectedBody">
-            <div class="control">
-              <multiselect
-                v-model="selectedFields"
-                :multiple="true"
-                :searchable="false"
-                :close-on-select="false"
-                :clear-on-select="false"
-                :preserve-search="true"
-                :options="fields"
-                placeholder="Select application fields"
-                track-by="name"
-                label="name">
-                <template
-                  slot="selection"
-                  slot-scope="{ values, isOpen }">
-                  <span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} fields selected</span>
-                </template>
-              </multiselect>
             </div>
           </div>
 
@@ -174,10 +152,6 @@
                 <span v-if="props.row.status === 'rejected'">Rejected</span>
                 <span v-if="props.row.status === 'waiting_list'">Waiting list</span>
                 <span v-if="props.row.status === 'pending'">Pending</span>
-              </b-table-column>
-
-              <b-table-column v-for="(field, index) in selectedFields" v-bind:key="index" field="answers[index]" :label="field.name">
-                {{ field.get(props.row) | beautify }}
               </b-table-column>
             </template>
 
@@ -225,17 +199,6 @@ export default {
       },
       displayCancelled: false,
       errors: {},
-      selectedFields: [],
-      fields: [
-        { name: 'First name', get: (pax) => pax.first_name },
-        { name: 'Last name', get: (pax) => pax.last_name },
-        { name: 'Gender', get: (pax) => pax.gender },
-        { name: 'Email', get: (pax) => pax.notification_email },
-        { name: 'Created at', get: (pax) => pax.created_at },
-        { name: 'Updated at', get: (pax) => pax.updated_at },
-        { name: 'Participant type', get: (pax) => (pax.participant_type ? `${pax.participant_type} (${pax.participant_order})` : '') },
-        { name: 'Board comment', get: (pax) => pax.board_comment }
-      ],
       isLoading: false,
       isSaving: false
     }
@@ -255,7 +218,7 @@ export default {
 
       const lowercaseQuery = this.query.toLowerCase()
 
-      return filterCancelled.filter(app => ['first_name', 'last_name', 'notification_email'].some(field => app[field].toLowerCase().includes(lowercaseQuery)))
+      return filterCancelled.filter(app => ['first_name', 'last_name'].some(field => app[field].toLowerCase().includes(lowercaseQuery)))
     },
     canEditSelectedBody () {
       return this.can.set_board_comment_and_participant_type.global
@@ -380,13 +343,6 @@ export default {
         .filter(key => this.can.see_boardview[key])
         .map(id => Number(id))
       this.selectedBody = this.myBoards.length > 0 ? this.myBoards[0] : null
-
-      for (const index in this.event.questions) {
-        this.fields.push({
-          name: this.event.questions[index].description,
-          get: pax => pax.answers[index]
-        })
-      }
 
       if (this.can.see_boardview.global) {
         // Fetching all bodies
