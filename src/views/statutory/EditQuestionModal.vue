@@ -26,7 +26,7 @@
       </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-primary" @click="saveQuestion()">Save changes</button>
+      <button class="button is-primary" :disabled="isLoading" @click="saveQuestion()">Save changes</button>
       <button class="button" @click="$parent.close()">Cancel</button>
     </footer>
   </div>
