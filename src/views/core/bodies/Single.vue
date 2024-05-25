@@ -195,19 +195,23 @@
                 </tr>
                 <tr>
                   <th>President</th>
-                  <td>{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
+                  <td v-if="board.president_user">{{ board.president_user.first_name }} {{ board.president_user.last_name }}</td>
+                  <td v-else>-</td>
                 </tr>
                 <tr>
                   <th>Secretary</th>
-                  <td>{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
+                  <td v-if="board.secretary_user">{{ board.secretary_user.first_name }} {{ board.secretary_user.last_name }}</td>
+                  <td v-else>-</td>
                 </tr>
                 <tr>
                   <th>Treasurer</th>
-                  <td>{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                  <td v-if="board.treasurer_user">{{ board.treasurer_user.first_name }} {{ board.treasurer_user.last_name }}</td>
+                  <td v-else>-</td>
                 </tr>
                 <tr v-for="position in board.other_members" v-bind:key="position.index">
                   <th>{{ position.function }}</th>
-                  <td>{{ position.user.first_name }} {{ position.user.last_name }}</td>
+                  <td v-if="position.user">{{ position.user.first_name }} {{ position.user.last_name }}</td>
+                  <td v-else>-</td>
                 </tr>
               </tbody>
             </table>
