@@ -1,10 +1,10 @@
 <template>
-	<div class="tile is-ancestor contact">
-		<div class="tile is-parent is-vertical">
-			<div class="tile is-child">
-				<div class="title">Get in contact with a European Body</div>
+  <div class="tile is-ancestor contact">
+    <div class="tile is-parent is-vertical">
+      <div class="tile is-child">
+        <div class="title">Get in contact with a European Body</div>
 
-				<b-table :data="bodies" :loading="isLoading" narrowed>
+        <b-table :data="bodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
 
             <b-table-column field="name" label="Body name">
@@ -15,10 +15,9 @@
               {{ props.row.email }}
             </b-table-column>
 
-						<b-table-column field="members" label="Members">
-							{{ props.row.members }}
-						</b-table-column>
-
+            <b-table-column field="members" label="Members">
+              {{ props.row.members }}
+            </b-table-column>
 
           </template>
 
@@ -27,12 +26,10 @@
           </template>
         </b-table>
 
-
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </template>
-  
 
 <script>
 import { mapGetters } from 'vuex'
@@ -47,13 +44,13 @@ export default {
       isLoading: false
     }
   },
-	computed: mapGetters(['services']),
+  computed: mapGetters(['services']),
   mounted () {
     this.isLoading = true
     this.fetchData()
   },
   methods: {
-    async fetchData() {
+    async fetchData () {
       // TODO: Ask CD what types of bodies they want to have in the address book
       try {
         const response = await this.axios.get(this.services['core'] + '/bodies')
@@ -63,7 +60,7 @@ export default {
         // Fetch members for each body
         const bodiesWithMembers = await Promise.all(bodies.map(async (body) => {
           const membersResponse = await this.axios.get(this.services['core'] + '/bodies/' + body.id + '/members')
-          const members = membersResponse.data.data.map((member) => member.user.first_name + " " + member.user.last_name)
+          const members = membersResponse.data.data.map((member) => member.user.first_name + ' ' + member.user.last_name)
           body.members = members.join(', ')
           return body
         }))
