@@ -444,17 +444,6 @@ export default {
         this.$root.showError('Some error happened', err)
       })
 
-      this.axios.get(this.services['statutory'] + '/members/' + this.$route.params.id).then((response) => {
-        this.body.members = response.data.data
-      }).catch((err) => {
-        this.isLoading = false
-        this.body.members = null
-
-        if (err.response && err.response.status !== 404) {
-          this.$root.showError('Could not fetch memberslist', err)
-        }
-      })
-
       if (this.loginUser) {
         this.isMember = this.loginUser.bodies.some(body => body.id === this.body.id)
         this.isRequestingMembership = this.loginUser.join_requests.some(request => request.body_id === this.body.id)
