@@ -91,6 +91,15 @@
               <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
+            <b-table-column field="comment" label="Comment">
+
+            </b-table-column>
+            <b-table-column>
+              <b-button @click="openAntennaCriteriaModal(props.row)" class="button is-warning">
+                <span class="white"><font-awesome-icon :icon="['fa', 'pencil-alt']"/></span>
+              </b-button>
+            </b-table-column>
+
           </template>
 
           <template slot="empty">
@@ -105,6 +114,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import AntennaCriteriaModal from './AntennaCriteriaModal.vue'
 
 export default {
   name: 'AntennaCriteriaCheck',
@@ -129,6 +139,19 @@ export default {
     }
   },
   methods: {
+    openAntennaCriteriaModal (row) {
+      this.$buefy.modal.open({
+        component: AntennaCriteriaModal,
+        hasModaLCard: true,
+        props: {
+          local: row,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     toggleShowDetails () {
       this.showDetails = !this.showDetails
     },
