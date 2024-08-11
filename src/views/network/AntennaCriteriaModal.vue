@@ -35,7 +35,14 @@ export default {
   data () {
     return {
       antennaCriteria: {
-        communication: null
+        communication: null,
+        boardElection: null,
+        membersList: null,
+        membershipFee: null,
+        events: null,
+        agoraAttendance: null,
+        developmentPlan: null,
+        fulfilmentReport: null
       },
       permissions: [],
       can: {
@@ -50,7 +57,9 @@ export default {
       this.isLoading = true
       const promises = []
       for (const criterion in this.antennaCriteria) {
-        promises.push(this.setAntennaCriterionFulfilment(criterion))
+        if (criterion === 'communication' && this.antennaCriteria[criterion] != this.local.communication) {
+          promises.push(this.setAntennaCriterionFulfilment(criterion))
+        }
       }
 
       await Promise.all(promises)
@@ -60,17 +69,16 @@ export default {
     },
     setAntennaCriterionFulfilment (criterion) {
       console.log(criterion, this.antennaCriteria[criterion])
-      console.log(this.agora.id)
 
       const data = {
         "agora_id": this.agora.id,
         "body_id": this.local.id,
         "antenna_criterion": criterion,
-        "value": this.antennaCriteria[criterion]
+        "value": this.antennaCriteria[criterion] === 'null' ? null : this.antennaCriteria[criterion]
       }
 
-      this.axios.post(
-        this.services['network'] + '/antennaCriteria/' + this.agora.id,
+      this.axios.put(
+        this.services['network'] + '/antennaCriteria',
         data
       )
     }
@@ -81,6 +89,9 @@ export default {
       this.permissions = permissionResponse.data.data
       this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
     })
+
+    // Set the current fulfilment
+    this.antennaCriteria.communication = this.local.communication
 
     this.isLoading = false
   }

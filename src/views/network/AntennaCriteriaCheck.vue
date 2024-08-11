@@ -36,8 +36,9 @@
             </b-table-column>
 
             <b-table-column field="communication" label="Communication (C)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.communication && props.row.type !== 'contact antenna'">Yes</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.communication && props.row.type !== 'contact antenna'">No</b-tag>
+              <b-tag type="is-light" size="is-medium" v-if="!props.row.communication && props.row.type !== 'contact antenna'">Empty</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.communication === 'true' && props.row.type !== 'contact antenna'">Yes</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="props.row.communication === 'false' && props.row.type !== 'contact antenna'">No</b-tag>
               <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact antenna'">Else</b-tag>
             </b-table-column>
 
@@ -194,7 +195,7 @@ export default {
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
-              this.bodies[body].communication
+              this.bodies[body].communication === 'true'
               && this.bodies[body].check_events
               && this.bodies[body].check_elections_last_year
               && this.bodies[body].submitted_members_list
@@ -207,7 +208,7 @@ export default {
           }
           if (this.bodies[body].type === 'contact') {
             this.bodies[body].status = (
-              this.bodies[body].communication
+              this.bodies[body].communication === 'true'
             )
           }
         }
@@ -271,10 +272,9 @@ export default {
       await this.axios.get(this.services['network'] + '/antennaCriteria/' + this.selectedAgora.id).then((antennaCriteriaResponse) => {
         const antennaCriteriaFulfilment = antennaCriteriaResponse.data.data
         for (const criterion of antennaCriteriaFulfilment) {
-          console.log(criterion)
+          // console.log(criterion)
           const body = this.bodies.find(x => x.id === criterion.body_id)
-          // TODO: Make this general for all criterion
-          body.communication = criterion.value
+          body[criterion.antenna_criterion] = criterion.value
         }
       }).catch((err) => {
         this.isLoading = false
