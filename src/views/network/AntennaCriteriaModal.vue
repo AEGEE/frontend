@@ -112,6 +112,7 @@ export default {
 
     // Set the current fulfilment
     this.antennaCriteria.communication = this.local.communication
+    this.comments.communication = this.local.comments.communication
 
     this.isLoading = false
   }

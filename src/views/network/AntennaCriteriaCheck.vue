@@ -292,7 +292,9 @@ export default {
         for (const criterion of antennaCriteriaFulfilment) {
           // console.log(criterion)
           const body = this.bodies.find(x => x.id === criterion.body_id)
+          body.comments = body.comments || {}
           body[criterion.antenna_criterion] = criterion.value
+          body.comments[criterion.antenna_criterion] = criterion.comment
         }
       }).catch((err) => {
         this.isLoading = false
