@@ -14,7 +14,16 @@
               <option value=null>Not set</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
+              <!-- TODO: Make sure that only the ND has this option, and not NetCom -->
+              <option value="exception">Exception</option> 
             </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.communication" />
           </div>
         </div>
       <!-- </template> -->
@@ -43,6 +52,16 @@ export default {
         agoraAttendance: null,
         developmentPlan: null,
         fulfilmentReport: null
+      },
+      comments: {
+        communication: '',
+        boardElection: '',
+        membersList: '',
+        membershipFee: '',
+        events: '',
+        agoraAttendance: '',
+        developmentPlan: '',
+        fulfilmentReport: ''
       },
       permissions: [],
       can: {
@@ -74,7 +93,8 @@ export default {
         "agora_id": this.agora.id,
         "body_id": this.local.id,
         "antenna_criterion": criterion,
-        "value": this.antennaCriteria[criterion] === 'null' ? null : this.antennaCriteria[criterion]
+        "value": this.antennaCriteria[criterion] === 'null' ? null : this.antennaCriteria[criterion],
+        "comment": this.comments[criterion]
       }
 
       this.axios.put(

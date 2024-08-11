@@ -37,6 +37,7 @@
 
             <b-table-column field="communication" label="Communication (C)">
               <b-tag type="is-light" size="is-medium" v-if="!props.row.communication && props.row.type !== 'contact antenna'">Empty</b-tag>
+              <b-tag type="is-link" size="is-medium" v-if="props.row.communication === 'exception' && props.row.type !== 'contact antenna'">Exception</b-tag>
               <b-tag type="is-success" size="is-medium" v-if="props.row.communication === 'true' && props.row.type !== 'contact antenna'">Yes</b-tag>
               <b-tag type="is-danger" size="is-medium" v-if="props.row.communication === 'false' && props.row.type !== 'contact antenna'">No</b-tag>
               <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact antenna'">Else</b-tag>
@@ -94,8 +95,10 @@
               <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
-            <b-table-column field="comment" label="Comment">
-
+            <b-table-column>
+              <b-button @click="openAntennaCriteriaInfo(props.row)" class="button is-link">
+                <span class="white"><font-awesome-icon :icon="['fa', 'eye']"/></span>
+              </b-button>
             </b-table-column>
 
             <b-table-column>
@@ -119,6 +122,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import AntennaCriteriaModal from './AntennaCriteriaModal.vue'
+import AntennaCriteriaInfo from './AntennaCriteriaInfo.vue'
 
 export default {
   name: 'AntennaCriteriaCheck',
@@ -147,6 +151,20 @@ export default {
       this.$buefy.modal.open({
         component: AntennaCriteriaModal,
         hasModaLCard: true,
+        props: {
+          local: row,
+          agora: this.selectedAgora,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
+    openAntennaCriteriaInfo (row) {
+      this.$buefy.modal.open({
+        component: AntennaCriteriaInfo,
+        hasModalCard: true,
         props: {
           local: row,
           agora: this.selectedAgora,
@@ -195,7 +213,7 @@ export default {
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
-              this.bodies[body].communication === 'true'
+              (this.bodies[body].communication === 'true' || this.bodies[body].communication === 'exception')
               && this.bodies[body].check_events
               && this.bodies[body].check_elections_last_year
               && this.bodies[body].submitted_members_list
@@ -208,7 +226,7 @@ export default {
           }
           if (this.bodies[body].type === 'contact') {
             this.bodies[body].status = (
-              this.bodies[body].communication === 'true'
+              this.bodies[body].communication === 'true' || this.bodies[body].communication === 'exception'
             )
           }
         }
