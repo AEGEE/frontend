@@ -36,7 +36,9 @@
             </b-table-column>
 
             <b-table-column field="communication" label="Communication (C)">
-              <b-tag type="is-light" size="is-medium">Empty</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.communication && props.row.type !== 'contact antenna'">Yes</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.communication && props.row.type !== 'contact antenna'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="boardElection" label="Board election (BE)">
@@ -86,7 +88,7 @@
               <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
-            <b-table-column field="fulfillment" label="Fulfillment report (FR)">
+            <b-table-column field="fulfilment" label="Fulfilment report (FR)">
               <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
               <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
@@ -94,6 +96,7 @@
             <b-table-column field="comment" label="Comment">
 
             </b-table-column>
+
             <b-table-column>
               <b-button @click="openAntennaCriteriaModal(props.row)" class="button is-warning">
                 <span class="white"><font-awesome-icon :icon="['fa', 'pencil-alt']"/></span>
@@ -145,6 +148,7 @@ export default {
         hasModaLCard: true,
         props: {
           local: row,
+          agora: this.selectedAgora,
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
@@ -182,6 +186,7 @@ export default {
         promises.push(this.checkBoardCriterium())
         promises.push(this.checkMembersList())
         promises.push(this.checkEventsCriterium())
+        promises.push(this.getAntennaCriteriaFulfilment())
 
         await Promise.all(promises)
 
@@ -189,16 +194,21 @@ export default {
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
-              this.bodies[body].check_events
+              this.bodies[body].communication
+              && this.bodies[body].check_events
               && this.bodies[body].check_elections_last_year
               && this.bodies[body].submitted_members_list
             )
           }
           if (this.bodies[body].type === 'contact antenna') {
-            this.bodies[body].status = this.bodies[body].submitted_members_list
+            this.bodies[body].status = (
+              this.bodies[body].submitted_members_list
+            )
           }
           if (this.bodies[body].type === 'contact') {
-            this.bodies[body].status = true
+            this.bodies[body].status = (
+              this.bodies[body].communication
+            )
           }
         }
 
@@ -255,6 +265,20 @@ export default {
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch members list data', err)
+      })
+    },
+    async getAntennaCriteriaFulfilment () {
+      await this.axios.get(this.services['network'] + '/antennaCriteria/' + this.selectedAgora.id).then((antennaCriteriaResponse) => {
+        const antennaCriteriaFulfilment = antennaCriteriaResponse.data.data
+        for (const criterion of antennaCriteriaFulfilment) {
+          console.log(criterion)
+          const body = this.bodies.find(x => x.id === criterion.body_id)
+          // TODO: Make this general for all criterion
+          body.communication = criterion.value
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch Antenna Criteria fulfilment', err)
       })
     }
   },
