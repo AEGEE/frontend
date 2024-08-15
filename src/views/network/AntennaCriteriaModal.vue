@@ -16,7 +16,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.communication" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.communication" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -35,7 +35,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.boardElection" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.boardElection" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -54,7 +54,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.membersList" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.membersList" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -68,7 +68,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.membershipFee" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.membershipFee" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -87,7 +87,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.events" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.events" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -101,7 +101,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.agoraAttendance" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.agoraAttendance" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -115,7 +115,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.developmentPlan" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.developmentPlan" placeholder="Comment" expanded />
         </b-field>
       </template>
 
@@ -129,7 +129,7 @@
             <option value="exception">Exception</option>
           </b-select>
 
-          <b-input v-model="comments.fulfilmentReport" placeholder="Comment" expanded></b-input>
+          <b-input v-model="comments.fulfilmentReport" placeholder="Comment" expanded />
         </b-field>
       </template>
     </section>
