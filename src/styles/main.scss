@@ -80,8 +80,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* for MapBox popups */
 .mapbox-popup-custom {
-	width: 80px;
+	max-width: 500px;
+	max-height: 280px;
+	overflow-y: auto;
 	font-size: medium;
+	
+	@include mobile {
+		max-width: 250px;
+	}
 }
 
 .bold {
@@ -341,4 +347,20 @@ h1, h2, h3, h4, h5, h6 {
 	  opacity: 1;
 	  transition: opacity .15s;
 	}
+}
+
+// Responsive fixes.
+@include mobile {
+  .app-main > .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .card  {
+    margin-bottom: 2em;
+  }
+  
+  .box  {
+    border-radius: 0;
+  }
 }

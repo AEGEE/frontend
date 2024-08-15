@@ -1,3 +1,122 @@
+# [1.36.0](https://github.com/AEGEE/frontend/compare/1.35.19...1.36.0) (2024-07-23)
+
+
+### Features
+
+* **resources:** remove the board submission form ([#2199](https://github.com/AEGEE/frontend/issues/2199)) ([9b8d71a](https://github.com/AEGEE/frontend/commit/9b8d71acc6567baa7fc247b08fd0f14ce8d933c3))
+
+## [1.35.19](https://github.com/AEGEE/frontend/compare/1.35.18...1.35.19) (2024-05-24)
+
+
+### Bug Fixes
+
+* **sidebar:** update kollaboratio link. Fixes HELP-2510 ([#2171](https://github.com/AEGEE/frontend/issues/2171)) ([14a1119](https://github.com/AEGEE/frontend/commit/14a11199c270cf30690f93bcf2ab149365455fff))
+
+## [1.35.18](https://github.com/AEGEE/frontend/compare/1.35.17...1.35.18) (2024-05-06)
+
+
+### Bug Fixes
+
+* **resources:** add SPC form to resources ([#2150](https://github.com/AEGEE/frontend/issues/2150)) ([aee8031](https://github.com/AEGEE/frontend/commit/aee8031ebc2a8c6f14963d5627ca9d74bb918002))
+
+## [1.35.17](https://github.com/AEGEE/frontend/compare/1.35.16...1.35.17) (2024-05-03)
+
+
+### Bug Fixes
+
+* **resources:** update request a trainer link. Fixes HELP-2499 ([#2142](https://github.com/AEGEE/frontend/issues/2142)) ([74c8a2d](https://github.com/AEGEE/frontend/commit/74c8a2dc7382a199f3ff9dba0fd8f9a9e51beec0))
+
+## [1.35.16](https://github.com/AEGEE/frontend/compare/1.35.15...1.35.16) (2024-04-26)
+
+
+### Bug Fixes
+
+* **statutory:** disable submit button when loading ([#2135](https://github.com/AEGEE/frontend/issues/2135)) ([5b7a988](https://github.com/AEGEE/frontend/commit/5b7a988a1ce63192855e4b7a79f21372eb9a4964))
+
+## [1.35.15](https://github.com/AEGEE/frontend/compare/1.35.14...1.35.15) (2024-04-19)
+
+
+### Bug Fixes
+
+* **statutory:** add question line explanation for Spring Agora 2024 ([#2134](https://github.com/AEGEE/frontend/issues/2134)) ([2050191](https://github.com/AEGEE/frontend/commit/2050191b54a153ffcc82f2326ec13f1cadc8b025))
+
+## [1.35.14](https://github.com/AEGEE/frontend/compare/1.35.13...1.35.14) (2024-04-10)
+
+
+### Bug Fixes
+
+* **core:** only filter on body type when logged in ([#2113](https://github.com/AEGEE/frontend/issues/2113)) ([0e1b737](https://github.com/AEGEE/frontend/commit/0e1b737adf79c88f46f602c9943c898c3008fbbb))
+
+## [1.35.13](https://github.com/AEGEE/frontend/compare/1.35.12...1.35.13) (2024-04-03)
+
+
+### Bug Fixes
+
+* **statutory:** mention filter on statutory ID ([#2102](https://github.com/AEGEE/frontend/issues/2102)) ([0d9e83c](https://github.com/AEGEE/frontend/commit/0d9e83ca6f7309427ad74491c36d76e029c6d0fa))
+
+## [1.35.12](https://github.com/AEGEE/frontend/compare/1.35.11...1.35.12) (2024-03-09)
+
+
+### Bug Fixes
+
+* **statutory:** add information on how to withdraw your application ([#2069](https://github.com/AEGEE/frontend/issues/2069)) ([152d14e](https://github.com/AEGEE/frontend/commit/152d14e80f3018aa05b70fbbb697c6b4b7bf9394))
+
+## [1.35.11](https://github.com/AEGEE/frontend/compare/1.35.10...1.35.11) (2024-03-09)
+
+
+### Bug Fixes
+
+* increase the mapbox popup width ([#2077](https://github.com/AEGEE/frontend/issues/2077)) ([b1b9d44](https://github.com/AEGEE/frontend/commit/b1b9d44f6934f235e8fa53996b9c47a8a7677410))
+
+## [1.35.10](https://github.com/AEGEE/frontend/compare/1.35.9...1.35.10) (2024-03-09)
+
+
+### Bug Fixes
+
+* **calendar:** remove not nice border around calendar events ([#2068](https://github.com/AEGEE/frontend/issues/2068)) ([18bbadd](https://github.com/AEGEE/frontend/commit/18bbadd69a6758a32d214958891ad164f1188f2b))
+
+## [1.35.9](https://github.com/AEGEE/frontend/compare/1.35.8...1.35.9) (2024-03-09)
+
+
+### Bug Fixes
+
+* use notification_email in event modules ([#2057](https://github.com/AEGEE/frontend/issues/2057)) ([e4e788c](https://github.com/AEGEE/frontend/commit/e4e788c1c44dc8e79be68f3f534286d2088fde45))
+
+## [1.35.8](https://github.com/AEGEE/frontend/compare/1.35.7...1.35.8) (2024-02-20)
+
+
+### Bug Fixes
+
+* removed unnecessary paddings in the mobile breakpoint ([#2049](https://github.com/AEGEE/frontend/issues/2049)) ([79011d3](https://github.com/AEGEE/frontend/commit/79011d31bb9c279c5f231f8c7fe69a5277085946))
+
+## [1.35.7](https://github.com/AEGEE/frontend/compare/1.35.6...1.35.7) (2024-02-20)
+
+
+### Bug Fixes
+
+* **statutory:** add special permissions for memberslist views ([#2058](https://github.com/AEGEE/frontend/issues/2058)) ([ce84a7e](https://github.com/AEGEE/frontend/commit/ce84a7eb4a1dac717c00e1844c14b69e7115a61b))
+
+## [1.35.6](https://github.com/AEGEE/frontend/compare/1.35.5...1.35.6) (2024-02-09)
+
+
+### Bug Fixes
+
+* **su:** add new theme categories ([#2047](https://github.com/AEGEE/frontend/issues/2047)) ([3c3ea8c](https://github.com/AEGEE/frontend/commit/3c3ea8c5423a119e95fcc79e8cd6d122801c3128))
+
+## [1.35.5](https://github.com/AEGEE/frontend/compare/1.35.4...1.35.5) (2024-02-06)
+
+
+### Bug Fixes
+
+* **statutory:** add warning when fee is 0 ([#2045](https://github.com/AEGEE/frontend/issues/2045)) ([cb2d868](https://github.com/AEGEE/frontend/commit/cb2d8681c5dbff943bc332fbb51af4b8e386671e))
+
+## [1.35.4](https://github.com/AEGEE/frontend/compare/1.35.3...1.35.4) (2024-02-04)
+
+
+### Bug Fixes
+
+* **su:** update booklet link ([#2043](https://github.com/AEGEE/frontend/issues/2043)) ([daa8dc1](https://github.com/AEGEE/frontend/commit/daa8dc1e441f890bbbe75310262cee11a5710b80))
+
 ## [1.35.3](https://github.com/AEGEE/frontend/compare/1.35.2...1.35.3) (2024-01-24)
 
 

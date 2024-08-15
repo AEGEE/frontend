@@ -108,9 +108,15 @@ export default {
             color: '#FFDB4C'
           },
           {
-            url: 'https://aegee-academy.eu/request-a-training/',
+            url: 'https://forms.gle/DhfVStza9xhn1jRT6',
             title: 'AEGEE-Academy',
             description: 'Request a trainer for your training events',
+            color: '#FFDB4C'
+          },
+          {
+            url: 'https://forms.gle/EcaDkdyQfSb65Jdh8',
+            title: 'Safe Person Committee',
+            description: 'Request a Safe Person or workshop for your event',
             color: '#FFDB4C'
           },
           {
@@ -133,12 +139,6 @@ export default {
           }
         ],
         'Network': [
-          {
-            url: 'https://docs.google.com/forms/d/e/1FAIpQLSfheOjWEQjqua1UqaqYofuqlrBV2bQK_m8OOypeqq6fnfgQLQ/viewform',
-            title: 'Board Submission Form',
-            description: 'Submitting new board to NetCom',
-            color: '#C2DE5D'
-          },
           {
             url: 'https://docs.google.com/forms/d/e/1FAIpQLSd2u-r1jFGyNwYCwsSnMf9-dApH7ZGeGltZusxqWqkB_VQ0zg/viewform',
             title: 'AEGEE Contact in your City',

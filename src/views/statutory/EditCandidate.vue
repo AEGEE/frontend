@@ -1,6 +1,9 @@
 <template>
   <div class="tile is-ancestor ">
     <div class="tile is-child">
+      <span class="notification is-info" v-if="$route.params.candidate_id">
+        To withdraw your candidature, you should send an email to the <a href="mailto:juridical@aegee.eu">Juridical Commission</a>.
+      </span>
       <form @submit.prevent="saveCandidate()">
         <div class="field">
           <label class="label">Body <span class="has-text-danger">*</span></label>
@@ -49,30 +52,6 @@
               You can upload candidature image after saving it.
             </div>
           </div>
-        </div>
-
-        <div class="field">
-          <label class="label">First name</label>
-          <div class="control">
-            <input class="input" type="text" required v-model="candidate.first_name" />
-          </div>
-          <p class="help is-danger" v-if="errors.first_name">{{ errors.first_name.join(', ') }}</p>
-        </div>
-
-        <div class="field">
-          <label class="label">Last name</label>
-          <div class="control">
-            <input class="input" type="text" required v-model="candidate.last_name" />
-          </div>
-          <p class="help is-danger" v-if="errors.last_name">{{ errors.last_name.join(', ') }}</p>
-        </div>
-
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control">
-            <input class="input" type="email" required v-model="candidate.email" />
-          </div>
-          <p class="help is-danger" v-if="errors.email">{{ errors.email.join(', ') }}</p>
         </div>
 
         <div class="field">
@@ -378,7 +357,6 @@ export default {
       // Prefilling values
       this.candidate.first_name = this.loginUser.first_name
       this.candidate.last_name = this.loginUser.last_name
-      this.candidate.email = this.loginUser.email
       this.candidate.date_of_birth = moment(this.loginUser.date_of_birth).format('YYYY-MM-DD')
       this.candidate.member_since = moment(this.loginUser.created_at).format('YYYY-MM-DD')
 
