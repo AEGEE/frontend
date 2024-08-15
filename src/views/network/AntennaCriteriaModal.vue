@@ -7,171 +7,130 @@
 
     <section class="modal-card-body">
       <template v-if="can.setCommunication">
-        <div class="field">
-          <label class="label">Communication (C)</label>
-          <div class="select">
-            <select v-model="antennaCriteria.communication">
-              <option value=null>Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option v-if="can.giveExceptionCommunication" value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field label="Communication (C)" />
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.communication">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.communication" />
-          </div>
-        </div>
+          <b-input v-model="comments.communication" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.setBoardElection">
-        <div class="field">
-          <label class="label">Board election (BE) <tooltip text="This is an automatic field" /></label>
-          <div class="select">
-            <select v-model="antennaCriteria.boardElection">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field>
+          <template #label>
+            Board Election (BE)
+            <tooltip text="This is an automatic field" />
+          </template>
+        </b-field>
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.boardElection">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.boardElection" />
-          </div>
-        </div>
+          <b-input v-model="comments.boardElection" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.setMembersList">
-        <div class="field">
-          <label class="label">Members list (ML) <tooltip text="This is an automatic field" /></label>
-          <div class="select">
-            <select v-model="antennaCriteria.membersList">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field>
+          <template #label>
+            Members list (ML)
+            <tooltip text="This is an automatic field" />
+          </template>
+        </b-field>
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.membersList">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.membersList" />
-          </div>
-        </div>
+          <b-input v-model="comments.membersList" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.setMembershipFeePayement">
-        <div class="field">
-          <label class="label">Membership fee (F)</label>
-          <div class="select">
-            <select v-model="antennaCriteria.membershipFee">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field label="Membership fee (F)" />
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.membershipFee">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.membershipFee" />
-          </div>
-        </div>
+          <b-input v-model="comments.membershipFee" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.setEvents">
-        <div class="field">
-          <label class="label">Events (E) <tooltip text="This is an automatic field" /></label>
-          <div class="select">
-            <select v-model="antennaCriteria.events">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field>
+          <template #label>
+            Events (E)
+            <tooltip text="This is an automatic field" />
+          </template>
+        </b-field>
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.events">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.events" />
-          </div>
-        </div>
+          <b-input v-model="comments.events" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.setAgoraAttendance">
-        <div class="field">
-          <label class="label">Agora attendance (AA)</label>
-          <div class="select">
-            <select v-model="antennaCriteria.agoraAttendance">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field label="Agora attendance (AA)" />
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.agoraAttendance">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.agoraAttendance" />
-          </div>
-        </div>
+          <b-input v-model="comments.agoraAttendance" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.approveDevelopmentPlan">
-        <div class="field">
-          <label class="label">Development plan (DP)</label>
-          <div class="select">
-            <select v-model="antennaCriteria.developmentPlan">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field label="Development plan (DP)" />
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.developmentPlan">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.developmentPlan" />
-          </div>
-        </div>
+          <b-input v-model="comments.developmentPlan" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
 
       <template v-if="can.approveFulfilmentReport">
-        <div class="field">
-          <label class="label">Fulfilment report (FR)</label>
-          <div class="select">
-            <select v-model="antennaCriteria.fulfilmentReport">
-              <option value="null">Not set</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-              <option value="exception">Exception</option>
-            </select>
-          </div>
-        </div>
+        <b-field label="Fulfilment report (FR)" />
+        <b-field grouped>
+          <b-select v-model="antennaCriteria.fulfilmentReport">
+            <option value="null">Not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            <option value="exception">Exception</option>
+          </b-select>
 
-        <div class="field">
-          <label class="label">Comment</label>
-          <div class="control">
-            <b-input type="textarea" v-model="comments.fulfilmentReport" />
-          </div>
-        </div>
+          <b-input v-model="comments.fulfilmentReport" placeholder="Comment" expanded></b-input>
+        </b-field>
       </template>
     </section>
 
@@ -216,7 +175,7 @@ export default {
         setMembersList: false,
         setMembershipFeePayement: false,
         setEvents: false,
-        setAgoraAttendace: false,
+        setAgoraAttendance: false,
         approveDevelopmentPlan: false,
         approveFulfilmentReport: false
       },
@@ -233,12 +192,14 @@ export default {
         }
       }
 
-      await Promise.all(promises)
-
-      // TODO: Show error / success
-
-      this.isLoading = false
-      // TODO: Close the modal
+      await Promise.all(promises).then(() => {
+        this.isLoading = false
+        this.showSuccess('Antenna Criteria fulfilment updated.')
+        this.router.go(0)
+      }).catch((err) => {
+        this.isLoading = false
+        this.showError('Something went wrong', err)
+      })
     },
     setAntennaCriterionFulfilment (criterion) {
       // Convert camelCase to seperate, lower-case words
@@ -256,7 +217,9 @@ export default {
       this.axios.put(
         this.services['network'] + '/antennaCriteria',
         data
-      )
+      ).catch((err) => {
+        this.$root.showError('Error saving Antenna Criteria', err)
+      })
     }
   },
   mounted () {
