@@ -13,7 +13,7 @@
             <option value="null">Not set</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
-            <option value="exception">Exception</option>
+            <option v-if="can.giveExceptionCommunication" value="exception">Exception</option>
           </b-select>
 
           <b-input v-model="comments.communication" placeholder="Comment" expanded />
