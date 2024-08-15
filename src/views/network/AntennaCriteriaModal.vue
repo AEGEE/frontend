@@ -28,7 +28,32 @@
         </div>
       <!-- </template> -->
 
-      <!-- TODO: Add the other Antenna Criteria here -->
+      <!-- TODO: Board election -->
+
+      <!-- TODO: Members list -->
+
+      <!-- <template v-if="can.setMembershipFeePayement"> -->
+        <div class="field">
+          <label class="label">Membership fee (F)</label>
+          <div class="select">
+            <select v-model="antennaCriteria.membershipFee">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <option value="exception">Exception</option> 
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.membershipFee" />
+          </div>
+        </div>
+      <!-- </template> -->
+
+      <!-- TODO: Events -->
 
       <!-- <template v-if="can.setAgoraAttendance"> -->
         <div class="field">
@@ -93,7 +118,6 @@
           </div>
         </div>
       <!-- </template> -->
-
     </section>
 
     <footer class="modal-card-foot">
@@ -179,6 +203,7 @@ export default {
       this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
       // this.can.approveDevelopmentPlan = "is ND"
       // this.can.approveFulfilmentReport = "is ND"
+      // this.can. setMembershipFeePayement = "is FD or financial assistant"
     })
 
     // Set the current fulfilment and comments

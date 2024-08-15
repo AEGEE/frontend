@@ -44,16 +44,16 @@
             </b-table-column>
 
             <b-table-column field="boardElection" label="Board election (BE)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElections && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElections && showDetails">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElection && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElection && showDetails">
                 {{ props.row.latest_election }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && !showDetails && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && showDetails && props.row.latest_election && props.row.type === 'antenna'">
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElection && !showDetails && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElection && showDetails && props.row.latest_election && props.row.type === 'antenna'">
                 {{ props.row.latest_election }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && showDetails && !props.row.latest_election && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && props.row.type !== 'antenna'">Else</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElection && showDetails && !props.row.latest_election && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.antennaCriteria.boardElection && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)">
@@ -63,8 +63,15 @@
             </b-table-column>
 
             <b-table-column field="membershipFee" label="Membership fee (F)">
-              <b-tag type="is-light" size="is-medium" v-if="props.row.type !== 'contact'">Empty</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact'">Else</b-tag>
+              <template v-if="!props.row.antennaCriteria.membershipFee">
+                <b-tag type="is-light" size="is-medium" v-if="props.row.type !== 'contact'">Empty</b-tag>
+                <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact'">Else</b-tag>
+              </template>
+              <template v-else>
+                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.membershipFee === 'true'">Yes</b-tag>
+                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.membershipFee === 'false'">No</b-tag>
+                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.membershipFee === 'exception'">Exception</b-tag>
+              </template>
             </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
@@ -236,19 +243,24 @@ export default {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
               (this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception')
-              && this.bodies[body].antennaCriteria.events
-              && this.bodies[body].antennaCriteria.boardElections
-              && this.bodies[body].antennaCriteria.membersList
+              && (this.bodies[body].antennaCriteria.boardElection === 'true' || this.bodies[body].antennaCriteria.boardElection === 'exception')
+              && (this.bodies[body].antennaCriteria.membersList === 'true' || this.bodies[body].antennaCriteria.membersList === 'exception')
+              && (this.bodies[body].antennaCriteria.membershipFee === 'true' || this.bodies[body].antennaCriteria.membershipFee === 'exception')
+              && (this.bodies[body].antennaCriteria.events === 'true' || this.bodies[body].antennaCriteria.events === 'exception')
+              && (this.bodies[body].antennaCriteria.agoraAttendance === 'true' || this.bodies[body].antennaCriteria.agoraAttendance === 'exception')
+              && (this.bodies[body].antennaCriteria.developmentPlan === 'true' || this.bodies[body].antennaCriteria.developmentPlan === 'exception')
+              && (this.bodies[body].antennaCriteria.fulfilmentReport === 'true' || this.bodies[body].antennaCriteria.fulfilmentReport === 'exception')
             )
           }
           if (this.bodies[body].type === 'contact antenna') {
             this.bodies[body].status = (
-              this.bodies[body].antennaCriteria.membersList
+              (this.bodies[body].antennaCriteria.membersList === 'true' || this.bodies[body].antennaCriteria.membersList === 'exception')
+              && (this.bodies[body].antennaCriteria.membershipFee === 'true' || this.bodies[body].antennaCriteria.membershipFee === 'exception')
             )
           }
           if (this.bodies[body].type === 'contact') {
             this.bodies[body].status = (
-              this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception'
+              (this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception')
             )
           }
         }
@@ -290,7 +302,7 @@ export default {
 
         for (const body in this.bodies) {
           // Check if the current board was elected within the past year
-          this.bodies[body].antennaCriteria.boardElections = this.bodies[body].latest_election !== undefined && moment(this.bodies[body].latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1
+          this.bodies[body].antennaCriteria.boardElection = this.bodies[body].latest_election !== undefined && moment(this.bodies[body].latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1
           if (this.bodies[body].latest_election !== undefined) this.bodies[body].latest_election = moment(this.bodies[body].latest_election).format('D[/]M[/]YYYY')
         }
       }).catch((err) => {
