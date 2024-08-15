@@ -14,7 +14,7 @@
               <option value=null>Not set</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
-              <option v-if="can.giveExceptionCommunication" value="exception">Exception</option> 
+              <option v-if="can.giveExceptionCommunication" value="exception">Exception</option>
             </select>
           </div>
         </div>
@@ -27,9 +27,47 @@
         </div>
       </template>
 
-      <!-- TODO: Board election -->
+      <template v-if="can.setBoardElection">
+        <div class="field">
+          <label class="label">Board election (BE) <tooltip text="This is an automatic field" /></label>
+          <div class="select">
+            <select v-model="antennaCriteria.boardElection">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <option value="exception">Exception</option>
+            </select>
+          </div>
+        </div>
 
-      <!-- TODO: Members list -->
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.boardElection" />
+          </div>
+        </div>
+      </template>
+
+      <template v-if="can.setMembersList">
+        <div class="field">
+          <label class="label">Members list (ML) <tooltip text="This is an automatic field" /></label>
+          <div class="select">
+            <select v-model="antennaCriteria.membersList">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <option value="exception">Exception</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.membersList" />
+          </div>
+        </div>
+      </template>
 
       <template v-if="can.setMembershipFeePayement">
         <div class="field">
@@ -39,7 +77,7 @@
               <option value="null">Not set</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
-              <option value="exception">Exception</option> 
+              <option value="exception">Exception</option>
             </select>
           </div>
         </div>
@@ -52,7 +90,26 @@
         </div>
       </template>
 
-      <!-- TODO: Events -->
+      <template v-if="can.setEvents">
+        <div class="field">
+          <label class="label">Events (E) <tooltip text="This is an automatic field" /></label>
+          <div class="select">
+            <select v-model="antennaCriteria.events">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <option value="exception">Exception</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.events" />
+          </div>
+        </div>
+      </template>
 
       <template v-if="can.setAgoraAttendance">
         <div class="field">
@@ -62,7 +119,7 @@
               <option value="null">Not set</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
-              <option value="exception">Exception</option> 
+              <option value="exception">Exception</option>
             </select>
           </div>
         </div>
@@ -83,7 +140,7 @@
               <option value="null">Not set</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
-              <option value="exception">Exception</option> 
+              <option value="exception">Exception</option>
             </select>
           </div>
         </div>
@@ -104,7 +161,7 @@
               <option value="null">Not set</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
-              <option value="exception">Exception</option> 
+              <option value="exception">Exception</option>
             </select>
           </div>
         </div>
@@ -155,7 +212,10 @@ export default {
       can: {
         setCommunication: false,
         giveExceptionCommunication: false,
+        setBoardElection: false,
+        setMembersList: false,
         setMembershipFeePayement: false,
+        setEvents: false,
         setAgoraAttendace: false,
         approveDevelopmentPlan: false,
         approveFulfilmentReport: false
@@ -168,7 +228,7 @@ export default {
       this.isLoading = true
       const promises = []
       for (const criterion in this.antennaCriteria) {
-        if (this.antennaCriteria[criterion] != this.local.antennaCriteria[criterion] || this.comments[criterion] != this.local.comments[criterion]) {
+        if (this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion] || this.comments[criterion] !== this.local.comments[criterion]) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
         }
       }
@@ -186,11 +246,11 @@ export default {
       console.log(criterion, this.antennaCriteria[criterion], this.comments[criterion])
 
       const data = {
-        "agora_id": this.agora.id,
-        "body_id": this.local.id,
-        "antenna_criterion": criterionName,
-        "value": this.antennaCriteria[criterion] === 'null' ? null : this.antennaCriteria[criterion],
-        "comment": this.comments[criterion]
+        'agora_id': this.agora.id,
+        'body_id': this.local.id,
+        'antenna_criterion': criterionName,
+        'value': this.antennaCriteria[criterion] === 'null' ? null : this.antennaCriteria[criterion],
+        'comment': this.comments[criterion]
       }
 
       this.axios.put(
@@ -205,7 +265,10 @@ export default {
       this.permissions = permissionResponse.data.data
       this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
       this.can.giveExceptionCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication_exception'))
+      this.can.setBoardElection = this.permissions.some(permission => permission.combined.endsWith('manage_network:board_election'))
+      this.can.setMembersList = this.permissions.some(permission => permission.combined.endsWith('manage_network:members_list'))
       this.can.setMembershipFeePayement = this.permissions.some(permission => permission.combined.endsWith('manage_network:fee'))
+      this.can.setEvents = this.permissions.some(permission => permission.combined.endsWith('manage_network:events'))
       this.can.setAgoraAttendance = this.permissions.some(permission => permission.combined.endsWith('manage_network:agora_attendance'))
       this.can.approveDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
       this.can.approveFulfilmentReport = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_report'))

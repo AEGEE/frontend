@@ -4,7 +4,7 @@
       <p class="modal-card-title">{{ local.name }}</p>
       <button class="delete" aria-label="close" @click="$parent.close()" />
     </header>
-  
+
     <section class="modal-card-body">
       <template v-if="!local.comments">
         <i>No comments to display for this body!</i>
@@ -23,11 +23,11 @@
     <footer class="modal-card-foot" />
   </div>
 </template>
-  
+
 <script>
 export default {
   name: 'AntennaCriteriaInfo',
   props: ['local', 'agora', 'services', 'showError', 'showSuccess', 'router']
 }
-  
+
 </script>

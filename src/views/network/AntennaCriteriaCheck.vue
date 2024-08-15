@@ -125,13 +125,13 @@
 
             <b-table-column>
               <b-button @click="openAntennaCriteriaInfo(props.row)" class="button is-link">
-                <span class="white"><font-awesome-icon :icon="['fa', 'eye']"/></span>
+                <span class="white"><font-awesome-icon :icon="['fa', 'eye']" /></span>
               </b-button>
             </b-table-column>
 
             <b-table-column>
               <b-button @click="openAntennaCriteriaModal(props.row)" class="button is-warning">
-                <span class="white"><font-awesome-icon :icon="['fa', 'pencil-alt']"/></span>
+                <span class="white"><font-awesome-icon :icon="['fa', 'pencil-alt']" /></span>
               </b-button>
             </b-table-column>
 
@@ -228,17 +228,18 @@ export default {
       this.axios.get(this.services['core'] + '/bodies').then(async (bodiesResponse) => {
         this.bodies = bodiesResponse.data.data
         this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
-        this.bodies.forEach(body => body.antennaCriteria = {});
+        this.bodies.forEach(body => body.antennaCriteria = {})
 
         const promises = []
         promises.push(this.checkBoardCriterium())
         promises.push(this.checkMembersList())
         promises.push(this.checkEventsCriterium())
-        promises.push(this.getAntennaCriteriaFulfilment())
 
         await Promise.all(promises)
 
-        // TODO: Add all the antenna criteria here when they are automatically computed
+        // To this after the rest, to make sure it also "overrides" automatically computed fields
+        await this.getAntennaCriteriaFulfilment()
+
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
@@ -334,7 +335,7 @@ export default {
         }
       }).catch((err) => {
         this.isLoading = false
-        this.$root.showError('Could not fetch Antenna Criteria fulfilment', err)
+        this.$root.showError('Could not fetch manual Antenna Criteria fulfilment', err)
       })
     }
   },
