@@ -28,6 +28,30 @@
         </div>
       <!-- </template> -->
 
+      <!-- TODO: Add the other Antenna Criteria here -->
+
+      <!-- <template v-if="can.setAgoraAttendance"> -->
+        <div class="field">
+          <label class="label">Agora attendance (AA)</label>
+          <div class="select">
+            <select v-model="antennaCriteria.agoraAttendance">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <!-- TODO: Make sure that only the ND has this option -->
+              <option value="exception">Exception</option> 
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.agoraAttendance" />
+          </div>
+        </div>
+      <!-- </template> -->
+
     </section>
 
     <footer class="modal-card-foot">
@@ -66,6 +90,7 @@ export default {
       permissions: [],
       can: {
         setCommunication: false,
+        setAgoraAttendace: false,
         giveExceptions: false
       },
       isLoading: false
@@ -76,7 +101,7 @@ export default {
       this.isLoading = true
       const promises = []
       for (const criterion in this.antennaCriteria) {
-        if (criterion === 'communication' && this.antennaCriteria[criterion] != this.local.antennaCriteria.communication) {
+        if (this.antennaCriteria[criterion] != this.local.antennaCriteria[criterion] || this.comments[criterion] != this.local.comments[criterion]) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
         }
       }
@@ -87,12 +112,14 @@ export default {
       // TODO: Close the modal
     },
     setAntennaCriterionFulfilment (criterion) {
-      console.log(criterion, this.antennaCriteria[criterion])
+      // Convert camelCase to seperate, lower-case words
+      const criterionName = criterion.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()
+      console.log(criterion, this.antennaCriteria[criterion], this.comments[criterion])
 
       const data = {
         "agora_id": this.agora.id,
         "body_id": this.local.id,
-        "antenna_criterion": criterion,
+        "antenna_criterion": criterionName,
         "value": this.antennaCriteria[criterion] === 'null' ? null : this.antennaCriteria[criterion],
         "comment": this.comments[criterion]
       }
@@ -110,9 +137,11 @@ export default {
       this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
     })
 
-    // Set the current fulfilment
-    this.antennaCriteria.communication = this.local.antennaCriteria.communication
-    this.comments.communication = this.local.comments.communication
+    // Set the current fulfilment and comments
+    for (const criterion in this.local.antennaCriteria) {
+      this.antennaCriteria[criterion] = this.local.antennaCriteria[criterion]
+      this.comments[criterion] = this.local.comments[criterion]
+    }
 
     this.isLoading = false
   }
