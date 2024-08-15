@@ -52,6 +52,48 @@
         </div>
       <!-- </template> -->
 
+      <!-- <template v-if="can.approveDevelopmentPlan"> -->
+        <div class="field">
+          <label class="label">Development plan (DP)</label>
+          <div class="select">
+            <select v-model="antennaCriteria.developmentPlan">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <option value="exception">Exception</option> 
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.developmentPlan" />
+          </div>
+        </div>
+      <!-- </template> -->
+
+      <!-- <template v-if="can.approveFulfilmentReport"> -->
+        <div class="field">
+          <label class="label">Fulfilment report (FR)</label>
+          <div class="select">
+            <select v-model="antennaCriteria.fulfilmentReport">
+              <option value="null">Not set</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+              <option value="exception">Exception</option> 
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <div class="control">
+            <b-input type="textarea" v-model="comments.fulfilmentReport" />
+          </div>
+        </div>
+      <!-- </template> -->
+
     </section>
 
     <footer class="modal-card-foot">
@@ -135,6 +177,8 @@ export default {
     this.axios.get(this.services['core'] + '/my_permissions').then((permissionResponse) => {
       this.permissions = permissionResponse.data.data
       this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
+      // this.can.approveDevelopmentPlan = "is ND"
+      // this.can.approveFulfilmentReport = "is ND"
     })
 
     // Set the current fulfilment and comments

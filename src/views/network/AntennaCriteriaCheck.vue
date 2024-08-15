@@ -87,20 +87,33 @@
               </template>
               <template v-else>
                 <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'true'">Yes</b-tag>
-                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'exception'">Exception</b-tag>
                 <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'false'">No</b-tag>
+                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'exception'">Exception</b-tag>
               </template>
-
             </b-table-column>
 
             <b-table-column field="development" label="Development plan (DP)">
-              <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+              <template v-if="!props.row.antennaCriteria.developmentPlan">
+                <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
+                <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+              </template>
+              <template v-else>
+                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.developmentPlan === 'true'">Yes</b-tag>
+                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.developmentPlan === 'false'">No</b-tag>
+                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.developmentPlan === 'exception'">Exception</b-tag>
+              </template>
             </b-table-column>
 
             <b-table-column field="fulfilment" label="Fulfilment report (FR)">
-              <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+              <template v-if="!props.row.antennaCriteria.fulfilmentReport">
+                <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
+                <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
+              </template>
+              <template v-else>
+                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.fulfilmentReport === 'true'">Yes</b-tag>
+                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.fulfilmentReport === 'false'">No</b-tag>
+                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.fulfilmentReport === 'exception'">Exception</b-tag>
+              </template>
             </b-table-column>
 
             <b-table-column>
