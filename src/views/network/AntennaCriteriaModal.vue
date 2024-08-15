@@ -230,7 +230,7 @@ export default {
       this.can.giveExceptionCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication_exception'))
       this.can.setBoardElection = this.permissions.some(permission => permission.combined.endsWith('manage_network:board_election'))
       this.can.setMembersList = this.permissions.some(permission => permission.combined.endsWith('manage_network:members_list'))
-      this.can.setMembershipFeePayement = this.permissions.some(permission => permission.combined.endsWith('manage_network:fee'))
+      this.can.setMembershipFeePayement = this.permissions.some(permission => permission.combined.endsWith('manage_network:membership_fee'))
       this.can.setEvents = this.permissions.some(permission => permission.combined.endsWith('manage_network:events'))
       this.can.setAgoraAttendance = this.permissions.some(permission => permission.combined.endsWith('manage_network:agora_attendance'))
       this.can.approveDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
