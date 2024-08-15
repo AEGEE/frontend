@@ -210,7 +210,7 @@
         "name": "oms.network.ac_check",
         "icon": "users",
         "label": "AC check",
-        "permissions": ["global:manage_network:boards"]
+        "permissions": ["global:manage_network:antenna_criteria"]
       }
     ]
   },
