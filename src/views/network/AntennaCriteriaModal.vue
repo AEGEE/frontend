@@ -76,7 +76,7 @@ export default {
       this.isLoading = true
       const promises = []
       for (const criterion in this.antennaCriteria) {
-        if (criterion === 'communication' && this.antennaCriteria[criterion] != this.local.communication) {
+        if (criterion === 'communication' && this.antennaCriteria[criterion] != this.local.antennaCriteria.communication) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
         }
       }
@@ -111,7 +111,7 @@ export default {
     })
 
     // Set the current fulfilment
-    this.antennaCriteria.communication = this.local.communication
+    this.antennaCriteria.communication = this.local.antennaCriteria.communication
     this.comments.communication = this.local.comments.communication
 
     this.isLoading = false

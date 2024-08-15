@@ -36,30 +36,30 @@
             </b-table-column>
 
             <b-table-column field="communication" label="Communication (C)">
-              <b-tag type="is-light" size="is-medium" v-if="!props.row.communication && props.row.type !== 'contact antenna'">Empty</b-tag>
-              <b-tag type="is-link" size="is-medium" v-if="props.row.communication === 'exception' && props.row.type !== 'contact antenna'">Exception</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.communication === 'true' && props.row.type !== 'contact antenna'">Yes</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.communication === 'false' && props.row.type !== 'contact antenna'">No</b-tag>
+              <b-tag type="is-light" size="is-medium" v-if="!props.row.antennaCriteria.communication && props.row.type !== 'contact antenna'">Empty</b-tag>
+              <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.communication === 'exception' && props.row.type !== 'contact antenna'">Exception</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.communication === 'true' && props.row.type !== 'contact antenna'">Yes</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.communication === 'false' && props.row.type !== 'contact antenna'">No</b-tag>
               <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="boardElection" label="Board election (BE)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.check_elections_last_year && showDetails">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElections && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElections && showDetails">
                 {{ props.row.latest_election }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && !showDetails && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && showDetails && props.row.latest_election && props.row.type === 'antenna'">
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && !showDetails && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && showDetails && props.row.latest_election && props.row.type === 'antenna'">
                 {{ props.row.latest_election }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_elections_last_year && showDetails && !props.row.latest_election && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="!props.row.check_elections_last_year && props.row.type !== 'antenna'">Else</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && showDetails && !props.row.latest_election && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.antennaCriteria.boardElections && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.submitted_members_list">Yes</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.submitted_members_list && props.row.type !== 'contact'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="!props.row.submitted_members_list && props.row.type === 'contact'">Else</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.membersList">Yes</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.membersList && props.row.type !== 'contact'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.antennaCriteria.membersList && props.row.type === 'contact'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="membershipFee" label="Membership fee (F)">
@@ -68,16 +68,16 @@
             </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.check_events && showDetails">
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.events && !showDetails">Yes</b-tag>
+              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.events && showDetails">
                 {{ props.row.latest_event }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && !showDetails && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && showDetails && props.row.latest_event && props.row.type === 'antenna'">
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.events && !showDetails && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.events && showDetails && props.row.latest_event && props.row.type === 'antenna'">
                 {{ props.row.latest_event }}
               </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="!props.row.check_events && showDetails && !props.row.latest_event && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="!props.row.check_events && props.row.type !== 'antenna'">Else</b-tag>
+              <b-tag type="is-danger" size="is-medium" v-if="!props.row.antennaCriteria.events && showDetails && !props.row.latest_event && props.row.type === 'antenna'">No</b-tag>
+              <b-tag type="is-info" size="is-medium" v-if="!props.row.antennaCriteria.events && props.row.type !== 'antenna'">Else</b-tag>
             </b-table-column>
 
             <b-table-column field="attendance" label="Agora attendance (AA)">
@@ -200,6 +200,7 @@ export default {
       this.axios.get(this.services['core'] + '/bodies').then(async (bodiesResponse) => {
         this.bodies = bodiesResponse.data.data
         this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
+        this.bodies.forEach(body => body.antennaCriteria = {});
 
         const promises = []
         promises.push(this.checkBoardCriterium())
@@ -213,20 +214,20 @@ export default {
         for (const body in this.bodies) {
           if (this.bodies[body].type === 'antenna') {
             this.bodies[body].status = (
-              (this.bodies[body].communication === 'true' || this.bodies[body].communication === 'exception')
-              && this.bodies[body].check_events
-              && this.bodies[body].check_elections_last_year
-              && this.bodies[body].submitted_members_list
+              (this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception')
+              && this.bodies[body].antennaCriteria.events
+              && this.bodies[body].antennaCriteria.boardElections
+              && this.bodies[body].antennaCriteria.membersList
             )
           }
           if (this.bodies[body].type === 'contact antenna') {
             this.bodies[body].status = (
-              this.bodies[body].submitted_members_list
+              this.bodies[body].antennaCriteria.membersList
             )
           }
           if (this.bodies[body].type === 'contact') {
             this.bodies[body].status = (
-              this.bodies[body].communication === 'true' || this.bodies[body].communication === 'exception'
+              this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception'
             )
           }
         }
@@ -251,7 +252,7 @@ export default {
 
         for (const body in this.bodies) {
           // Check if the last event is in the past 2 years
-          this.bodies[body].check_events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2
+          this.bodies[body].antennaCriteria.events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2
           if (this.bodies[body].latest_event !== undefined) this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
         }
       }).catch((err) => {
@@ -268,7 +269,7 @@ export default {
 
         for (const body in this.bodies) {
           // Check if the current board was elected within the past year
-          this.bodies[body].check_elections_last_year = this.bodies[body].latest_election !== undefined && moment(this.bodies[body].latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1
+          this.bodies[body].antennaCriteria.boardElections = this.bodies[body].latest_election !== undefined && moment(this.bodies[body].latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1
           if (this.bodies[body].latest_election !== undefined) this.bodies[body].latest_election = moment(this.bodies[body].latest_election).format('D[/]M[/]YYYY')
         }
       }).catch((err) => {
@@ -279,7 +280,7 @@ export default {
     async checkMembersList () {
       await this.axios.get(this.services['statutory'] + '/events/' + this.selectedAgora.id + '/memberslists/missing').then((membersListResponse) => {
         for (const body in this.bodies) {
-          this.bodies[body].submitted_members_list = this.bodies[body].id in membersListResponse.data.data.map(x => x.id)
+          this.bodies[body].antennaCriteria.membersList = this.bodies[body].id in membersListResponse.data.data.map(x => x.id)
         }
       }).catch((err) => {
         this.isLoading = false
@@ -290,11 +291,13 @@ export default {
       await this.axios.get(this.services['network'] + '/antennaCriteria/' + this.selectedAgora.id).then((antennaCriteriaResponse) => {
         const antennaCriteriaFulfilment = antennaCriteriaResponse.data.data
         for (const criterion of antennaCriteriaFulfilment) {
-          // console.log(criterion)
+          console.log(criterion)
           const body = this.bodies.find(x => x.id === criterion.body_id)
           body.comments = body.comments || {}
-          body[criterion.antenna_criterion] = criterion.value
-          body.comments[criterion.antenna_criterion] = criterion.comment
+          // Convert string to camelCase
+          const criterionName = criterion.antenna_criterion.replace(/(?:^\w|\s\w)/g, match => match.trim().toUpperCase()).replace(/^\w/, match => match.toLowerCase())
+          body.antennaCriteria[criterionName] = criterion.value
+          body.comments[criterionName] = criterion.comment
         }
       }).catch((err) => {
         this.isLoading = false
