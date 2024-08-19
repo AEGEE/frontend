@@ -161,6 +161,9 @@ export default {
       selectedAgora: null,
       showDetails: false,
       hideSafeLocals: false,
+      events: [],
+      statutoryEvents: [],
+      summerUniversities: [],
       isLoading: false
     }
   },
@@ -275,27 +278,63 @@ export default {
         this.$root.showError('Could not fetch bodies', err)
       })
     },
-    async checkEventsCriterium () {
-      // TODO: Also get the most recent statutory event and SU organised
-      await this.axios.get(this.services['events'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((eventsResponse) => {
-        for (const event of eventsResponse.data.data) {
-          for (const organizer of event.organizing_bodies) {
-            const body = this.bodies.find(x => x.id === organizer.body_id)
-            // TODO: What happens if there are multiple last events
-            // Can happen if locals organised events with two locals together
-            body.latest_event = event.latest_event
-          }
-        }
-
-        for (const body in this.bodies) {
-          // Check if the last event is in the past 2 years
-          this.bodies[body].antennaCriteria.events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2
-          if (this.bodies[body].latest_event !== undefined) this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
-        }
+    async fetchEvents () {
+      await this.axios.get(this.services['events'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((response) => {
+        this.events = response.data.data
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch event data', err)
       })
+    },
+    async fetchStatutoryEvents () {
+      await this.axios.get(this.services['statutory'] + '/recents', {params: { ends: this.selectedAgora.ends } }).then((response) => {
+        this.statutoryEvents = response.data.data
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch statutory event data', err)
+      })
+    },
+    async fetchSummerUniversities () {
+      await this.axios.get(this.services['summeruniversity'] + '/recents', {params: { ends: this.selectedAgora.ends } }).then((response) => {
+        this.statutoryEvents = response.data.data
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch Summer University data', err)
+      })
+    },
+    async checkEventsCriterium () {
+      const promises = []
+      promises.push(this.fetchEvents())
+      promises.push(this.fetchStatutoryEvents())
+      promises.push(this.fetchSummerUniversities())
+
+      await Promise.all(promises)
+
+      // TODO: Make this code (until 333) nicer
+      for (const event of this.events) {
+        for (const organizer of event.organizing_bodies) {
+          const body = this.bodies.find(x => x.id === organizer.body_id)
+          body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
+        }
+      }
+
+      for (const event of this.statutoryEvents) {
+        const body = this.bodies.find(x => x.id === event.body_id)
+        body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
+      }
+
+      for (const event of this.summerUniversities) {
+        for (const organizer of event.organizing_bodies) {
+          const body = this.bodies.find(x => x.id === organizer.body_id)
+          body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
+        }
+      }
+
+      for (const body in this.bodies) {
+        // Check if the last event is in the past 2 years
+        this.bodies[body].antennaCriteria.events = this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2
+        if (this.bodies[body].latest_event !== undefined) this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
+      }
     },
     async checkBoardCriterium () {
       await this.axios.get(this.services['network'] + '/boards/recents', { params: { ends: this.selectedAgora.ends } }).then((boardsResponse) => {
@@ -328,7 +367,7 @@ export default {
       await this.axios.get(this.services['network'] + '/antennaCriteria/' + this.selectedAgora.id).then((antennaCriteriaResponse) => {
         const antennaCriteriaFulfilment = antennaCriteriaResponse.data.data
         for (const criterion of antennaCriteriaFulfilment) {
-          console.log(criterion)
+          // console.log(criterion)
           const body = this.bodies.find(x => x.id === criterion.body_id)
           body.comments = body.comments || {}
           // Convert string to camelCase

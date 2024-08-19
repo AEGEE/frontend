@@ -195,7 +195,7 @@ export default {
       await Promise.all(promises).then(() => {
         this.isLoading = false
         this.showSuccess('Antenna Criteria fulfilment updated.')
-        this.router.go(0)
+        // this.router.go(0)
       }).catch((err) => {
         this.isLoading = false
         this.showError('Something went wrong', err)
@@ -218,7 +218,7 @@ export default {
         this.services['network'] + '/antennaCriteria',
         data
       ).catch((err) => {
-        this.$root.showError('Error saving Antenna Criteria', err)
+        this.showError('Error saving Antenna Criteria', err)
       })
     }
   },
