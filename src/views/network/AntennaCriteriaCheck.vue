@@ -213,6 +213,9 @@ export default {
       this.isLoading = true
       this.axios.get(this.services['statutory'], { params: { type: 'agora' } }).then((response) => {
         this.agorae = response.data.data
+        if (this.agorae.length === 0) {
+          throw new Error('no Agora data available')
+        }
         // Automatically load the most recent Agora as the selected one
         this.selectedAgora = this.agorae[0]
         this.fetchData()

@@ -843,7 +843,7 @@ module.exports = [
   },
   {
     name: 'oms.network.ac_check',
-    path: '/antenna_criteria_check',
+    path: '/network/ac_check',
     component: 'network/AntennaCriteriaCheck',
     meta: {
       label: 'Antenna Criteria check'
