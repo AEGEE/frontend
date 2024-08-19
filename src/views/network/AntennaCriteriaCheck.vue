@@ -287,7 +287,7 @@ export default {
       })
     },
     async fetchStatutoryEvents () {
-      await this.axios.get(this.services['statutory'] + '/recents', {params: { ends: this.selectedAgora.ends } }).then((response) => {
+      await this.axios.get(this.services['statutory'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((response) => {
         this.statutoryEvents = response.data.data
       }).catch((err) => {
         this.isLoading = false
@@ -295,7 +295,7 @@ export default {
       })
     },
     async fetchSummerUniversities () {
-      await this.axios.get(this.services['summeruniversity'] + '/recents', {params: { ends: this.selectedAgora.ends } }).then((response) => {
+      await this.axios.get(this.services['summeruniversity'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((response) => {
         this.statutoryEvents = response.data.data
       }).catch((err) => {
         this.isLoading = false
@@ -310,7 +310,7 @@ export default {
 
       await Promise.all(promises)
 
-      // TODO: Make this code (until 333) nicer
+      // TODO: Make this code nicer and compacter ...
       for (const event of this.events) {
         for (const organizer of event.organizing_bodies) {
           const body = this.bodies.find(x => x.id === organizer.body_id)
@@ -329,6 +329,7 @@ export default {
           body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
         }
       }
+      // ... until here
 
       for (const body in this.bodies) {
         // Check if the last event is in the past 2 years
