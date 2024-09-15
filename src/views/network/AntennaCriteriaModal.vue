@@ -105,7 +105,7 @@
         </b-field>
       </template>
 
-      <template v-if="can.approveDevelopmentPlan">
+      <template v-if="can.setDevelopmentPlan">
         <b-field label="Development plan (DP)" />
         <b-field grouped>
           <b-select v-model="antennaCriteria.developmentPlan">
@@ -119,7 +119,7 @@
         </b-field>
       </template>
 
-      <template v-if="can.approveFulfilmentReport">
+      <template v-if="can.setFulfilmentReport">
         <b-field label="Fulfilment report (FR)" />
         <b-field grouped>
           <b-select v-model="antennaCriteria.fulfilmentReport">
@@ -176,8 +176,8 @@ export default {
         setMembershipFeePayement: false,
         setEvents: false,
         setAgoraAttendance: false,
-        approveDevelopmentPlan: false,
-        approveFulfilmentReport: false
+        setDevelopmentPlan: false,
+        setFulfilmentReport: false
       },
       isLoading: false
     }
@@ -187,7 +187,8 @@ export default {
       this.isLoading = true
       const promises = []
       for (const criterion in this.antennaCriteria) {
-        if (this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion] || this.comments[criterion] !== this.local.comments[criterion]) {
+        const permission = "set" + criterion.charAt(0).toUpperCase() + criterion.slice(1)
+        if (this.can[permission] && (this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion] || this.comments[criterion] !== this.local.comments[criterion])) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
         }
       }
@@ -233,8 +234,8 @@ export default {
       this.can.setMembershipFeePayement = this.permissions.some(permission => permission.combined.endsWith('manage_network:membership_fee'))
       this.can.setEvents = this.permissions.some(permission => permission.combined.endsWith('manage_network:events'))
       this.can.setAgoraAttendance = this.permissions.some(permission => permission.combined.endsWith('manage_network:agora_attendance'))
-      this.can.approveDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
-      this.can.approveFulfilmentReport = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_report'))
+      this.can.setDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
+      this.can.setFulfilmentReport = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_report'))
     })
 
     // Set the current fulfilment and comments

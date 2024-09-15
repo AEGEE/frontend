@@ -219,7 +219,7 @@ export default {
         if (this.agorae.length === 0) {
           throw new Error('no Agora data available')
         }
-        // Automatically load the most recent Agora as the selected one
+        // Automatically set the most recent Agora as the selected one
         this.selectedAgora = this.agorae[0]
         this.fetchData()
         this.isLoading = false
@@ -243,7 +243,7 @@ export default {
 
         await Promise.all(promises)
 
-        // To this after the rest, to make sure it also "overrides" automatically computed fields
+        // Do this after the rest, to make sure it also "overrides" automatically computed fields
         await this.getAntennaCriteriaFulfilment()
 
         for (const body in this.bodies) {
@@ -368,7 +368,6 @@ export default {
       await this.axios.get(this.services['network'] + '/antennaCriteria/' + this.selectedAgora.id).then((antennaCriteriaResponse) => {
         const antennaCriteriaFulfilment = antennaCriteriaResponse.data.data
         for (const criterion of antennaCriteriaFulfilment) {
-          // console.log(criterion)
           const body = this.bodies.find(x => x.id === criterion.body_id)
           body.comments = body.comments || {}
           // Convert string to camelCase
