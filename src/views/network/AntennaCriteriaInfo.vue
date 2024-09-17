@@ -32,7 +32,7 @@ export default {
     noComments () {
       if (!this.local.comments) return true
       for (const comment in this.local.comments) {
-        if (this.local.comments[comment] != '' && this.local.comments[comment] != null) return false
+        if (this.local.comments[comment] !== '' && this.local.comments[comment] != null) return false
       }
       return true
     }
