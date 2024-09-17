@@ -235,7 +235,7 @@ export default {
       this.axios.get(this.services['core'] + '/bodies').then(async (bodiesResponse) => {
         this.bodies = bodiesResponse.data.data
         this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
-        this.bodies.forEach(body => { body.antennaCriteria = {} })
+        this.bodies.forEach(body => { body.antennaCriteria = {}, body.comments = {} })
 
         const promises = []
         promises.push(this.checkBoardCriterium())
