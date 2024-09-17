@@ -352,9 +352,10 @@ export default {
       })
     },
     async checkMembersList () {
-      await this.axios.get(this.services['statutory'] + '/events/' + this.selectedAgora.id + '/memberslists/missing').then((membersListResponse) => {
-        for (const body in this.bodies) {
-          this.bodies[body].antennaCriteria.membersList = this.bodies[body].id in membersListResponse.data.data.map(x => x.id)
+      await this.axios.get(this.services['statutory'] + '/events/' + this.selectedAgora.id + '/memberslists').then((membersListsResponse) => {
+        for (const membersList of membersListsResponse.data.data) {
+          const body = this.bodies.find(x => x.id === membersList.body_id)
+          body.antennaCriteria.membersList = true
         }
       }).catch((err) => {
         this.$root.showError('Could not fetch members list data', err)
