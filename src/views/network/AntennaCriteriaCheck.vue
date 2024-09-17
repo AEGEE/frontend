@@ -164,7 +164,8 @@ export default {
       events: [],
       statutoryEvents: [],
       summerUniversities: [],
-      isLoading: false
+      isLoading: false,
+      isLoadingAgora: false
     }
   },
   computed: {
@@ -213,7 +214,7 @@ export default {
       this.hideSafeLocals = !this.hideSafeLocals
     },
     fetchAgorae () {
-      this.isLoading = true
+      this.isLoadingAgora = true
       this.axios.get(this.services['statutory'], { params: { type: 'agora' } }).then((response) => {
         this.agorae = response.data.data
         if (this.agorae.length === 0) {
@@ -222,9 +223,9 @@ export default {
         // Automatically set the most recent Agora as the selected one
         this.selectedAgora = this.agorae[0]
         this.fetchData()
-        this.isLoading = false
+        this.isLoadingAgora = false
       }).catch((err) => {
-        this.isLoading = false
+        this.isLoadingAgora = false
         this.$root.showError('Could not fetch statutory data', err)
       })
     },
@@ -282,7 +283,6 @@ export default {
       await this.axios.get(this.services['events'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((response) => {
         this.events = response.data.data
       }).catch((err) => {
-        this.isLoading = false
         this.$root.showError('Could not fetch event data', err)
       })
     },
@@ -290,7 +290,6 @@ export default {
       await this.axios.get(this.services['statutory'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((response) => {
         this.statutoryEvents = response.data.data
       }).catch((err) => {
-        this.isLoading = false
         this.$root.showError('Could not fetch statutory event data', err)
       })
     },
@@ -298,7 +297,6 @@ export default {
       await this.axios.get(this.services['summeruniversity'] + '/recents', { params: { ends: this.selectedAgora.ends } }).then((response) => {
         this.summerUniversities = response.data.data
       }).catch((err) => {
-        this.isLoading = false
         this.$root.showError('Could not fetch Summer University data', err)
       })
     },
@@ -350,7 +348,6 @@ export default {
           if (this.bodies[body].latest_election !== undefined) this.bodies[body].latest_election = moment(this.bodies[body].latest_election).format('D[/]M[/]YYYY')
         }
       }).catch((err) => {
-        this.isLoading = false
         this.$root.showError('Could not fetch boards data', err)
       })
     },
@@ -360,7 +357,6 @@ export default {
           this.bodies[body].antennaCriteria.membersList = this.bodies[body].id in membersListResponse.data.data.map(x => x.id)
         }
       }).catch((err) => {
-        this.isLoading = false
         this.$root.showError('Could not fetch members list data', err)
       })
     },
@@ -376,7 +372,6 @@ export default {
           body.comments[criterionName] = criterion.comment
         }
       }).catch((err) => {
-        this.isLoading = false
         this.$root.showError('Could not fetch manual Antenna Criteria fulfilment', err)
       })
     }
