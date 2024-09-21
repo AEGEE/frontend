@@ -245,7 +245,7 @@ export default {
         promises.push(this.checkMembersList())
         promises.push(this.checkEventsCriterium())
 
-        // The allSettled() command waits for all promises to be done, so it is also 'fine' if some of the fail 
+        // The allSettled() command waits for all promises to be done, so it is also 'fine' if some of them fail
         await Promise.allSettled(promises)
 
         // Do this after the rest, to make sure it also "overrides" automatically computed fields
