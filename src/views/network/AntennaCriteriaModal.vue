@@ -152,7 +152,7 @@
 <script>
 export default {
   name: 'AntennaCriteriaModal',
-  props: ['local', 'agora', 'netcommies', 'services', 'showError', 'showSuccess', 'router'],
+  props: ['local', 'agora', 'netcommies', 'permissions', 'services', 'showError', 'showSuccess', 'router'],
   data () {
     return {
       antennaCriteria: {
@@ -175,7 +175,6 @@ export default {
         developmentPlan: '',
         fulfilmentReport: ''
       },
-      permissions: [],
       can: {
         setCommunication: false,
         giveExceptionCommunication: false,
@@ -258,19 +257,17 @@ export default {
   },
   mounted () {
     this.isLoading = true
-    this.axios.get(this.services['core'] + '/my_permissions').then((permissionResponse) => {
-      this.permissions = permissionResponse.data.data
-      this.can.setNetcomAssignment = this.permissions.some(permission => permission.combined.endsWith('manage_network:netcom_assignment'))
-      this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
-      this.can.giveExceptionCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication_exception'))
-      this.can.setBoardElection = this.permissions.some(permission => permission.combined.endsWith('manage_network:board_election'))
-      this.can.setMembersList = this.permissions.some(permission => permission.combined.endsWith('manage_network:members_list'))
-      this.can.setMembershipFeePayement = this.permissions.some(permission => permission.combined.endsWith('manage_network:membership_fee'))
-      this.can.setEvents = this.permissions.some(permission => permission.combined.endsWith('manage_network:events'))
-      this.can.setAgoraAttendance = this.permissions.some(permission => permission.combined.endsWith('manage_network:agora_attendance'))
-      this.can.setDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
-      this.can.setFulfilmentReport = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_report'))
-    })
+    
+    this.can.setNetcomAssignment = this.permissions.some(permission => permission.combined.endsWith('manage_network:netcom_assignment'))
+    this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
+    this.can.giveExceptionCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication_exception'))
+    this.can.setBoardElection = this.permissions.some(permission => permission.combined.endsWith('manage_network:board_election'))
+    this.can.setMembersList = this.permissions.some(permission => permission.combined.endsWith('manage_network:members_list'))
+    this.can.setMembershipFeePayement = this.permissions.some(permission => permission.combined.endsWith('manage_network:membership_fee'))
+    this.can.setEvents = this.permissions.some(permission => permission.combined.endsWith('manage_network:events'))
+    this.can.setAgoraAttendance = this.permissions.some(permission => permission.combined.endsWith('manage_network:agora_attendance'))
+    this.can.setDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
+    this.can.setFulfilmentReport = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_report'))
 
     // Set the current fulfilment and comments
     for (const criterion in this.local.antennaCriteria) {

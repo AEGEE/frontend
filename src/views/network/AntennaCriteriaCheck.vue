@@ -19,6 +19,8 @@
 
           <a class="button is-info" v-if="hideSafeLocals" @click="toggleHideSafeLocals()">Show all Locals</a>
           <a class="button is-info" v-if="!hideSafeLocals" @click="toggleHideSafeLocals()">Show only Locals in danger</a>
+
+          <a class="button is-info" v-if="can.sendFulfilmentEmails" @click="sendFulfilmentEmails()">Send fulfilment email to Locals</a>
         </div>
         <b-table :data="filteredBodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
@@ -170,7 +172,11 @@ export default {
       statutoryEvents: [],
       summerUniversities: [],
       isLoading: false,
-      isLoadingAgora: false
+      isLoadingAgora: false,
+      permissions: [],
+      can: {
+        sendFulfilmentEmails: false
+      }
     }
   },
   computed: {
@@ -192,6 +198,7 @@ export default {
           local: row,
           agora: this.selectedAgora,
           netcommies: this.netcommies,
+          permissions: this.permissions,
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
@@ -387,18 +394,19 @@ export default {
         this.$root.showError('Could not fetch manual Antenna Criteria fulfilment', err)
       })
     },
-    async fetchNetcom() {
+    async fetchNetcom () {
+      // TODO: Find a way to get the correct body.id for NetCom, instead of having it hard coded
       await this.axios.get(this.services['core'] + '/bodies/' + '11' + '/members').then((response) => {
         this.netcommies = response.data.data.map(netcommie => ({
           user_id: netcommie.user_id,
           first_name: netcommie.user.first_name
         }))
-        this.netcommies.push({"user_id": 0, "first_name": "Not set"})
+        this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set' })
       }).catch((err) => {
         this.$root.showError('Could not fetch NetCom data', err)
       })
     },
-    async fetchNetcomAssignment() {
+    async fetchNetcomAssignment () {
       await this.axios.get(this.services['network'] + '/netcom').then(async (netcomResponse) => {
         const netcomAssignment = netcomResponse.data.data
         await this.fetchNetcom()
@@ -410,10 +418,18 @@ export default {
       }).catch((err) => {
         this.$root.showError('Could not fetch NetCom assignment', err)
       })
+    },
+    sendFulfilmentEmails() {
+      console.log('Sending emails...')
     }
   },
   mounted () {
     this.fetchAgorae()
+
+    this.axios.get(this.services['core'] + '/my_permissions').then((permissionResponse) => {
+      this.permissions = permissionResponse.data.data
+      this.can.sendFulfilmentEmails = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_email'))
+    })
   }
 }
 
