@@ -30,6 +30,10 @@
               {{ props.row.type | capitalize }}
             </b-table-column>
 
+            <b-table-column sortable field="netcom" label="NetCom">
+              {{ props.row.netcom?.first_name }}
+            </b-table-column>
+
             <b-table-column sortable field="status" label="Status">
               <b-tag type="is-success" size="is-medium" v-if="props.row.status">Safe</b-tag>
               <b-tag type="is-warning" size="is-medium" v-else>Danger</b-tag>
@@ -157,6 +161,7 @@ export default {
   data () {
     return {
       bodies: [],
+      netcommies: [],
       agorae: null,
       selectedAgora: null,
       showDetails: false,
@@ -186,6 +191,7 @@ export default {
         props: {
           local: row,
           agora: this.selectedAgora,
+          netcommies: this.netcommies,
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
@@ -241,6 +247,7 @@ export default {
         })
 
         const promises = []
+        promises.push(this.fetchNetcomAssignment())
         promises.push(this.checkBoardCriterium())
         promises.push(this.checkMembersList())
         promises.push(this.checkEventsCriterium())
@@ -378,6 +385,30 @@ export default {
         }
       }).catch((err) => {
         this.$root.showError('Could not fetch manual Antenna Criteria fulfilment', err)
+      })
+    },
+    async fetchNetcom() {
+      await this.axios.get(this.services['core'] + '/bodies/' + '11' + '/members').then((response) => {
+        this.netcommies = response.data.data.map(netcommie => ({
+          user_id: netcommie.user_id,
+          first_name: netcommie.user.first_name
+        }))
+        this.netcommies.push({"user_id": 0, "first_name": "Not set"})
+      }).catch((err) => {
+        this.$root.showError('Could not fetch NetCom data', err)
+      })
+    },
+    async fetchNetcomAssignment() {
+      await this.axios.get(this.services['network'] + '/netcom').then(async (netcomResponse) => {
+        const netcomAssignment = netcomResponse.data.data
+        await this.fetchNetcom()
+
+        for (const body of this.bodies) {
+          const assignment = netcomAssignment.find(x => x.body_id === body.id)
+          body.netcom = assignment !== undefined ? this.netcommies.find(x => x.user_id === assignment.netcom_id) : this.netcommies[this.netcommies.length - 1]
+        }
+      }).catch((err) => {
+        this.$root.showError('Could not fetch NetCom assignment', err)
       })
     }
   },
