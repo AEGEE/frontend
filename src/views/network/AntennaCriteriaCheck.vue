@@ -21,6 +21,8 @@
           <a class="button is-info" v-if="!hideSafeLocals" @click="toggleHideSafeLocals()">Show only Locals in danger</a>
 
           <a class="button is-info" v-if="can.sendFulfilmentEmails" @click="sendFulfilmentEmails()">Send fulfilment email to Locals</a>
+
+          <a class="button is-info" v-if="can.sendFulfilmentEmails" @click="openAntennaCriteriaMail()">Change fulfilment email text</a>
         </div>
         <b-table :data="filteredBodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
@@ -141,6 +143,12 @@
               </b-button>
             </b-table-column>
 
+            <b-table-column v-if="can.sendFulfilmentEmails">
+              <b-button @click="sendFulfilmentEmail(props.row)" class="button is-danger">
+                <span class="white"><font-awesome-icon :icon="['fa', 'envelope']" /></span>
+              </b-button>
+            </b-table-column>
+
           </template>
 
           <template slot="empty">
@@ -157,6 +165,7 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 import AntennaCriteriaModal from './AntennaCriteriaModal.vue'
 import AntennaCriteriaInfo from './AntennaCriteriaInfo.vue'
+import AntennaCriteriaMail from './AntennaCriteriaMail.vue'
 
 export default {
   name: 'AntennaCriteriaCheck',
@@ -220,6 +229,20 @@ export default {
         }
       })
     },
+    openAntennaCriteriaMail () {
+      this.$buefy.modal.open({
+        component: AntennaCriteriaMail,
+        hasModalCard: true,
+        props: {
+          agora: this.selectedAgora,
+          mail_components: this.mailComponents,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     toggleShowDetails () {
       this.showDetails = !this.showDetails
     },
@@ -258,6 +281,7 @@ export default {
         promises.push(this.checkBoardCriterium())
         promises.push(this.checkMembersList())
         promises.push(this.checkEventsCriterium())
+        promises.push(this.fetchMailComponents())
 
         // The allSettled() command waits for all promises to be done, so it is also 'fine' if some of them fail
         await Promise.allSettled(promises)
@@ -419,8 +443,23 @@ export default {
         this.$root.showError('Could not fetch NetCom assignment', err)
       })
     },
-    sendFulfilmentEmails() {
+    async fetchMailComponents () {
+      await this.axios.get(this.services['network'] + '/mailComponent/' + this.selectedAgora.id).then((mailResponse) => {
+        this.mailComponents = mailResponse.data.data
+      }).catch((err) => {
+        this.$root.showError('Could not fetch mail components', err)
+      })
+    },
+    sendFulfilmentEmail (body) {
+      console.log(body)
+    },
+    sendFulfilmentEmails () {
       console.log('Sending emails...')
+      for (const body of this.bodies) {
+        if (body.status === false) {
+          this.sendFulfilmentEmail(body)
+        }
+      }
     }
   },
   mounted () {
