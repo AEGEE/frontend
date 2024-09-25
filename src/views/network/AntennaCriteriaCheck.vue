@@ -19,6 +19,8 @@
 
           <a class="button is-info" v-if="hideSafeLocals" @click="toggleHideSafeLocals()">Show all Locals</a>
           <a class="button is-info" v-if="!hideSafeLocals" @click="toggleHideSafeLocals()">Show only Locals in danger</a>
+
+          <a class="button is-info" v-if="can.sendFulfilmentEmails" @click="openAntennaCriteriaMail()">Change fulfilment email text</a>
         </div>
         <b-table :data="filteredBodies" :loading="isLoading" narrowed>
           <template slot-scope="props">
@@ -30,17 +32,16 @@
               {{ props.row.type | capitalize }}
             </b-table-column>
 
+            <b-table-column sortable field="netcom" label="NetCom">
+              {{ props.row.netcom?.first_name }}
+            </b-table-column>
+
             <b-table-column sortable field="status" label="Status">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.status">Safe</b-tag>
-              <b-tag type="is-warning" size="is-medium" v-else>Danger</b-tag>
+              <b-tag :type="statusType(props.row)" size="is-medium">{{ statusValue(props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="communication" label="Communication (C)">
-              <b-tag type="is-light" size="is-medium" v-if="!props.row.antennaCriteria.communication && props.row.type !== 'contact antenna'">Empty</b-tag>
-              <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.communication === 'exception' && props.row.type !== 'contact antenna'">Exception</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.communication === 'true' && props.row.type !== 'contact antenna'">Yes</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.communication === 'false' && props.row.type !== 'contact antenna'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact antenna'">Else</b-tag>
+              <b-tag :type="criterionTagType('communication', props.row)" size="is-medium">{{ criterionTagValue("communication", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="boardElection" label="Board election (BE)">
@@ -57,21 +58,11 @@
             </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.membersList === 'true'">Yes</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.membersList !== 'true' && props.row.type !== 'contact'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.antennaCriteria.membersList !== 'true' && props.row.type === 'contact'">Else</b-tag>
+              <b-tag :type="criterionTagType('membersList', props.row)" size="is-medium">{{ criterionTagValue("membersList", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="membershipFee" label="Membership fee (F)">
-              <template v-if="!props.row.antennaCriteria.membershipFee">
-                <b-tag type="is-light" size="is-medium" v-if="props.row.type !== 'contact'">Empty</b-tag>
-                <b-tag type="is-info" size="is-medium" v-if="props.row.type === 'contact'">Else</b-tag>
-              </template>
-              <template v-else>
-                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.membershipFee === 'true'">Yes</b-tag>
-                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.membershipFee === 'false'">No</b-tag>
-                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.membershipFee === 'exception'">Exception</b-tag>
-              </template>
+              <b-tag :type="criterionTagType('membershipFee', props.row)" size="is-medium">{{ criterionTagValue("membershipFee", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
@@ -88,39 +79,15 @@
             </b-table-column>
 
             <b-table-column field="attendance" label="Agora attendance (AA)">
-              <template v-if="!props.row.antennaCriteria.agoraAttendance">
-                <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
-                <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
-              </template>
-              <template v-else>
-                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'true'">Yes</b-tag>
-                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'false'">No</b-tag>
-                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.agoraAttendance === 'exception'">Exception</b-tag>
-              </template>
+              <b-tag :type="criterionTagType('agoraAttendance', props.row)" size="is-medium">{{ criterionTagValue("agoraAttendance", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="development" label="Development plan (DP)">
-              <template v-if="!props.row.antennaCriteria.developmentPlan">
-                <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
-                <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
-              </template>
-              <template v-else>
-                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.developmentPlan === 'true'">Yes</b-tag>
-                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.developmentPlan === 'false'">No</b-tag>
-                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.developmentPlan === 'exception'">Exception</b-tag>
-              </template>
+              <b-tag :type="criterionTagType('developmentPlan', props.row)" size="is-medium">{{ criterionTagValue("developmentPlan", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="fulfilment" label="Fulfilment report (FR)">
-              <template v-if="!props.row.antennaCriteria.fulfilmentReport">
-                <b-tag type="is-light" size="is-medium" v-if="props.row.type === 'antenna'">Empty</b-tag>
-                <b-tag type="is-info" size="is-medium" v-if="props.row.type !== 'antenna'">Else</b-tag>
-              </template>
-              <template v-else>
-                <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.fulfilmentReport === 'true'">Yes</b-tag>
-                <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.fulfilmentReport === 'false'">No</b-tag>
-                <b-tag type="is-link" size="is-medium" v-if="props.row.antennaCriteria.fulfilmentReport === 'exception'">Exception</b-tag>
-              </template>
+              <b-tag :type="criterionTagType('fulfilmentReport', props.row)" size="is-medium">{{ criterionTagValue("fulfilmentReport", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column>
@@ -132,6 +99,12 @@
             <b-table-column>
               <b-button @click="openAntennaCriteriaModal(props.row)" class="button is-warning">
                 <span class="white"><font-awesome-icon :icon="['fa', 'pencil-alt']" /></span>
+              </b-button>
+            </b-table-column>
+
+            <b-table-column v-if="can.sendFulfilmentEmails">
+              <b-button @click="openAntennaCriteriaMailSend(props.row)" class="button is-danger">
+                <span class="white"><font-awesome-icon :icon="['fa', 'envelope']" /></span>
               </b-button>
             </b-table-column>
 
@@ -151,12 +124,15 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 import AntennaCriteriaModal from './AntennaCriteriaModal.vue'
 import AntennaCriteriaInfo from './AntennaCriteriaInfo.vue'
+import AntennaCriteriaMail from './AntennaCriteriaMail.vue'
+import AntennaCriteriaMailSend from './AntennaCriteriaMailSend.vue'
 
 export default {
   name: 'AntennaCriteriaCheck',
   data () {
     return {
       bodies: [],
+      netcommies: [],
       agorae: null,
       selectedAgora: null,
       showDetails: false,
@@ -165,7 +141,16 @@ export default {
       statutoryEvents: [],
       summerUniversities: [],
       isLoading: false,
-      isLoadingAgora: false
+      isLoadingAgora: false,
+      permissions: [],
+      can: {
+        sendFulfilmentEmails: false
+      },
+      antennaCriteriaMapping: {
+        'contact': ['communication'],
+        'contact antenna': ['membersList', 'membershipFee'],
+        'antenna': ['communication', 'boardElection', 'membersList', 'membershipFee', 'events', 'agoraAttendance', 'developmentPlan', 'fulfilmentReport']
+      }
     }
   },
   computed: {
@@ -175,7 +160,7 @@ export default {
     }),
     filteredBodies () {
       if (!this.hideSafeLocals) return this.bodies
-      return this.bodies.filter(body => { return body.status === false })
+      return this.bodies.filter(body => { return this.statusValue(body) === 'Danger' })
     }
   },
   methods: {
@@ -186,6 +171,8 @@ export default {
         props: {
           local: row,
           agora: this.selectedAgora,
+          netcommies: this.netcommies,
+          permissions: this.permissions,
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,
@@ -207,11 +194,67 @@ export default {
         }
       })
     },
+    openAntennaCriteriaMail () {
+      this.$buefy.modal.open({
+        component: AntennaCriteriaMail,
+        hasModalCard: true,
+        props: {
+          agora: this.selectedAgora,
+          mailComponents: this.mailComponents,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
+    openAntennaCriteriaMailSend (row) {
+      this.$buefy.modal.open({
+        component: AntennaCriteriaMailSend,
+        hasModalCard: true,
+        props: {
+          local: row,
+          agora: this.selectedAgora,
+          mailComponents: this.mailComponents,
+          antennaCriteriaMapping: this.antennaCriteriaMapping,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     toggleShowDetails () {
       this.showDetails = !this.showDetails
     },
     toggleHideSafeLocals () {
       this.hideSafeLocals = !this.hideSafeLocals
+    },
+    criterionTagType (criterion, local) {
+      if (local.antennaCriteria[criterion] === 'true') return 'is-success'
+      if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'is-link'
+      if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'false') return 'is-danger'
+      if (!this.antennaCriteriaMapping[local.type].includes(criterion)) return 'is-info'
+      return 'is-light'
+    },
+    criterionTagValue (criterion, local) {
+      if (local.antennaCriteria[criterion] === 'true') return 'Yes'
+      if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'Exception'
+      if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'false') return 'No'
+      if (!this.antennaCriteriaMapping[local.type].includes(criterion)) return 'Else'
+      return 'Empty'
+    },
+    statusType (local) {
+      return this.antennaCriteriaMapping[local.type].every(criterion => {
+        const fulfilment = local.antennaCriteria[criterion]
+        return fulfilment === 'true' || fulfilment === 'exception'
+      }) ? 'is-success' : 'is-warning'
+    },
+    statusValue (local) {
+      return this.antennaCriteriaMapping[local.type].every(criterion => {
+        const fulfilment = local.antennaCriteria[criterion]
+        return fulfilment === 'true' || fulfilment === 'exception'
+      }) ? 'Safe' : 'Danger'
     },
     fetchAgorae () {
       this.isLoadingAgora = true
@@ -241,41 +284,17 @@ export default {
         })
 
         const promises = []
+        promises.push(this.fetchNetcomAssignment())
         promises.push(this.checkBoardCriterium())
         promises.push(this.checkMembersList())
         promises.push(this.checkEventsCriterium())
+        promises.push(this.fetchMailComponents())
 
         // The allSettled() command waits for all promises to be done, so it is also 'fine' if some of them fail
         await Promise.allSettled(promises)
 
         // Do this after the rest, to make sure it also "overrides" automatically computed fields
         await this.getAntennaCriteriaFulfilment()
-
-        for (const body in this.bodies) {
-          if (this.bodies[body].type === 'antenna') {
-            this.bodies[body].status = (
-              (this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception')
-              && (this.bodies[body].antennaCriteria.boardElection === 'true' || this.bodies[body].antennaCriteria.boardElection === 'exception')
-              && (this.bodies[body].antennaCriteria.membersList === 'true' || this.bodies[body].antennaCriteria.membersList === 'exception')
-              && (this.bodies[body].antennaCriteria.membershipFee === 'true' || this.bodies[body].antennaCriteria.membershipFee === 'exception')
-              && (this.bodies[body].antennaCriteria.events === 'true' || this.bodies[body].antennaCriteria.events === 'exception')
-              && (this.bodies[body].antennaCriteria.agoraAttendance === 'true' || this.bodies[body].antennaCriteria.agoraAttendance === 'exception')
-              && (this.bodies[body].antennaCriteria.developmentPlan === 'true' || this.bodies[body].antennaCriteria.developmentPlan === 'exception')
-              && (this.bodies[body].antennaCriteria.fulfilmentReport === 'true' || this.bodies[body].antennaCriteria.fulfilmentReport === 'exception')
-            )
-          }
-          if (this.bodies[body].type === 'contact antenna') {
-            this.bodies[body].status = (
-              (this.bodies[body].antennaCriteria.membersList === 'true' || this.bodies[body].antennaCriteria.membersList === 'exception')
-              && (this.bodies[body].antennaCriteria.membershipFee === 'true' || this.bodies[body].antennaCriteria.membershipFee === 'exception')
-            )
-          }
-          if (this.bodies[body].type === 'contact') {
-            this.bodies[body].status = (
-              (this.bodies[body].antennaCriteria.communication === 'true' || this.bodies[body].antennaCriteria.communication === 'exception')
-            )
-          }
-        }
 
         this.isLoading = false
       }).catch((err) => {
@@ -379,10 +398,48 @@ export default {
       }).catch((err) => {
         this.$root.showError('Could not fetch manual Antenna Criteria fulfilment', err)
       })
+    },
+    async fetchNetcom () {
+      // TODO: Find a way to get the correct body.id for NetCom, instead of having it hard coded
+      await this.axios.get(this.services['core'] + '/bodies/' + '11' + '/members').then((response) => {
+        this.netcommies = response.data.data.map(netcommie => ({
+          user_id: netcommie.user_id,
+          first_name: netcommie.user.first_name,
+          email: netcommie.user.email
+        }))
+        this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set', 'email': '' })
+      }).catch((err) => {
+        this.$root.showError('Could not fetch NetCom data', err)
+      })
+    },
+    async fetchNetcomAssignment () {
+      await this.axios.get(this.services['network'] + '/netcom').then(async (netcomResponse) => {
+        const netcomAssignment = netcomResponse.data.data
+        await this.fetchNetcom()
+
+        for (const body of this.bodies) {
+          const assignment = netcomAssignment.find(x => x.body_id === body.id)
+          body.netcom = assignment !== undefined ? this.netcommies.find(x => x.user_id === assignment.netcom_id) : this.netcommies[this.netcommies.length - 1]
+        }
+      }).catch((err) => {
+        this.$root.showError('Could not fetch NetCom assignment', err)
+      })
+    },
+    async fetchMailComponents () {
+      await this.axios.get(this.services['network'] + '/mailComponent/' + this.selectedAgora.id).then((mailResponse) => {
+        this.mailComponents = mailResponse.data.data
+      }).catch((err) => {
+        this.$root.showError('Could not fetch mail components', err)
+      })
     }
   },
   mounted () {
     this.fetchAgorae()
+
+    this.axios.get(this.services['core'] + '/my_permissions').then((permissionResponse) => {
+      this.permissions = permissionResponse.data.data
+      this.can.sendFulfilmentEmails = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_email'))
+    })
   }
 }
 
