@@ -257,7 +257,7 @@ export default {
   },
   mounted () {
     this.isLoading = true
-    
+
     this.can.setNetcomAssignment = this.permissions.some(permission => permission.combined.endsWith('manage_network:netcom_assignment'))
     this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
     this.can.giveExceptionCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication_exception'))

@@ -20,8 +20,6 @@
           <a class="button is-info" v-if="hideSafeLocals" @click="toggleHideSafeLocals()">Show all Locals</a>
           <a class="button is-info" v-if="!hideSafeLocals" @click="toggleHideSafeLocals()">Show only Locals in danger</a>
 
-          <a class="button is-info" v-if="can.sendFulfilmentEmails" @click="sendFulfilmentEmails()">Send fulfilment email to Locals</a>
-
           <a class="button is-info" v-if="can.sendFulfilmentEmails" @click="openAntennaCriteriaMail()">Change fulfilment email text</a>
         </div>
         <b-table :data="filteredBodies" :loading="isLoading" narrowed>
@@ -452,14 +450,6 @@ export default {
     },
     sendFulfilmentEmail (body) {
       console.log(body)
-    },
-    sendFulfilmentEmails () {
-      console.log('Sending emails...')
-      for (const body of this.bodies) {
-        if (body.status === false) {
-          this.sendFulfilmentEmail(body)
-        }
-      }
     }
   },
   mounted () {
