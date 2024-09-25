@@ -78,7 +78,7 @@ export default {
     this.subject = 'Preliminary Antenna Criteria check ' + this.agora.name
 
     // Construct the complete mail based on the missing criteria
-    const ordering = ['communication', 'board election', 'members list', 'membership fee', 'events', 'agora attendance', 'development plan', 'fulfilment report'] 
+    const ordering = ['communication', 'board election', 'members list', 'membership fee', 'events', 'agora attendance', 'development plan', 'fulfilment report']
     const antennaCriteriaMapping = {
       'contact': ['communication'],
       'contact antenna': ['members list', 'membership fee'],
@@ -103,7 +103,7 @@ export default {
       .replaceAll('{body_name}', this.local.name)
       .replaceAll('{agora_name}', this.agora.name)
       .replaceAll('{netcom_name}', this.local.netcom.first_name)
-      .replaceAll('{local_type}', this.local.type.charAt(0).toUpperCase() + this.local.type.slice(1))
+      .replaceAll('{local_type}', this.local.type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
       .replaceAll('{antenna_criteria_amount}', antennaCriteriaMapping[this.local.type].length)
   }
 }
