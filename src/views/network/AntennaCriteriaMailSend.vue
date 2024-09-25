@@ -6,8 +6,16 @@
     </header>
 
     <section class="modal-card-body">
+      <b-field label="From" horizontal>
+        <b-input v-model="from" />
+      </b-field>
+
       <b-field label="To" horizontal>
         <b-input v-model="to" />
+      </b-field>
+
+      <b-field label="Cc" horizontal>
+        <b-input v-model="cc" />
       </b-field>
 
       <b-field label="Subject" horizontal>
@@ -40,8 +48,8 @@ export default {
     return {
       from: 'network@aegee.eu',
       to: '',
+      cc: '',
       subject: '',
-      replyTo: 'network@aegee.eu',
       body: ''
     }
   },
@@ -50,15 +58,16 @@ export default {
       const data = {
         'from': this.from,
         'to': this.to,
+        'cc': this.cc,
         'subject': this.subject,
-        'reply_to': this.replyTo,
+        'reply_to': this.from,
         'template': this.mail
       }
 
       console.log(data)
 
       this.axios.post(
-        this.services['network'] + '/sendFulfilmentMail',
+        this.services['network'] + '/antennaCriteria/sendFulfilmentMail',
         data
       ).then(() => {
         this.showSuccess('Mail sent succesfully.')
@@ -75,6 +84,7 @@ export default {
   },
   mounted () {
     this.to = this.local.email
+    this.cc = this.local.netcom.email // TODO: See how we can set this to always be an @aegee.eu account
     this.subject = 'Preliminary Antenna Criteria check ' + this.agora.name
 
     // Construct the complete mail based on the missing criteria

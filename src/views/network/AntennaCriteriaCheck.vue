@@ -437,9 +437,10 @@ export default {
       await this.axios.get(this.services['core'] + '/bodies/' + '11' + '/members').then((response) => {
         this.netcommies = response.data.data.map(netcommie => ({
           user_id: netcommie.user_id,
-          first_name: netcommie.user.first_name
+          first_name: netcommie.user.first_name,
+          email: netcommie.user.email
         }))
-        this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set' })
+        this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set', 'email': '' })
       }).catch((err) => {
         this.$root.showError('Could not fetch NetCom data', err)
       })
@@ -463,9 +464,6 @@ export default {
       }).catch((err) => {
         this.$root.showError('Could not fetch mail components', err)
       })
-    },
-    sendFulfilmentEmail (body) {
-      console.log(body)
     }
   },
   mounted () {
