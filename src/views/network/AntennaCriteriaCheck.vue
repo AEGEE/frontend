@@ -142,7 +142,7 @@
             </b-table-column>
 
             <b-table-column v-if="can.sendFulfilmentEmails">
-              <b-button @click="sendFulfilmentEmail(props.row)" class="button is-danger">
+              <b-button @click="openAntennaCriteriaMailSend(props.row)" class="button is-danger">
                 <span class="white"><font-awesome-icon :icon="['fa', 'envelope']" /></span>
               </b-button>
             </b-table-column>
@@ -164,6 +164,7 @@ import moment from 'moment'
 import AntennaCriteriaModal from './AntennaCriteriaModal.vue'
 import AntennaCriteriaInfo from './AntennaCriteriaInfo.vue'
 import AntennaCriteriaMail from './AntennaCriteriaMail.vue'
+import AntennaCriteriaMailSend from './AntennaCriteriaMailSend.vue'
 
 export default {
   name: 'AntennaCriteriaCheck',
@@ -233,7 +234,22 @@ export default {
         hasModalCard: true,
         props: {
           agora: this.selectedAgora,
-          mail_components: this.mailComponents,
+          mailComponents: this.mailComponents,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
+    openAntennaCriteriaMailSend (row) {
+      this.$buefy.modal.open({
+        component: AntennaCriteriaMailSend,
+        hasModalCard: true,
+        props: {
+          local: row,
+          agora: this.selectedAgora,
+          mailComponents: this.mailComponents,
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,

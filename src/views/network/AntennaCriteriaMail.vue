@@ -12,6 +12,8 @@
           <li><em>{body_name}</em> - name of the body</li>
           <li><em>{agora_name}</em> - name of the Agora</li>
           <li><em>{netcom_name}</em> - name of the assigned NetCommie</li>
+          <li><em>{local_type}</em> - type of the Local</li>
+          <li><em>{antenna_criteria_amount}</em> - the amount of Antenna Criteria to fulfil</li>
         </ul>
         You can also use Markdown, here are some basic functions:
         <ul style="list-style: inside">
@@ -47,12 +49,16 @@
         <b-input type="textarea" v-model="parts.events" />
       </b-field>
 
+      <b-field label="Agora attendance">
+        <b-input type="textarea" v-model="parts.agoraAttendance" />
+      </b-field>
+
       <b-field label="Development plan">
         <b-input type="textarea" v-model="parts.developmentPlan" />
       </b-field>
 
       <b-field label="Fulfilment Report">
-        <b-input type="textarea" v-model="parts.fulfilmenReport" />
+        <b-input type="textarea" v-model="parts.fulfilmentReport" />
       </b-field>
 
       <b-field label="Closing">
@@ -76,7 +82,7 @@
 <script>
 export default {
   name: 'AntennaCriteriaMail',
-  props: ['agora', 'mail_components', 'permissions', 'services', 'showError', 'showSuccess', 'router'],
+  props: ['agora', 'mailComponents', 'permissions', 'services', 'showError', 'showSuccess', 'router'],
   data () {
     return {
       parts: {
@@ -113,7 +119,7 @@ export default {
 
       for (const part in this.parts) {
         const component = part.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()
-        const original = this.mail_components.find(c => c.mail_component === component)
+        const original = this.mailComponents.find(c => c.mail_component === component)
         if (original !== this.parts[part]) {
           promises.push(this.setMailComponent(component, this.parts[part]))
         }
@@ -135,7 +141,7 @@ export default {
     }
   },
   mounted () {
-    for (const component of this.mail_components) {
+    for (const component of this.mailComponents) {
       const part = component.mail_component.replace(/ (\w)/g, (_, c) => c.toUpperCase())
       this.parts[part] = component.text
     }
