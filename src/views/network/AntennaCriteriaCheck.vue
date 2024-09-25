@@ -146,7 +146,7 @@ export default {
       can: {
         sendFulfilmentEmails: false
       },
-      antennaCriteriaMapping : {
+      antennaCriteriaMapping: {
         'contact': ['communication'],
         'contact antenna': ['membersList', 'membershipFee'],
         'antenna': ['communication', 'boardElection', 'membersList', 'membershipFee', 'events', 'agoraAttendance', 'developmentPlan', 'fulfilmentReport']

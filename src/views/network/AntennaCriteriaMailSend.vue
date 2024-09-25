@@ -92,7 +92,6 @@ export default {
 
     for (const criterion of this.antennaCriteriaMapping[this.local.type]) {
       const part = criterion.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()
-      const criterionName = part.replace(/ (\w)/g, (_, c) => c.toUpperCase())
       const criterionFulfilment = this.local.antennaCriteria[criterion]
       if (criterionFulfilment !== 'true' && criterionFulfilment !== 'exception') {
         rawMail += this.mailComponents.find(c => c.mail_component === part).text
