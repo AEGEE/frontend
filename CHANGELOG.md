@@ -1,3 +1,24 @@
+## [1.37.4](https://github.com/AEGEE/frontend/compare/1.37.3...1.37.4) (2024-09-25)
+
+
+### Bug Fixes
+
+* **network:** fix problems with saving of the membership fee and checking SU organisation ([#2207](https://github.com/AEGEE/frontend/issues/2207)) ([68d44d0](https://github.com/AEGEE/frontend/commit/68d44d0b64e312f11201e635ed37ba8ab80e02de))
+
+## [1.37.3](https://github.com/AEGEE/frontend/compare/1.37.2...1.37.3) (2024-09-21)
+
+
+### Bug Fixes
+
+* **network:** use Promise.allSettled in AC check ([#2205](https://github.com/AEGEE/frontend/issues/2205)) ([f77d8c9](https://github.com/AEGEE/frontend/commit/f77d8c946e3bb74d39d9bdc1e35287b637c37dbb))
+
+## [1.37.2](https://github.com/AEGEE/frontend/compare/1.37.1...1.37.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* **network:** Fix various small problems for the Antenna Criteria check ([#2204](https://github.com/AEGEE/frontend/issues/2204)) ([9b44123](https://github.com/AEGEE/frontend/commit/9b44123bd63fedb84a695c7a50f75fd2ca2c37b3))
+
 ## [1.37.1](https://github.com/AEGEE/frontend/compare/1.37.0...1.37.1) (2024-09-17)
 
 
