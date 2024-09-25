@@ -184,6 +184,11 @@ export default {
       permissions: [],
       can: {
         sendFulfilmentEmails: false
+      },
+      antennaCriteriaMapping : {
+        'contact': ['communication'],
+        'contact antenna': ['membersList', 'membershipFee'],
+        'antenna': ['communication', 'boardElection', 'membersList', 'membershipFee', 'events', 'agoraAttendance', 'developmentPlan', 'fulfilmentReport']
       }
     }
   },
@@ -250,6 +255,7 @@ export default {
           local: row,
           agora: this.selectedAgora,
           mailComponents: this.mailComponents,
+          antennaCriteriaMapping: this.antennaCriteriaMapping,
           services: this.services,
           showError: this.$root.showError,
           showSuccess: this.$root.showSuccess,

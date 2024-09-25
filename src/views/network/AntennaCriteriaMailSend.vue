@@ -43,7 +43,7 @@
 <script>
 export default {
   name: 'AntennaCriteriaMailSend',
-  props: ['local', 'agora', 'mailComponents', 'permissions', 'services', 'showError', 'showSuccess', 'router'],
+  props: ['local', 'agora', 'mailComponents', 'antennaCriteriaMapping', 'services', 'showError', 'showSuccess', 'router'],
   data () {
     return {
       from: 'network@aegee.eu',
@@ -87,20 +87,13 @@ export default {
     this.cc = this.local.netcom.email // TODO: See how we can set this to always be an @aegee.eu account
     this.subject = 'Preliminary Antenna Criteria check ' + this.agora.name
 
-    // Construct the complete mail based on the missing criteria
-    const ordering = ['communication', 'board election', 'members list', 'membership fee', 'events', 'agora attendance', 'development plan', 'fulfilment report']
-    const antennaCriteriaMapping = {
-      'contact': ['communication'],
-      'contact antenna': ['members list', 'membership fee'],
-      'antenna': ordering
-    }
-
+    // Add all parts of the mail template that the Local is not fulfilling and should fulfil
     let rawMail = this.mailComponents.find(c => c.mail_component === 'introduction').text + '\n<br><br>\n'
 
-    // Add all parts of the mail template that the Local is not fulfilling and should fulfil
-    for (const part of antennaCriteriaMapping[this.local.type]) {
+    for (const criterion of this.antennaCriteriaMapping[this.local.type]) {
+      const part = criterion.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()
       const criterionName = part.replace(/ (\w)/g, (_, c) => c.toUpperCase())
-      const criterionFulfilment = this.local.antennaCriteria[criterionName]
+      const criterionFulfilment = this.local.antennaCriteria[criterion]
       if (criterionFulfilment !== 'true' && criterionFulfilment !== 'exception') {
         rawMail += this.mailComponents.find(c => c.mail_component === part).text
         rawMail += '\n<br><br>\n'
@@ -114,7 +107,7 @@ export default {
       .replaceAll('{agora_name}', this.agora.name)
       .replaceAll('{netcom_name}', this.local.netcom.first_name)
       .replaceAll('{local_type}', this.local.type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
-      .replaceAll('{antenna_criteria_amount}', antennaCriteriaMapping[this.local.type].length)
+      .replaceAll('{antenna_criteria_amount}', this.antennaCriteriaMapping[this.local.type].length)
   }
 }
 </script>
