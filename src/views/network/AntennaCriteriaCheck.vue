@@ -4,10 +4,6 @@
       <article class="tile is-child">
         <h4 class="title">Antenna Criteria Check</h4>
 
-        <div class="notification is-warning">
-          The computation of the fulfilment of 'Events' is currently not working correctly. It does <strong>not</strong> yet take into account the Summer Universities organised. Please check these manually!
-        </div>
-
         <div class="field">
           <label class="label">Selected Agora</label>
           <div class="select">
@@ -131,7 +127,7 @@ export default {
       summerUniversities: [],
       isLoading: false,
       isLoadingAgora: false,
-      antennaCriteriaMapping : {
+      antennaCriteriaMapping: {
         'contact': ['communication'],
         'contact antenna': ['membersList', 'membershipFee'],
         'antenna': ['communication', 'boardElection', 'membersList', 'membershipFee', 'events', 'agoraAttendance', 'developmentPlan', 'fulfilmentReport']
