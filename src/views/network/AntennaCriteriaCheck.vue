@@ -312,7 +312,7 @@ export default {
       const promises = []
       promises.push(this.fetchEvents())
       promises.push(this.fetchStatutoryEvents())
-      // promises.push(this.fetchSummerUniversities())
+      promises.push(this.fetchSummerUniversities())
 
       await Promise.all(promises)
 
@@ -320,27 +320,39 @@ export default {
       for (const event of this.events) {
         for (const organizer of event.organizing_bodies) {
           const body = this.bodies.find(x => x.id === organizer.body_id)
-          body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
+          if (body) {
+            body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
+              ? event.latest_event
+              : body.latest_event
+          }
         }
       }
 
       for (const event of this.statutoryEvents) {
         const body = this.bodies.find(x => x.id === event.body_id)
-        body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
+        if (body) {
+          body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
+            ? event.latest_event
+            : body.latest_event
+        }
       }
 
-      // for (const event of this.summerUniversities) {
-      //   for (const organizer of event.organizing_bodies) {
-      //     const body = this.bodies.find(x => x.id === organizer.body_id)
-      //     body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event)) ? event.latest_event : body.latest_event
-      //   }
-      // }
+      for (const event of this.summerUniversities) {
+        for (const organizer of event.organizing_bodies) {
+          const body = this.bodies.find(x => x.id === organizer.body_id)
+          if (body) {
+            body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
+              ? event.latest_event
+              : body.latest_event
+          }
+        }
+      }
       // ... until here
 
-      for (const body in this.bodies) {
+      for (const body of this.bodies) {
         // Check if the last event is in the past 2 years
-        this.bodies[body].antennaCriteria.events = String(this.bodies[body].latest_event !== undefined && moment(this.bodies[body].latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2)
-        if (this.bodies[body].latest_event !== undefined) this.bodies[body].latest_event = moment(this.bodies[body].latest_event).format('M[/]YYYY')
+        body.antennaCriteria.events = String(body.latest_event !== undefined && moment(body.latest_event).diff(moment(this.selectedAgora.ends), 'years', true) <= 2)
+        if (body.latest_event !== undefined) body.latest_event = moment(body.latest_event).format('M[/]YYYY')
       }
     },
     async checkBoardCriterium () {
