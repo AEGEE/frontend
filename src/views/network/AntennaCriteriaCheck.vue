@@ -324,10 +324,10 @@ export default {
           body.latest_election = board.latest_election
         }
 
-        for (const body in this.bodies) {
+        for (const body of this.bodies) {
           // Check if the current board was elected within the past year
-          this.bodies[body].antennaCriteria.boardElection = String(this.bodies[body].latest_election !== undefined && moment(this.bodies[body].latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1)
-          if (this.bodies[body].latest_election !== undefined) this.bodies[body].latest_election = moment(this.bodies[body].latest_election).format('D[/]M[/]YYYY')
+          body.antennaCriteria.boardElection = String(body.latest_election !== undefined && moment(body.latest_election).diff(moment(this.selectedAgora.ends), 'years', true) <= 1)
+          if (body.latest_election !== undefined) body.latest_election = moment(body.latest_election).format('D[/]M[/]YYYY')
         }
       }).catch((err) => {
         this.$root.showError('Could not fetch boards data', err)
