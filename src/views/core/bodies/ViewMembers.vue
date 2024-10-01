@@ -110,7 +110,8 @@ export default {
         create: false,
         viewMember: false,
         viewPayment: false,
-        createPayment: false
+        createPayment: false,
+        deletePayment: false
       },
       PAST_DATE_PLACEHOLDER: '1900-01-1'
     }
@@ -127,7 +128,12 @@ export default {
         component: ListFeePaymentsModal,
         hasModalCard: true,
         props: {
-          member
+          member,
+          payments: this.payments,
+          canDelete: this.can.deletePayment,
+          route: this.$route,
+          services: this.services,
+          root: this.$root
         }
       })
     },
@@ -243,6 +249,7 @@ export default {
         this.can.viewMember = this.permissions.some(permission => permission.combined.endsWith('view:member'))
         this.can.viewPayment = this.permissions.some(permission => permission.combined.endsWith('view:payment'))
         this.can.createPayment = this.permissions.some(permission => permission.combined.endsWith('create:payment'))
+        this.can.deletePayment = this.permissions.some(permission => permission.combined.endsWith('delete:payment'))
 
         if (!this.can.viewPayment || !this.body.pays_fees) {
           this.isLoading = false

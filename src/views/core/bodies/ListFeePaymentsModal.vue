@@ -34,6 +34,13 @@
           <b-table-column field="invoice_name" label="Invoice name">
             {{ props.row.invoice_name }}
           </b-table-column>
+
+          <b-table-column label="Delete" centered :visible="canDelete">
+            <a class="button is-small is-danger" @click="askDeleteMemberPaymentFee(props.row, false)">
+              <span class="icon"><font-awesome-icon icon="minus" /></span>
+              <span>Delete</span>
+            </a>
+          </b-table-column>
         </template>
 
         <template slot="empty">
@@ -48,14 +55,41 @@
 <script>
 export default {
   name: 'ListFeePaymentsModal',
-  props: ['member'],
+  props: [
+    'member',
+    'payments',
+    'canDelete',
+    'route',
+    'services',
+    'root'
+  ],
   data () {
     return {
 
     }
   },
   methods: {
+    askDeleteMemberPaymentFee (fee) {
+      const message = `Are you sure you want to <b>delete</b> ${fee.id} from ${this.member.user.first_name} ${this.member.user.last_name}? This action cannot be undone.`
 
+      this.$buefy.dialog.confirm({
+        title: 'Deleting a fee',
+        message,
+        confirmText: 'Delete fee',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.deleteFee(fee)
+      })
+    },
+    deleteFee (fee) {
+      this.axios.delete(this.services['core'] + '/bodies/' + this.route.params.id + '/payments/' + fee.id).then(() => {
+        this.root.showSuccess('Fee is deleted.')
+        const updatedPayments = [...this.member.payments]
+        const index = updatedPayments.findIndex(p => p.id === fee.id)
+        updatedPayments.splice(index, 1)
+        this.member.payments = updatedPayments
+      }).catch((err) => this.root.showError('Could not delete fee', err))
+    }
   }
 }
 </script>
