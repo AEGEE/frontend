@@ -228,8 +228,8 @@ export default {
         this.bodies = bodiesResponse.data.data
         this.bodies = this.bodies.filter(x => ['antenna', 'contact antenna', 'contact'].includes(x.type))
         this.bodies.forEach(body => {
-          body.antennaCriteria = {}
-          body.comments = {}
+          this.$set(body, 'antennaCriteria', {})
+          this.$set(body, 'comments', {})
         })
 
         const promises = []
@@ -283,9 +283,10 @@ export default {
         for (const organizer of event.organizing_bodies) {
           const body = this.bodies.find(x => x.id === organizer.body_id)
           if (body) {
-            body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
+            const latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
               ? event.latest_event
               : body.latest_event
+            this.$set(body, 'latest_event', latest_event)
           }
         }
       }
@@ -293,9 +294,10 @@ export default {
       for (const event of this.statutoryEvents) {
         const body = this.bodies.find(x => x.id === event.body_id)
         if (body) {
-          body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
+          const latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
             ? event.latest_event
             : body.latest_event
+          this.$set(body, 'latest_event', latest_event)
         }
       }
 
@@ -303,9 +305,10 @@ export default {
         for (const organizer of event.organizing_bodies) {
           const body = this.bodies.find(x => x.id === organizer.body_id)
           if (body) {
-            body.latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
+            const latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
               ? event.latest_event
               : body.latest_event
+            this.$set(body, 'latest_event', latest_event)
           }
         }
       }
@@ -315,10 +318,8 @@ export default {
       for (const body of this.bodies) {
         if (body.latest_event) {
           const diffInYears = moment(this.selectedAgora.ends).diff(moment(body.latest_event), 'years', true)
-          body.antennaCriteria.events = diffInYears >= 0 && diffInYears <= 2 ? 'true' : 'false'
+          this.$set(body.antennaCriteria, 'events', diffInYears >= 0 && diffInYears <= 2 ? 'true' : 'false')
           body.latest_event = moment(body.latest_event).format('M[/]YYYY')
-        } else {
-          body.antennaCriteria.events = 'false'
         }
       }
     },
@@ -326,17 +327,15 @@ export default {
       await this.axios.get(this.services['network'] + '/boards/recents', { params: { ends: this.selectedAgora.ends } }).then((boardsResponse) => {
         for (const board of boardsResponse.data.data) {
           const body = this.bodies.find(x => x.id === board.body_id)
-          body.latest_election = board.latest_election
+          this.$set(body, 'latest_election', board.latest_election)
         }
 
         // Check if the current board was elected within the past year
         for (const body of this.bodies) {
           if (body.latest_election) {
             const diffInYears = moment(this.selectedAgora.ends).diff(moment(body.latest_election), 'years', true)
-            body.antennaCriteria.boardElection = diffInYears >= 0 && diffInYears <= 1 ? 'true' : 'false'
+            this.$set(body.antennaCriteria, 'boardElection', diffInYears >= 0 && diffInYears <= 1 ? 'true' : 'false')
             body.latest_election = moment(body.latest_election).format('D[/]M[/]YYYY')
-          } else {
-            body.antennaCriteria.boardElection = 'false'
           }
         }
       }).catch((err) => {
@@ -362,11 +361,12 @@ export default {
         const antennaCriteriaFulfilment = antennaCriteriaResponse.data.data
         for (const criterion of antennaCriteriaFulfilment) {
           const body = this.bodies.find(x => x.id === criterion.body_id)
-          body.comments = body.comments || {}
+
           // Convert string to camelCase
           const criterionName = criterion.antenna_criterion.replace(/(?:^\w|\s\w)/g, match => match.trim().toUpperCase()).replace(/^\w/, match => match.toLowerCase())
-          body.antennaCriteria[criterionName] = criterion.value
-          body.comments[criterionName] = criterion.comment
+
+          this.$set(body.antennaCriteria, criterionName, criterion.value)
+          this.$set(body.comments, criterionName, criterion.comment)
         }
       }).catch((err) => {
         this.$root.showError('Could not fetch manual Antenna Criteria fulfilment', err)
