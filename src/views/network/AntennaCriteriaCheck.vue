@@ -171,15 +171,15 @@ export default {
     criterionTagValue (criterion, local) {
       if (this.showDetails) {
         if (criterion === 'boardElection') {
-          if (local.antennaCriteria?.['boardElection'] === 'true') return local.latest_election
+          if (local.antennaCriteria?.['boardElection'] === 'true') return local.latestElection
           if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'Exception'
-          if (this.antennaCriteriaMapping[local.type].includes('boardElection')) return local.latest_election ?? 'No'
+          if (this.antennaCriteriaMapping[local.type].includes('boardElection')) return local.latestElection ?? 'No'
         }
 
         if (criterion === 'events') {
-          if (local.antennaCriteria?.['events'] === 'true') return local.latest_event
+          if (local.antennaCriteria?.['events'] === 'true') return local.latestEvent
           if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'Exception'
-          if (this.antennaCriteriaMapping[local.type].includes('events')) return local.latest_event ?? 'No'
+          if (this.antennaCriteriaMapping[local.type].includes('events')) return local.latestEvent ?? 'No'
         }
       }
 
@@ -279,10 +279,10 @@ export default {
         for (const organizer of event.organizing_bodies) {
           const body = this.bodies.find(x => x.id === organizer.body_id)
           if (body) {
-            const latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
-              ? event.latest_event
-              : body.latest_event
-            this.$set(body, 'latest_event', latest_event)
+            const latestEvent = !body.latestEvent || moment(event.latestEvent).isAfter(moment(body.latestEvent))
+              ? event.latestEvent
+              : body.latestEvent
+            this.$set(body, 'latestEvent', latestEvent)
           }
         }
       }
@@ -290,10 +290,10 @@ export default {
       for (const event of this.statutoryEvents) {
         const body = this.bodies.find(x => x.id === event.body_id)
         if (body) {
-          const latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
-            ? event.latest_event
-            : body.latest_event
-          this.$set(body, 'latest_event', latest_event)
+          const latestEvent = !body.latestEvent || moment(event.latestEvent).isAfter(moment(body.latestEvent))
+            ? event.latestEvent
+            : body.latestEvent
+          this.$set(body, 'latestEvent', latestEvent)
         }
       }
 
@@ -301,10 +301,10 @@ export default {
         for (const organizer of event.organizing_bodies) {
           const body = this.bodies.find(x => x.id === organizer.body_id)
           if (body) {
-            const latest_event = !body.latest_event || moment(event.latest_event).isAfter(moment(body.latest_event))
-              ? event.latest_event
-              : body.latest_event
-            this.$set(body, 'latest_event', latest_event)
+            const latestEvent = !body.latestEvent || moment(event.latestEvent).isAfter(moment(body.latestEvent))
+              ? event.latestEvent
+              : body.latestEvent
+            this.$set(body, 'latestEvent', latestEvent)
           }
         }
       }
@@ -312,10 +312,10 @@ export default {
 
       // Check if the latest event is at most two years before the Agora
       for (const body of this.bodies) {
-        if (body.latest_event) {
-          const diffInYears = moment(this.selectedAgora.ends).diff(moment(body.latest_event), 'years', true)
+        if (body.latestEvent) {
+          const diffInYears = moment(this.selectedAgora.ends).diff(moment(body.latestEvent), 'years', true)
           this.$set(body.antennaCriteria, 'events', diffInYears >= 0 && diffInYears <= 2 ? 'true' : 'false')
-          body.latest_event = moment(body.latest_event).format('M[/]YYYY')
+          body.latestEvent = moment(body.latestEvent).format('M[/]YYYY')
         }
       }
     },
@@ -323,15 +323,15 @@ export default {
       await this.axios.get(this.services['network'] + '/boards/recents', { params: { ends: this.selectedAgora.ends } }).then((boardsResponse) => {
         for (const board of boardsResponse.data.data) {
           const body = this.bodies.find(x => x.id === board.body_id)
-          this.$set(body, 'latest_election', board.latest_election)
+          this.$set(body, 'latestElection', board.latestElection)
         }
 
         // Check if the current board was elected within the past year
         for (const body of this.bodies) {
-          if (body.latest_election) {
-            const diffInYears = moment(this.selectedAgora.ends).diff(moment(body.latest_election), 'years', true)
+          if (body.latestElection) {
+            const diffInYears = moment(this.selectedAgora.ends).diff(moment(body.latestElection), 'years', true)
             this.$set(body.antennaCriteria, 'boardElection', diffInYears >= 0 && diffInYears <= 1 ? 'true' : 'false')
-            body.latest_election = moment(body.latest_election).format('D[/]M[/]YYYY')
+            body.latestElection = moment(body.latestElection).format('D[/]M[/]YYYY')
           }
         }
       }).catch((err) => {

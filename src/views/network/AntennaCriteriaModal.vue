@@ -194,10 +194,10 @@ export default {
       for (const criterion in this.antennaCriteria) {
         const permission = 'set' + criterion.charAt(0).toUpperCase() + criterion.slice(1)
         if (
-          this.can[permission] &&
-          (
-            (this.antennaCriteria[criterion] !== null && this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion]) ||
-            (this.comments[criterion] !== '' && this.comments[criterion] !== this.local.comments[criterion])
+          this.can[permission]
+          && (
+            (this.antennaCriteria[criterion] !== null && this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion])
+            || (this.comments[criterion] !== '' && this.comments[criterion] !== this.local.comments[criterion])
           )
         ) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
