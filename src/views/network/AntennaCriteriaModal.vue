@@ -59,7 +59,12 @@
       </template>
 
       <template v-if="can.setMembershipFee">
-        <b-field label="Membership fee (F)" />
+        <b-field>
+          <template #label>
+            Membership fee (F)
+            <tooltip text="This is an automatic field" />
+          </template>
+        </b-field>
         <b-field grouped>
           <b-select v-model="antennaCriteria.membershipFee">
             <option value="null">Not set</option>

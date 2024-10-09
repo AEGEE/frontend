@@ -234,7 +234,7 @@ export default {
 
         const promises = []
         promises.push(this.checkBoardCriterium())
-        promises.push(this.checkMembersList())
+        promises.push(this.checkMembersListAndFeeCriteria())
         promises.push(this.checkEventsCriterium())
 
         // The allSettled() command waits for all promises to be done, so it is also 'fine' if some of them fail
@@ -343,11 +343,15 @@ export default {
         this.$root.showError('Could not fetch boards data', err)
       })
     },
-    async checkMembersList () {
+    async checkMembersListAndFeeCriteria () {
       await this.axios.get(this.services['statutory'] + '/events/' + this.selectedAgora.id + '/memberslists').then((membersListsResponse) => {
         for (const membersList of membersListsResponse.data.data) {
           const body = this.bodies.find(x => x.id === membersList.body_id)
-          body.antennaCriteria.membersList = 'true'
+          this.$set(body.antennaCriteria, 'membersList', 'true')
+
+          if (membersList.fee_not_paid === 0) {
+            this.$set(body.antennaCriteria, 'membershipFee', 'true')
+          }
         }
       }).catch((err) => {
         this.$root.showError('Could not fetch members list data', err)
