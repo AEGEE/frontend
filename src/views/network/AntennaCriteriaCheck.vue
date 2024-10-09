@@ -172,11 +172,13 @@ export default {
       if (this.showDetails) {
         if (criterion === 'boardElection') {
           if (local.antennaCriteria?.['boardElection'] === 'true') return local.latest_election
+          if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'Exception'
           if (this.antennaCriteriaMapping[local.type].includes('boardElection')) return local.latest_election ?? 'No'
         }
 
         if (criterion === 'events') {
           if (local.antennaCriteria?.['events'] === 'true') return local.latest_event
+          if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'Exception'
           if (this.antennaCriteriaMapping[local.type].includes('events')) return local.latest_event ?? 'No'
         }
       }
