@@ -1,3 +1,38 @@
+# [1.38.0](https://github.com/AEGEE/frontend/compare/1.37.7...1.38.0) (2024-10-09)
+
+
+### Features
+
+* **network:** automatically load membership fee payment ([#2211](https://github.com/AEGEE/frontend/issues/2211)) ([4193f91](https://github.com/AEGEE/frontend/commit/4193f918d413171259782c9b19e745d28a7d5e0c))
+
+## [1.37.7](https://github.com/AEGEE/frontend/compare/1.37.6...1.37.7) (2024-10-09)
+
+
+### Bug Fixes
+
+* **resources:** update CD House guest request form link ([#2210](https://github.com/AEGEE/frontend/issues/2210)) ([29b38c5](https://github.com/AEGEE/frontend/commit/29b38c545e31cd758f90fa160d0105e1f1b95c1c))
+
+## [1.37.6](https://github.com/AEGEE/frontend/compare/1.37.5...1.37.6) (2024-09-27)
+
+
+### Bug Fixes
+
+* **network:** fix comparing of dates to the Agora time ([#2209](https://github.com/AEGEE/frontend/issues/2209)) ([126f29f](https://github.com/AEGEE/frontend/commit/126f29f772d27657c88b2a3a706cf11e0ff08b1d))
+
+## [1.37.5](https://github.com/AEGEE/frontend/compare/1.37.4...1.37.5) (2024-09-26)
+
+
+### Bug Fixes
+
+* **network:** fix the mapping of all events and board elections to Locals ([#2208](https://github.com/AEGEE/frontend/issues/2208)) ([cb7855e](https://github.com/AEGEE/frontend/commit/cb7855edebbbe8c5b3a09ba3ef31437d8e28914a))
+
+## [1.37.4](https://github.com/AEGEE/frontend/compare/1.37.3...1.37.4) (2024-09-25)
+
+
+### Bug Fixes
+
+* **network:** fix problems with saving of the membership fee and checking SU organisation ([#2207](https://github.com/AEGEE/frontend/issues/2207)) ([68d44d0](https://github.com/AEGEE/frontend/commit/68d44d0b64e312f11201e635ed37ba8ab80e02de))
+
 ## [1.37.3](https://github.com/AEGEE/frontend/compare/1.37.2...1.37.3) (2024-09-21)
 
 

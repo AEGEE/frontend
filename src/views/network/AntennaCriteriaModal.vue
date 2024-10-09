@@ -21,7 +21,7 @@
             <option value="null">Not set</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
-            <option v-if="can.giveExceptionCommunication" value="exception">Exception</option>
+            <option v-if="can.setCommunicationException" value="exception">Exception</option>
           </b-select>
 
           <b-input v-model="comments.communication" placeholder="Comment" expanded />
@@ -66,8 +66,13 @@
         </b-field>
       </template>
 
-      <template v-if="can.setMembershipFeePayement">
-        <b-field label="Membership fee (F)" />
+      <template v-if="can.setMembershipFee">
+        <b-field>
+          <template #label>
+            Membership fee (F)
+            <tooltip text="This is an automatic field" />
+          </template>
+        </b-field>
         <b-field grouped>
           <b-select v-model="antennaCriteria.membershipFee">
             <option value="null">Not set</option>
@@ -177,10 +182,10 @@ export default {
       },
       can: {
         setCommunication: false,
-        giveExceptionCommunication: false,
+        setCommunicationException: false,
         setBoardElection: false,
         setMembersList: false,
-        setMembershipFeePayement: false,
+        setMembershipFee: false,
         setEvents: false,
         setAgoraAttendance: false,
         setDevelopmentPlan: false,
@@ -196,8 +201,16 @@ export default {
       const promises = []
       for (const criterion in this.antennaCriteria) {
         const permission = 'set' + criterion.charAt(0).toUpperCase() + criterion.slice(1)
-        if (this.can[permission] && (this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion] || this.comments[criterion] !== this.local.comments[criterion])) {
+        if (
+          this.can[permission]
+          && (
+            (this.antennaCriteria[criterion] !== null && this.antennaCriteria[criterion] !== this.local.antennaCriteria[criterion])
+            || (this.comments[criterion] !== '' && this.comments[criterion] !== this.local.comments[criterion])
+          )
+        ) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
+          this.$set(this.local.antennaCriteria, criterion, this.antennaCriteria[criterion])
+          this.$set(this.local.comments, criterion, this.comments[criterion])
         }
       }
 
@@ -208,7 +221,7 @@ export default {
       await Promise.all(promises).then(() => {
         this.isLoading = false
         this.showSuccess('Antenna Criteria fulfilment updated.')
-        this.router.go(0)
+        this.$parent.close()
       }).catch((err) => {
         this.isLoading = false
         this.showError('Something went wrong', err)
@@ -257,6 +270,18 @@ export default {
   },
   mounted () {
     this.isLoading = true
+    this.axios.get(this.services['core'] + '/my_permissions').then((permissionResponse) => {
+      this.permissions = permissionResponse.data.data
+      this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
+      this.can.setCommunicationException = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication_exception'))
+      this.can.setBoardElection = this.permissions.some(permission => permission.combined.endsWith('manage_network:board_election'))
+      this.can.setMembersList = this.permissions.some(permission => permission.combined.endsWith('manage_network:members_list'))
+      this.can.setMembershipFee = this.permissions.some(permission => permission.combined.endsWith('manage_network:membership_fee'))
+      this.can.setEvents = this.permissions.some(permission => permission.combined.endsWith('manage_network:events'))
+      this.can.setAgoraAttendance = this.permissions.some(permission => permission.combined.endsWith('manage_network:agora_attendance'))
+      this.can.setDevelopmentPlan = this.permissions.some(permission => permission.combined.endsWith('manage_network:development_plan'))
+      this.can.setFulfilmentReport = this.permissions.some(permission => permission.combined.endsWith('manage_network:fulfilment_report'))
+    })
 
     this.can.setNetcomAssignment = this.permissions.some(permission => permission.combined.endsWith('manage_network:netcom_assignment'))
     this.can.setCommunication = this.permissions.some(permission => permission.combined.endsWith('manage_network:communication'))
