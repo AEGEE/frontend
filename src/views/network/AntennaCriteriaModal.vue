@@ -201,13 +201,15 @@ export default {
           )
         ) {
           promises.push(this.setAntennaCriterionFulfilment(criterion))
+          this.$set(this.local.antennaCriteria, criterion, this.antennaCriteria[criterion])
+          this.$set(this.local.comments, criterion, this.comments[criterion])
         }
       }
 
       await Promise.all(promises).then(() => {
         this.isLoading = false
         this.showSuccess('Antenna Criteria fulfilment updated.')
-        this.router.go(0)
+        this.$parent.close()
       }).catch((err) => {
         this.isLoading = false
         this.showError('Something went wrong', err)
