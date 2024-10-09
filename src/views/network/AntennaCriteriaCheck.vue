@@ -39,16 +39,7 @@
             </b-table-column>
 
             <b-table-column field="boardElection" label="Board election (BE)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElection === 'true' && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.boardElection === 'true' && showDetails">
-                {{ props.row.latest_election }}
-              </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.boardElection !== 'true' && !showDetails && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.boardElection !== 'true' && showDetails && props.row.latest_election && props.row.type === 'antenna'">
-                {{ props.row.latest_election }}
-              </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.boardElection !== 'true' && showDetails && !props.row.latest_election && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.antennaCriteria.boardElection !== 'true' && props.row.type !== 'antenna'">Else</b-tag>
+              <b-tag :type="criterionTagType('boardElection', props.row)" size="is-medium">{{ criterionTagValue("boardElection", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="membersList" label="Members list (ML)">
@@ -60,16 +51,7 @@
             </b-table-column>
 
             <b-table-column field="mostRecentEvent" label="Events (E)">
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.events === 'true' && !showDetails">Yes</b-tag>
-              <b-tag type="is-success" size="is-medium" v-if="props.row.antennaCriteria.events === 'true' && showDetails">
-                {{ props.row.latest_event }}
-              </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.events !== 'true' && !showDetails && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.events !== 'true' && showDetails && props.row.latest_event && props.row.type === 'antenna'">
-                {{ props.row.latest_event }}
-              </b-tag>
-              <b-tag type="is-danger" size="is-medium" v-if="props.row.antennaCriteria.events !== 'true' && showDetails && !props.row.latest_event && props.row.type === 'antenna'">No</b-tag>
-              <b-tag type="is-info" size="is-medium" v-if="props.row.antennaCriteria.events !== 'true' && props.row.type !== 'antenna'">Else</b-tag>
+              <b-tag :type="criterionTagType('events', props.row)" size="is-medium">{{ criterionTagValue("events", props.row) }}</b-tag>
             </b-table-column>
 
             <b-table-column field="attendance" label="Agora attendance (AA)">
@@ -187,6 +169,18 @@ export default {
       return 'is-light'
     },
     criterionTagValue (criterion, local) {
+      if (this.showDetails) {
+        if (criterion === 'boardElection') {
+          if (local.antennaCriteria?.['boardElection'] === 'true') return local.latest_election
+          if (this.antennaCriteriaMapping[local.type].includes('boardElection')) return local.latest_election ?? 'No'
+        }
+
+        if (criterion === 'events') {
+          if (local.antennaCriteria?.['events'] === 'true') return local.latest_event
+          if (this.antennaCriteriaMapping[local.type].includes('events')) return local.latest_event ?? 'No'
+        }
+      }
+
       if (local.antennaCriteria[criterion] === 'true') return 'Yes'
       if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'exception') return 'Exception'
       if (this.antennaCriteriaMapping[local.type].includes(criterion) && local.antennaCriteria[criterion] === 'false') return 'No'
