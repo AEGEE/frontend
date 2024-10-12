@@ -63,6 +63,7 @@ import { faHistory } from '@fortawesome/free-solid-svg-icons/faHistory'
 import { faUmbrellaBeach } from '@fortawesome/free-solid-svg-icons/faUmbrellaBeach'
 import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay'
 import { faStop } from '@fortawesome/free-solid-svg-icons/faStop'
+import { faAddressBook } from '@fortawesome/free-solid-svg-icons/faAddressBook'
 import { faBookReader } from '@fortawesome/free-solid-svg-icons/faBookReader'
 
 library.add(faTimesCircle)
@@ -127,5 +128,6 @@ library.add(faUmbrellaBeach)
 library.add(faPlay)
 library.add(faStop)
 library.add(faBookReader)
+library.add(faAddressBook)
 
 export default FontAwesomeIcon

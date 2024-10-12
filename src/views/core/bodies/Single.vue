@@ -265,7 +265,8 @@ export default {
         address: null,
         postal_address: null,
         shadow_circle: null,
-        shadow_circle_id: null
+        shadow_circle_id: null,
+        members: null
       },
       boards: [],
       isLoading: false,
