@@ -2,7 +2,7 @@
   <div class="tile is-ancestor">
     <div class="tile is-parent">
       <div class="tile is-child">
-        <div class="title">Export data</div>
+        <div class="title">Export data for {{ event.name }}</div>
         <div v-if="can.export.openslides">
           <div class="field">
             <div class="control">
