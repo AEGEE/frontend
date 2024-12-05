@@ -27,7 +27,7 @@
 
         <div class="field">
           <div class="control">
-            <b-switch v-model="displayTiles" :rounded="true" :size="is-medium" :type="is-primary" :passive-type="null">Display experimental view</b-switch>
+            <b-switch v-model="displayTiles" :rounded="true">Display experimental view</b-switch>
           </div>
         </div>
 
@@ -95,7 +95,7 @@
         </template>
 
         <!-- Tile view -->
-        <container v-else>
+        <template v-else>
           <div class="columns is-multiline">
             <div class="column is-one-quarter" v-for="event in events" v-bind:key="event.id">
               <div class="card">
@@ -119,7 +119,7 @@
 
                     <table>
                       <tr>
-                        <td><span class="subtitle is-4"><font-awesome-icon :icon="['fa', 'calendar']" :size="is-medium" /></span></td>
+                        <td><span class="subtitle is-4"><font-awesome-icon :icon="['fa', 'calendar']" /></span></td>
                         <td>{{ event.starts | date }} - {{ event.ends | date }}</td>
                       </tr>
                       <tr>
@@ -152,12 +152,16 @@
                           :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }"
                           class="button">Go to event page</router-link>
                       </p>
-                      <p class="control">
+
+                      <p class="control" v-if="event.status === 'published' && event.application_status === 'open'">
                         <router-link
                           :to="{ name: 'oms.events.apply', params: { id: event.url || event.id, application_id: 'me' } }"
                           class="button is-warning">
                           My application
                         </router-link>
+                      </p>
+                      <p class="control" v-else>
+                        <button class="button is-warning" disabled>My application</button>
                       </p>
                     </div>
                   </div>
@@ -165,7 +169,7 @@
               </div>
             </div>
           </div>
-        </container>
+        </template>
 
         <div class="card" v-show="events.length === 0 && !isLoadingSomething">
           <div class="card-content">
