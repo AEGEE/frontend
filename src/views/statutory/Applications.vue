@@ -222,8 +222,8 @@ export default {
         return ''
       }
     },
-    calculateClassForMemberslist (is_on_memberslist) {
-      return ['tag', 'is-small', is_on_memberslist ? 'is-primary' : 'is-danger']
+    calculateClassForMemberslist (isOnMemberslist) {
+      return ['tag', 'is-small', isOnMemberslist ? 'is-primary' : 'is-danger']
     },
     switchPaxStatus (pax) {
       pax.isSaving = true
