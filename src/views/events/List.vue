@@ -129,7 +129,7 @@
                         <td><span class="subtitle is-4"><font-awesome-icon :icon="['fa', 'coins']" /></span></td>
                         <td>
                           <span v-if="event.fee">€{{ event.fee }}</span>
-                          <span v-else="!event.fee"><i>Free</i></span>
+                          <span v-else><i>Free</i></span>
                           <span v-if="event.optional_fee"> (+ €{{ event.optional_fee }})</span>
                         </td>
                       </tr>
@@ -137,7 +137,7 @@
                         <td><span class="subtitle is-4"><font-awesome-icon :icon="['fa', 'users']" /></span></td>
                         <td>
                           <ul style="list-style-type: none; padding: 0; margin: 0">
-                            <li v-for="(body, index) in event.organizing_bodies">
+                            <li v-for="(body, index) in event.organizing_bodies" v-bind:key="index">
                               <router-link
                                 v-bind:key="index"
                                 :to="{ name: 'oms.bodies.view', params: { id: body.body_id } }">
