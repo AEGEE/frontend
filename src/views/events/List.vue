@@ -110,10 +110,13 @@
                   <div class="content">
                     <ul style="list-style-type: none; padding: 0; margin: 0">
                       <li><span class="title is-4">{{ event.name }}</span></li>
-                      <li>
+                      <li style="display: flex; justify-content: space-between;">
                         <span class="tag" :style="{ 'background-color': colors[event.type], color: '#FFFFFF' }">
                           {{ eventTypesNames[event.type] }}
                         </span>
+                        <span v-if="today.isBefore(event.application_starts)" class="tag is-warning">Apply after {{ event.application_starts | date }}</span>
+                        <span v-if="event.application_status === 'open'" class="tag is-success">Apply before {{ event.application_ends | date }}</span>
+                        <span v-if="today.isAfter(event.application_ends)" class="tag is-light">Applications are closed</span>
                       </li>
                     </ul>
 
@@ -156,12 +159,9 @@
                       <p class="control" v-if="event.status === 'published' && event.application_status === 'open'">
                         <router-link
                           :to="{ name: 'oms.events.apply', params: { id: event.url || event.id, application_id: 'me' } }"
-                          class="button is-warning">
-                          My application
+                          class="button is-success">
+                          Apply!
                         </router-link>
-                      </p>
-                      <p class="control" v-else>
-                        <button class="button is-warning" disabled>My application</button>
                       </p>
                     </div>
                   </div>
@@ -227,6 +227,7 @@ export default {
         nwm: '#FBBA00',
         cultural: '#C51C13'
       },
+      today: moment(),
       canLoadMore: true,
       source: null,
       can: {
