@@ -130,7 +130,7 @@ export default {
       },
       antennaCriteriaMapping: {
         'contact': ['communication'],
-        'contact antenna': ['membersList', 'membershipFee'],
+        'contact antenna': ['communication', 'membersList', 'membershipFee'],
         'antenna': ['communication', 'boardElection', 'membersList', 'membershipFee', 'events', 'agoraAttendance', 'developmentPlan', 'fulfilmentReport']
       }
     }
