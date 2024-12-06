@@ -256,7 +256,7 @@ import { MglMap, MglMarker, MglPopup, MglNavigationControl } from 'vue-mapbox'
 import constants from '../../constants'
 import credentials from '../../credentials'
 import TimezoneTooltip from '../../components/tooltips/TimezoneTooltip'
-import PictureModal from '../core/members/PictureModal.vue'
+import PictureModal from './PictureModal.vue'
 
 export default {
   components: {
