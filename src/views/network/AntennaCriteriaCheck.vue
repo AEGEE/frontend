@@ -422,9 +422,9 @@ export default {
       })
     },
     async fetchNetcom () {
-      await this.axios.get(this.services['core'] + '/bodies?query=network%20commission').then((response) => {
-        this.axios.get(this.services['core'] + '/bodies/' + response.data.data[0].id + '/members').then((response) => {
-          this.netcommies = response.data.data.map(netcommie => ({
+      await this.axios.get(this.services['core'] + '/bodies?query=network%20commission').then((netcomBodyResponse) => {
+        this.axios.get(this.services['core'] + '/bodies/' + netcomBodyResponse.data.data[0].id + '/members').then((netcomMembersResponse) => {
+          this.netcommies = netcomMembersResponse.data.data.map(netcommie => ({
             user_id: netcommie.user_id,
             first_name: netcommie.user.first_name,
             email: netcommie.user.email
