@@ -61,7 +61,7 @@ export default {
         'cc': this.cc,
         'subject': this.subject,
         'reply_to': this.from,
-        'template': this.mail
+        'body': this.$options.filters.markdown(this.mail)
       }
 
       console.log(data)
@@ -71,7 +71,7 @@ export default {
         data
       ).then(() => {
         this.showSuccess('Mail sent succesfully.')
-        this.router.go(0)
+        this.$parent.close()
       }).catch((err) => {
         this.showError('Something went wrong', err)
       })
