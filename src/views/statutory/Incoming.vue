@@ -5,9 +5,9 @@
         <div class="title">Incoming</div>
 
         <div class="field">
-          <label class="label">Search by name or email</label>
+          <label class="label">Search by name or statutory ID (search by email is currently broken but will return)</label>
           <div class="control is-expanded">
-            <input class="input" type="text" v-model="query" placeholder="Search by name, surname or email" />
+            <input class="input" type="text" v-model="query" placeholder="Search by name, surname or statutory ID" />
           </div>
         </div>
 
@@ -43,18 +43,18 @@
             </b-table-column>
 
             <b-table-column field="email" label="Email" centered sortable>
-              {{ props.row.email }}
+              {{ props.row.notification_email }}
             </b-table-column>
 
             <b-table-column field="body_name" label="Body" centered sortable>
               {{ props.row.body_name }}
             </b-table-column>
 
-            <b-table-column field="meals" label="Meals" centered>
+            <b-table-column field="meals" label="Meals" centered sortable>
               {{ props.row.meals }}
             </b-table-column>
 
-            <b-table-column field="allergies" label="Allergies" centered>
+            <b-table-column field="allergies" label="Allergies" centered sortable>
               {{ props.row.allergies }}
             </b-table-column>
 

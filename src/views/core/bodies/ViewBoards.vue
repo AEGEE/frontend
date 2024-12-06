@@ -4,6 +4,12 @@
       <article class="tile is-child">
         <h4 class="title">Boards</h4>
 
+        <div class="field is-grouped" v-if="can.manageBoards">
+          <div class="control">
+            <a class="button is-primary" @click="openCreateBoardModal()">Add board</a>
+          </div>
+        </div>
+
         <template v-if="boards.length > 0">
           <template v-for="(board, index) in boards">
             <b-collapse class="card" animation="slide" :open="false" v-bind:key="index">
@@ -49,7 +55,7 @@
                 </div>
               </div>
 
-              <footer class="card-footer">
+              <footer class="card-footer" v-if="can.manageBoards">
                 <a @click="openChangeBoardModal(index)" :class="['button', 'is-fullwidth', 'is-info']">
                   <span class="field-label">Edit board</span>
                 </a>
@@ -76,7 +82,11 @@ export default {
   data () {
     return {
       boards: [],
-      isLoading: false
+      isLoading: false,
+      permissions: [],
+      can: {
+        manageBoards: false
+      }
     }
   },
   computed: {
@@ -88,6 +98,19 @@ export default {
     })
   },
   methods: {
+    openCreateBoardModal () {
+      this.$buefy.modal.open({
+        component: ChangeBoardModal,
+        hasModalCard: true,
+        props: {
+          body: this.$route.params,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     openChangeBoardModal (index) {
       this.$buefy.modal.open({
         component: ChangeBoardModal,
@@ -104,10 +127,8 @@ export default {
       })
     },
     fetchData () {
-      this.isLoading = true
-
       // Get boards of the body
-      this.axios.get(this.services['network'] + '/bodies/' + this.$route.params.id + '?sort=start_date&direction=desc').then((response) => {
+      this.axios.get(this.services['network'] + '/bodies/' + this.$route.params.id + '/boards?sort=start_date&direction=desc').then((response) => {
         this.boards = response.data.data
 
         // Get members of the body
@@ -129,8 +150,6 @@ export default {
             this.$set(position, 'user', users.find(user => user.id === position.user_id))
           }
         }
-
-        this.isLoading = false
       }).catch((err) => {
         if (err.response.status === 404) {
           return
@@ -140,7 +159,15 @@ export default {
     }
   },
   mounted () {
+    this.isLoading = true
     this.fetchData()
+
+    this.axios.get(this.services['core'] + '/bodies/' + this.$route.params.id + '/my_permissions').then((permissionResponse) => {
+      this.permissions = permissionResponse.data.data
+      this.can.manageBoards = this.permissions.some(permission => permission.combined.endsWith('manage_network:boards'))
+    })
+
+    this.isLoading = false
   }
 }
 </script>

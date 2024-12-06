@@ -1,9 +1,9 @@
 const constants = {
   EVENT_TYPES_NAMES: {
-    training: 'Training event',
-    nwm: 'Network meeting',
+    training: 'Training Event',
+    nwm: 'Network Meeting',
     conference: 'Conference',
-    cultural: 'Cultural event'
+    cultural: 'Cultural Event'
   },
   STATUTORY_TYPES_NAMES: {
     agora: 'Agora',
@@ -22,7 +22,9 @@ const constants = {
     political_activism: 'Political Activism',
     social_equity: 'Social Equity',
     sports: 'Sports',
-    leisure: 'Leisure'
+    leisure: 'Leisure',
+    personal_development: 'Personal Development',
+    volunteering: 'Volunteering'
   },
   SUMMERUNIVERSITY_ROLES: {
     main_coordinator: 'Main coordinator',

@@ -88,14 +88,14 @@
             </router-link>
           </div>
 
-          <div class="field is-grouped" v-if="can.see_memberslist.global && this.event.type === 'agora'">
+          <div class="field is-grouped" v-if="can.see_missing_memberslist.global && this.event.type === 'agora'">
             <router-link :to="{ name: 'oms.statutory.memberslist.list.missing', params: { id: event.url || event.id } }" class="button is-fullwidth">
               <span>See missing members lists</span>
               <span class="icon"><font-awesome-icon icon="users" /></span>
             </router-link>
           </div>
 
-          <div class="field is-grouped" v-if="can.see_memberslist.global && this.event.type === 'agora'">
+          <div class="field is-grouped" v-if="can.see_memberslist_without_fee.global && this.event.type === 'agora'">
             <router-link :to="{ name: 'oms.statutory.memberslist.list.without_fee', params: { id: event.url || event.id } }" class="button is-fullwidth">
               <span>See members lists without fee</span>
               <span class="icon"><font-awesome-icon icon="users" /></span>
@@ -183,8 +183,8 @@
                     <div class="content" v-html="$options.filters.markdown(event.description)" />
                   </td>
                 </tr>
-                <tr v-if="event.booklet_folder && canSeeBooklet">
-                  <th>Booklet</th>
+                <tr v-if="event.booklet_folder">
+                  <th>KMS page</th>
                   <td><a :href="event.booklet_folder" target="_blank" rel="noopener noreferrer">{{ event.booklet_folder }}</a></td>
                 </tr>
                 <tr>
@@ -275,11 +275,11 @@
                   <td colspan="2">{{ event.candidature_deadline | datetime }}</td>
                 </tr>
                 <tr v-if="event.type === 'agora'">
-                  <th>Booklet publication</th>
+                  <th>Documents publication</th>
                   <td colspan="2">{{ event.booklet_publication_deadline | datetime }}</td>
                 </tr>
                 <tr v-if="event.type === 'agora'">
-                  <th>Updated booklet publication</th>
+                  <th>Updated documents publication</th>
                   <td colspan="2">{{ event.updated_booklet_publication_deadline | datetime }}</td>
                 </tr>
               </tbody>
@@ -358,6 +358,8 @@ export default {
         see_boardview: {},
         see_participants_list: false,
         see_memberslist: {},
+        see_missing_memberslist: {},
+        see_memberslist_without_fee: {},
         export: false,
         see_questions: false,
         manage_question_lines: false
@@ -460,9 +462,6 @@ export default {
     },
     duringAgora () {
       return this.event.type === 'agora' && moment().isBetween(this.event.starts, this.event.ends, null, '[]')
-    },
-    canSeeBooklet () {
-      return this.event.type !== 'agora' || moment().isAfter(this.event.booklet_publication_deadline) || this.can.edit_event
     }
   }
 }

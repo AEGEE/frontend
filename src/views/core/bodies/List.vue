@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="loginUser">
           <label class="label">Filter on body type</label>
           <div class="control">
             <multiselect
@@ -116,6 +116,7 @@ export default {
         { value: 'committee', name: 'Committee' },
         { value: 'project', name: 'Project' },
         { value: 'partner', name: 'Partner' },
+        { value: 'external', name: 'External' },
         { value: 'other', name: 'Other' }
       ],
       selectedTypes: [],

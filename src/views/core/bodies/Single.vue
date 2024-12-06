@@ -142,6 +142,16 @@
                   <td v-if="body.email"><a :href="'mailto:' + body.email">{{ body.email }}</a></td>
                   <td v-if="!body.email"><i>Not set.</i></td>
                 </tr>
+                <tr v-if="can.editGsuite">
+                  <th>Google Workspace account</th>
+                  <td v-if="body.gsuite_id"><a :href="'mailto:' + body.gsuite_id" data-cy="gsuite">{{ body.gsuite_id }}</a></td>
+                  <td v-if="!body.gsuite_id"><i>Not set.</i></td>
+                </tr>
+                <tr v-if="can.editGsuite">
+                  <th>Google Group</th>
+                  <td v-if="body.google_group"><a :href="'mailto:' + body.google_group" data-cy="google_group">{{ body.google_group }}</a></td>
+                  <td v-if="!body.google_group"><i>Not set.</i></td>
+                </tr>
                 <tr v-if="body.phone">
                   <th>Phone</th>
                   <td>{{ body.phone }}</td>
@@ -273,7 +283,8 @@ export default {
         manageBoards: false,
         updateBody: false,
         deleteBody: false,
-        addMembers: false
+        addMembers: false,
+        editGsuite: false
       }
     }
   },
@@ -452,7 +463,7 @@ export default {
           this.permissions = permissionsResponse.data.data
           this.can.viewMembers = this.permissions.some(permission => permission.combined.endsWith('view:member'))
           this.can.viewMembersGlobal = this.permissions.some(permission => permission.combined.endsWith('global:view:member'))
-          this.can.viewBoards = this.permissions.some(permission => permission.combined.endsWith('view:board'))
+          this.can.viewBoards = this.permissions.some(permission => permission.combined.endsWith('view:board')) && ['contact', 'contact antenna', 'antenna'].includes(this.body.type)
           this.can.viewJoinRequests = this.permissions.some(permission => permission.combined.endsWith('view:join_request'))
           this.can.viewCampaigns = this.permissions.some(permission => permission.combined.endsWith('view:campaign'))
           this.can.viewShadowCircles = this.permissions.some(permission => permission.combined.endsWith('view:shadow_circle'))
@@ -461,6 +472,7 @@ export default {
           this.can.updateBody = this.permissions.some(permission => permission.combined.endsWith('update:body'))
           this.can.deleteBody = this.permissions.some(permission => permission.combined.endsWith('delete:body'))
           this.can.addMembers = this.permissions.some(permission => permission.combined.endsWith('add_member:body'))
+          this.can.editGsuite = this.permissions.some(permission => permission.combined.endsWith('global:update:body'))
 
           this.isLoading = false
         })
