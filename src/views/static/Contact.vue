@@ -12,11 +12,18 @@
             </b-table-column>
 
             <b-table-column field="email" label="Email">
-              {{ props.row.email }}
+              <a :href="'mailto:' + props.row.email">
+                {{ props.row.email }}
+              </a>
             </b-table-column>
 
             <b-table-column field="members" label="Members">
-              {{ props.row.members }}
+              <router-link
+                v-for="(member, index) in props.row.members"
+                v-bind:key="index"
+                :to="{ name: 'oms.members.view', params: { id: member.id } }">
+                {{ member.first_name }} {{ member.last_name }}
+              </router-link>
             </b-table-column>
 
           </template>
@@ -60,8 +67,7 @@ export default {
         // Fetch members for each body
         const bodiesWithMembers = await Promise.all(bodies.map(async (body) => {
           const membersResponse = await this.axios.get(this.services['core'] + '/bodies/' + body.id + '/members')
-          const members = membersResponse.data.data.map((member) => member.user.first_name + ' ' + member.user.last_name)
-          body.members = members.join(', ')
+          body.members = membersResponse.data.data.map((member) => member.user)
           return body
         }))
 
