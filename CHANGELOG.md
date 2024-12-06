@@ -1,3 +1,38 @@
+## [1.40.1](https://github.com/AEGEE/frontend/compare/1.40.0...1.40.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* **events:** update small things on rendering events ([#2225](https://github.com/AEGEE/frontend/issues/2225)) ([f948029](https://github.com/AEGEE/frontend/commit/f9480292dfee98ae2d3f3bfe11a52ccd358e3c3f))
+
+# [1.40.0](https://github.com/AEGEE/frontend/compare/1.39.0...1.40.0) (2024-12-05)
+
+
+### Features
+
+* **statutory:** update export of participants ([#2223](https://github.com/AEGEE/frontend/issues/2223)) ([bef4708](https://github.com/AEGEE/frontend/commit/bef47080799221ca65fd630198ffd2e7febe3cad))
+
+# [1.39.0](https://github.com/AEGEE/frontend/compare/1.38.2...1.39.0) (2024-12-05)
+
+
+### Features
+
+* **events:** add tile view for events listing ([#2222](https://github.com/AEGEE/frontend/issues/2222)) ([6a36cf6](https://github.com/AEGEE/frontend/commit/6a36cf6e85f9aadacec27df0a7234d2135e1610f))
+
+## [1.38.2](https://github.com/AEGEE/frontend/compare/1.38.1...1.38.2) (2024-12-05)
+
+
+### Bug Fixes
+
+* **core:** add external association to body type ([#2221](https://github.com/AEGEE/frontend/issues/2221)) ([e860466](https://github.com/AEGEE/frontend/commit/e860466266eb1d3532c6e6ded9108e80944fe858))
+
+## [1.38.1](https://github.com/AEGEE/frontend/compare/1.38.0...1.38.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* **network:** fix detailed AC display and sorting of boards on listing ([#2212](https://github.com/AEGEE/frontend/issues/2212)) ([5985913](https://github.com/AEGEE/frontend/commit/59859131bcf2ead73d16e29d870bd5843080fc72))
+
 # [1.38.0](https://github.com/AEGEE/frontend/compare/1.37.7...1.38.0) (2024-10-09)
 
 
