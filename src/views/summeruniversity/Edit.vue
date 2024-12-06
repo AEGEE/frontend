@@ -1,37 +1,6 @@
 <template>
   <div class="tile is-ancestor">
     <div class="tile is-child">
-      <div v-if="$route.params.id">
-        <div class="subtitle">Update event logo</div>
-
-        <div class="field is-grouped">
-          <div class="control">
-            <div class="file has-name">
-              <label class="file-label">
-                <input class="file-input" type="file" name="resume" @change="setFile($event)">
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <font-awesome-icon icon="upload" />
-                  </span>
-                  <span class="file-label">
-                    Choose a file
-                  </span>
-                </span>
-                <span class="file-name">
-                  {{ file ? file.name : 'Not set.' }}
-                </span>
-              </label>
-            </div>
-          </div>
-
-          <div class="control">
-            <a class="button is-info" :disabled="!file" @click="updateImage()">Upload!</a>
-          </div>
-        </div>
-
-        <hr />
-      </div>
-
       <form @submit.prevent="saveEvent()">
         <div class="notification is-info" v-if="!$route.params.id">
           <div class="content">
@@ -806,6 +775,7 @@ import credentials from '../../credentials'
 import TimezoneNotification from '../../components/notifications/TimezoneNotification'
 import MarkdownTooltip from '../../components/tooltips/MarkdownTooltip'
 import URLTooltip from '../../components/tooltips/URLTooltip'
+import PictureModal from './PictureModal.vue'
 
 // TODO: check that all unused code is removed
 export default {
@@ -815,7 +785,8 @@ export default {
     MglNavigationControl,
     TimezoneNotification,
     MarkdownTooltip,
-    URLTooltip
+    URLTooltip,
+    PictureModal
   },
   name: 'EditEvent',
   data () {
