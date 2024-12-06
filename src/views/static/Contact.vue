@@ -58,10 +58,8 @@ export default {
   },
   methods: {
     async fetchData () {
-      // TODO: Ask CD what types of bodies they want to have in the address book
       try {
         const response = await this.axios.get(this.services['core'] + '/bodies')
-        // TODO: Move filter to the backend by changing the request
         const bodies = response.data.data.filter(a => !['antenna', 'contact antenna', 'contact', 'partner', 'other'].includes(a.type))
 
         // Fetch members for each body
