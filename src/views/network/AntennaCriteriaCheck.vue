@@ -422,8 +422,8 @@ export default {
       })
     },
     async fetchNetcom () {
-      await this.axios.get(this.services['core'] + '/bodies?query=network%20commission').then((netcomBodyResponse) => {
-        this.axios.get(this.services['core'] + '/bodies/' + netcomBodyResponse.data.data[0].id + '/members').then((netcomMembersResponse) => {
+      await this.axios.get(this.services['core'] + '/bodies?query=network%20commission').then(async (netcomBodyResponse) => {
+        await this.axios.get(this.services['core'] + '/bodies/' + netcomBodyResponse.data.data[0].id + '/members').then((netcomMembersResponse) => {
           this.netcommies = netcomMembersResponse.data.data.map(netcommie => ({
             user_id: netcommie.user_id,
             first_name: netcommie.user.first_name,
@@ -442,7 +442,7 @@ export default {
 
         for (const body of this.bodies) {
           const assignment = netcomAssignment.find(x => x.body_id === body.id)
-          body.netcom = assignment !== undefined ? this.netcommies.find(x => x.user_id === assignment.netcom_id) : this.netcommies[this.netcommies.length - 1]
+          this.$set(body, 'netcom', assignment !== undefined ? this.netcommies.find(x => x.user_id === assignment.netcom_id) : this.netcommies[this.netcommies.length - 1])
         }
       }).catch((err) => {
         this.$root.showError('Could not fetch NetCom assignment', err)
