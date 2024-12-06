@@ -422,14 +422,15 @@ export default {
       })
     },
     async fetchNetcom () {
-      // TODO: Find a way to get the correct body.id for NetCom, instead of having it hard coded
-      await this.axios.get(this.services['core'] + '/bodies/' + '11' + '/members').then((response) => {
-        this.netcommies = response.data.data.map(netcommie => ({
-          user_id: netcommie.user_id,
-          first_name: netcommie.user.first_name,
-          email: netcommie.user.email
-        }))
-        this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set', 'email': '' })
+      await this.axios.get(this.services['core'] + '/bodies?query=network%20commission').then((response) => {
+        this.axios.get(this.services['core'] + '/bodies/' + response.data.data[0].id + '/members').then((response) => {
+          this.netcommies = response.data.data.map(netcommie => ({
+            user_id: netcommie.user_id,
+            first_name: netcommie.user.first_name,
+            email: netcommie.user.email
+          }))
+          this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set', 'email': '' })
+        })
       }).catch((err) => {
         this.$root.showError('Could not fetch NetCom data', err)
       })
