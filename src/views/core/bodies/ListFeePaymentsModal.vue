@@ -1,11 +1,11 @@
 <template>
-  <div class="modal-card">
+  <div class="modal-card" style="width: 90%; max-width: 1200px;">
     <header class="modal-card-head">
-      <p class="modal-card-title">List view payments</p>
+      <p class="modal-card-title">Fee payments for {{ member.user.first_name }} {{ member.user.last_name }}</p>
       <button class="delete" aria-label="close" @click="$parent.close()" />
     </header>
     <section class="modal-card-body">
-      <b-table :data="member.payments">
+      <b-table :data="member.payments" v-if="member.payments.length > 0">
         <template slot-scope="props">
           <b-table-column field="id" label="#" numeric sortable>
             {{ props.row.id }}
@@ -47,6 +47,9 @@
           <empty-table-stub />
         </template>
       </b-table>
+      <template v-else>
+        <empty-table-stub />
+      </template>
     </section>
     <footer class="modal-card-foot" />
   </div>

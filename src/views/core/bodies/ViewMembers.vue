@@ -46,7 +46,7 @@
             </b-table-column>
 
             <b-table-column field="lastPaymentExpires" sortable label="Last payment exp. date" centered :visible="can.viewPayment && body.pays_fees">
-              <span v-if="props.row.lastPaymentExpires !== PAST_DATE_PLACEHOLDER">{{ props.row.lastPaymentExpires | date }}</span>
+              <span v-if="props.row.payments && props.row.payments.length > 0">{{ getLastPaymentExpiration(props.row) | date }}</span>
             </b-table-column>
 
             <b-table-column label="View payments" centered :visible="(can.viewPayment || can.createPayment) && body.pays_fees">
@@ -171,6 +171,9 @@ export default {
         }
       })
     },
+    getLastPaymentExpiration (member) {
+      return member.payments[member.payments.length - 1].expires
+    },
     askDeleteMember (member) {
       const message = 'Are you sure you want to <b>delete</b> '
         + member.user.first_name + ' ' + member.user.last_name
@@ -267,10 +270,6 @@ export default {
               .filter(payment => payment.user_id === member.user_id)
               .sort((a, b) => a.expires.localeCompare(b.expires))
             this.$set(member, 'payments', paymentsForMember)
-            this.$set(member, 'lastPayment', paymentsForMember.length >= 1 ? paymentsForMember[paymentsForMember.length - 1] : null)
-            this.$set(member, 'lastPaymentExpires', paymentsForMember.length >= 1
-              ? paymentsForMember[paymentsForMember.length - 1].expires
-              : this.PAST_DATE_PLACEHOLDER)
           }
 
           this.isLoading = false
