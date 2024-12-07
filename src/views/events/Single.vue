@@ -264,8 +264,7 @@ export default {
     MglMarker,
     MglPopup,
     MglNavigationControl,
-    TimezoneTooltip,
-    PictureModal
+    TimezoneTooltip
   },
   name: 'SingleEvent',
   data () {

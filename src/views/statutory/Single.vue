@@ -334,8 +334,7 @@ export default {
     MglMap,
     MglMarker,
     MglPopup,
-    MglNavigationControl,
-    PictureModal
+    MglNavigationControl
   },
   name: 'SingleStatutory',
   data () {
