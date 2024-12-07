@@ -3,7 +3,7 @@
     <div class="tile is-vertical is-3">
       <div class="tile is-parent is-vertical">
         <article class="tile is-child is-primary">
-          <figure class="image is-1by1">
+          <figure class="image">
             <img v-if="!user.image" src="/images/logo.png">
             <img v-if="user.image" :src="services['core-static'] + '/headimages/' + user.image">
           </figure>
