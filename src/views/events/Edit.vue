@@ -4,10 +4,16 @@
       <form @submit.prevent="saveEvent()">
         <div class="notification is-info" v-if="!$route.params.id">
           <div class="content">
+            <p>If you want to upload an image, please do it from the event page after creating the event.</p>
             <p><strong>If the event is not published, people won't be able to see the event in the listing or apply to it.</strong></p>
             <p>Also, <strong>once the event is published you won't be able to edit it.</strong> So please check everything twice.</p>
             <p>If you will need the event info to be changed after publishing, please contact CD or EQAC.</p>
             <p><strong>PLEASE KEEP IN MIND THAT THE APPROVAL OF YOUR SUBMITTED EVENT WILL TAKE 3-4 DAYS.</strong></p>
+          </div>
+        </div>
+        <div class="notification is-info" v-else>
+          <div class="content">
+            <p>If you want to upload an image, please do it from the event page.</p>
           </div>
         </div>
 

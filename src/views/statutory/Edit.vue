@@ -2,6 +2,12 @@
   <div class="tile is-ancestor ">
     <div class="tile is-child">
       <form @submit.prevent="saveEvent()">
+        <div class="notification is-info">
+          <div class="content">
+            <p>If you want to upload an image, please do it from the event page after creating the event.</p>
+          </div>
+        </div>
+
         <div class="field">
           <label class="label">Title <span class="has-text-danger">*</span></label>
           <div class="control">
