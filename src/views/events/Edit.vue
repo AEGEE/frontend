@@ -560,9 +560,9 @@
 
             <p><a href="https://myaegee.atlassian.net/wiki/spaces/KMS/pages/2451505153/Organising+Safe+Events" target="blank">Here</a>
               you can find a checklist on how to make your event safer and educational posters to hang up during events.
-              You may also <a href="https://forms.gle/oKjTeWrhLadrWkwR7" target="blank">here</a>
-              request a workshop or briefing around consent and active bystanding or a Safe Person
-              which acts as a first contact for people that experience sexual harassment during an AEGEE event.
+              You may also request a workshop or briefing around consent and active bystanding or a Safe Person
+              which acts as a first contact for people that experience sexual harassment during an AEGEE event
+              <a href="https://forms.gle/oKjTeWrhLadrWkwR7" target="blank">here</a>.
             </p>
 
             <p>For any further questions, please contact the Safe Person Committee via
