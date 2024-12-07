@@ -43,7 +43,7 @@
           <b-table-column field="comment" label="Comment" v-slot="props">
             {{ props.row.comment }}
           </b-table-column>
-          
+
           <b-table-column field="lastPaymentExpires" sortable label="Last payment exp. date" centered :visible="can.viewPayment && body.pays_fees" v-slot="props">
             <span v-if="props.row.payments && props.row.payments.length > 0">{{ getLastPaymentExpiration(props.row) | date }}</span>
           </b-table-column>

@@ -33,7 +33,7 @@
         <b-table-column field="invoice_name" label="Invoice name" v-slot="props">
           {{ props.row.invoice_name }}
         </b-table-column>
-        
+
         <b-table-column label="Delete" centered :visible="canDelete" v-slot="props">
           <a class="button is-small is-danger" @click="askDeleteMemberPaymentFee(props.row, false)">
             <span class="icon"><font-awesome-icon icon="minus" /></span>
