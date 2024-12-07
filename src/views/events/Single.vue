@@ -3,7 +3,7 @@
     <div class="tile is-vertical is-3">
       <div class="tile is-parent is-vertical">
         <article class="tile is-child is-primary">
-          <figure class="image is-1by1">
+          <figure class="image">
             <img v-if="!event.image" src="/images/logo.png">
             <img v-if="event.image" :src="services['events-static'] + '/headimages/' + event.image">
           </figure>
@@ -30,6 +30,13 @@
               <span>Manage my application</span>
               <span class="icon"><font-awesome-icon icon="plus" /></span>
             </router-link>
+          </div>
+
+          <div class="field is-grouped" v-if="can.edit_event">
+            <a class="button is-fullwidth is-primary" data-cy="picture-change-link" @click="openPictureModal()">
+              <span>Change picture</span>
+              <span class="icon"><font-awesome-icon icon="camera" /></span>
+            </a>
           </div>
 
           <div class="field is-grouped" v-if="can.edit_event">
@@ -249,6 +256,7 @@ import { MglMap, MglMarker, MglPopup, MglNavigationControl } from 'vue-mapbox'
 import constants from '../../constants'
 import credentials from '../../credentials'
 import TimezoneTooltip from '../../components/tooltips/TimezoneTooltip'
+import PictureModal from './PictureModal.vue'
 
 export default {
   components: {
@@ -306,6 +314,20 @@ export default {
     }
   },
   methods: {
+    openPictureModal () {
+      this.$buefy.modal.open({
+        component: PictureModal,
+        hasModalCard: true,
+        props: {
+          event: this.event,
+          permissions: this.permissions,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     askDeleteEvent () {
       this.$buefy.dialog.confirm({
         title: 'Deleting an event',

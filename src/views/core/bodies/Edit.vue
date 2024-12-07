@@ -16,6 +16,7 @@
                 <option value="committee">Committee</option>
                 <option value="project">Project</option>
                 <option value="partner">Partner association</option>
+                <option value="external">External association</option>
                 <option value="other">Other</option>
               </select>
             </div>
@@ -105,6 +106,22 @@
             <input class="input" type="email" v-model="body.email" />
           </div>
           <p class="help is-danger" v-if="errors.email">{{ errors.email.join(', ')}}</p>
+        </div>
+
+        <div class="field">
+          <label class="label">Google Workspace account</label>
+          <div class="control">
+            <input class="input" data-cy="gsuite_id" type="email" :disabled="!can.editGsuite" v-model="body.gsuite_id" placeholder="Type the Google Workspace email of the body" />
+          </div>
+          <p class="help is-danger" v-if="errors.gsuite_id">{{ errors.gsuite_id.join(', ')}}</p>
+        </div>
+
+        <div class="field">
+          <label class="label">Google Group</label>
+          <div class="control">
+            <input class="input" data-cy="google_group" type="email" :disabled="!can.editGsuite" v-model="body.google_group" placeholder="Type the Google Group of the body" />
+          </div>
+          <p class="help is-danger" v-if="errors.google_group">{{ errors.google_group.join(', ')}}</p>
         </div>
 
         <div class="field">
@@ -212,6 +229,8 @@ export default {
         id: null,
         code: null,
         email: null,
+        gsuite_id: null,
+        google_group: null,
         phone: null,
         address: null,
         postal_address: null,
@@ -226,7 +245,8 @@ export default {
         editAbbreviation: true,
         editCode: true,
         editShadowCircle: true,
-        editType: true
+        editType: true,
+        editGsuite: false
       },
       countries,
       autocompleteBody: '',
@@ -306,6 +326,7 @@ export default {
       this.can.editCode = editGlobalPermission
       this.can.editShadowCircle = editGlobalPermission
       this.can.editType = editGlobalPermission
+      this.can.editGsuite = editGlobalPermission
     }).catch((err) => {
       if (err.response.status === 404) {
         this.$root.showError('Body is not found')

@@ -133,7 +133,7 @@
           </b-table-column>
 
           <b-table-column field="email" label="Email" :visible="prefix === 'all'" v-slot="props">
-            {{ props.row.email }}
+            {{ props.row.notification_email }}
           </b-table-column>
 
           <b-table-column label="View" v-slot="props">

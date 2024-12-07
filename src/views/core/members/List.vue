@@ -31,9 +31,9 @@
             </router-link>
           </b-table-column>
 
-          <b-table-column field="email" label="Email" v-slot="props">
-            {{ props.row.email }}
-          </b-table-column>
+            <b-table-column field="email" label="Notification email" v-slot="props">
+              {{ props.row.notification_email }}
+            </b-table-column>
 
           <b-table-column field="date_of_birth" label="Birthday" sortable width="150" v-slot="props">
             {{ props.row.date_of_birth }}

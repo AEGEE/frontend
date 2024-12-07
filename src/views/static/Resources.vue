@@ -76,7 +76,7 @@ export default {
             color: '#4CA0FF'
           },
           {
-            url: 'https://www.aegee.org/external/key-to-europe/',
+            url: 'https://drive.google.com/drive/folders/1kU6DQd0v5rsGMwdjnhYUerYcJMH7af0_',
             title: 'Key to Europe',
             description: 'Yearbook - the annual report publication',
             color: '#4CA0FF'
@@ -87,18 +87,6 @@ export default {
             url: '/pages/mailing-lists',
             title: 'Mailing Lists',
             description: 'AEGEE mailing lists',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'https://aegee.org/wiki',
-            title: 'AEGEE Wiki',
-            description: 'A collaborative knowledge backbone of AEGEE',
-            color: '#FFDB4C'
-          },
-          {
-            url: 'https://drive.google.com/drive/folders/1IOg5hnbGmhgZ8pajYQgbY3CBTsETijS_',
-            title: 'AEGEE Materials Database',
-            description: 'Knowledge library of AEGEE materials',
             color: '#FFDB4C'
           },
           {
@@ -120,15 +108,15 @@ export default {
             color: '#FFDB4C'
           },
           {
-            url: 'https://aegee-academy.eu/request-a-training/',
+            url: 'https://forms.gle/DhfVStza9xhn1jRT6',
             title: 'AEGEE-Academy',
             description: 'Request a trainer for your training events',
             color: '#FFDB4C'
           },
           {
-            url: 'https://calendar.google.com/calendar/embed?src=powerhost.gr_uo2hj0qhr1493oqhpjel5v4lo8%40group.calendar.google.com&ctz=Europe%2FBrussels',
-            title: 'Calendar of CD',
-            description: 'Find out more about how the schedule of CD looks like',
+            url: 'https://forms.gle/EcaDkdyQfSb65Jdh8',
+            title: 'Safe Person Committee',
+            description: 'Request a Safe Person or workshop for your event',
             color: '#FFDB4C'
           },
           {
@@ -138,7 +126,7 @@ export default {
             color: '#FFDB4C'
           },
           {
-            url: 'https://podio.com/webforms/13269615/901752',
+            url: 'https://forms.gle/s8vE6b9wrEHqV1xe9',
             title: 'CD House Guest Request',
             description: 'Visiting the CD house',
             color: '#FFDB4C'
@@ -148,15 +136,15 @@ export default {
             title: 'ASRF Application Form',
             description: 'Apply for the AEGEE Social Responsibility Fund',
             color: '#FFDB4C'
+          },
+          {
+            url: 'https://docs.google.com/forms/d/e/1FAIpQLSf0OmluW11nce72VEuWOybQ1n83gMK6UcE9QvfJ5gIBETUwpA/viewform',
+            title: 'Sexual Harassment Report',
+            description: 'Report a case of sexual harassment',
+            color: '#FFDB4C'
           }
         ],
         'Network': [
-          {
-            url: 'https://docs.google.com/forms/d/e/1FAIpQLSfheOjWEQjqua1UqaqYofuqlrBV2bQK_m8OOypeqq6fnfgQLQ/viewform',
-            title: 'Board Submission Form',
-            description: 'Submitting new board to NetCom',
-            color: '#C2DE5D'
-          },
           {
             url: 'https://docs.google.com/forms/d/e/1FAIpQLSd2u-r1jFGyNwYCwsSnMf9-dApH7ZGeGltZusxqWqkB_VQ0zg/viewform',
             title: 'AEGEE Contact in your City',
@@ -198,15 +186,9 @@ export default {
         ],
         'Useful guides': [
           {
-            url: 'https://drive.google.com/drive/folders/1FosqlM9zjSnpvAxZkOg0yoCW7swHdwM1',
+            url: 'https://myaegee.atlassian.net/wiki/spaces/KMS/pages/2238152708/Public+Relations',
             title: 'Visual Identity',
             description: 'Manual, logos, PR materials and more',
-            color: '#FF5543'
-          },
-          {
-            url: 'https://drive.google.com/drive/folders/1J9qCQP4Kbuol3Nutid3h04b-E-BM3QN5',
-            title: 'Internal Education',
-            description: 'LTC packages',
             color: '#FF5543'
           }
         ]

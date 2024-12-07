@@ -88,6 +88,20 @@
             </router-link>
           </div>
 
+          <div class="field is-grouped" v-if="can.see_missing_memberslist.global && this.event.type === 'agora'">
+            <router-link :to="{ name: 'oms.statutory.memberslist.list.missing', params: { id: event.url || event.id } }" class="button is-fullwidth">
+              <span>See missing members lists</span>
+              <span class="icon"><font-awesome-icon icon="users" /></span>
+            </router-link>
+          </div>
+
+          <div class="field is-grouped" v-if="can.see_memberslist_without_fee.global && this.event.type === 'agora'">
+            <router-link :to="{ name: 'oms.statutory.memberslist.list.without_fee', params: { id: event.url || event.id } }" class="button is-fullwidth">
+              <span>See members lists without fee</span>
+              <span class="icon"><font-awesome-icon icon="users" /></span>
+            </router-link>
+          </div>
+
           <div class="field is-grouped" v-if="can.use_massmailer">
             <router-link :to="{ name: 'oms.statutory.massmailer', params: { id: event.url || event.id } }" class="button is-fullwidth">
               <span>Mass mailer</span>
@@ -131,6 +145,13 @@
           </div>
 
           <div class="field is-grouped" v-if="can.edit_event">
+            <a class="button is-fullwidth is-primary" data-cy="picture-change-link" @click="openPictureModal()">
+              <span>Change picture</span>
+              <span class="icon"><font-awesome-icon icon="camera" /></span>
+            </a>
+          </div>
+
+          <div class="field is-grouped" v-if="can.edit_event">
             <router-link :to="{ name: 'oms.statutory.edit', params: { id: event.url || event.id } }" class="button is-fullwidth is-warning">
               <span>Edit event</span>
               <span class="icon"><font-awesome-icon icon="edit" /></span>
@@ -169,8 +190,8 @@
                     <div class="content" v-html="$options.filters.markdown(event.description)" />
                   </td>
                 </tr>
-                <tr v-if="event.booklet_folder && canSeeBooklet">
-                  <th>Booklet</th>
+                <tr v-if="event.booklet_folder">
+                  <th>KMS page</th>
                   <td><a :href="event.booklet_folder" target="_blank" rel="noopener noreferrer">{{ event.booklet_folder }}</a></td>
                 </tr>
                 <tr>
@@ -261,11 +282,11 @@
                   <td colspan="2">{{ event.candidature_deadline | datetime }}</td>
                 </tr>
                 <tr v-if="event.type === 'agora'">
-                  <th>Booklet publication</th>
+                  <th>Documents publication</th>
                   <td colspan="2">{{ event.booklet_publication_deadline | datetime }}</td>
                 </tr>
                 <tr v-if="event.type === 'agora'">
-                  <th>Updated booklet publication</th>
+                  <th>Updated documents publication</th>
                   <td colspan="2">{{ event.updated_booklet_publication_deadline | datetime }}</td>
                 </tr>
               </tbody>
@@ -306,6 +327,7 @@ import { mapGetters } from 'vuex'
 import { MglMap, MglMarker, MglPopup, MglNavigationControl } from 'vue-mapbox'
 import moment from 'moment'
 import credentials from '../../credentials'
+import PictureModal from './PictureModal.vue'
 
 export default {
   components: {
@@ -344,6 +366,8 @@ export default {
         see_boardview: {},
         see_participants_list: false,
         see_memberslist: {},
+        see_missing_memberslist: {},
+        see_memberslist_without_fee: {},
         export: false,
         see_questions: false,
         manage_question_lines: false
@@ -351,6 +375,20 @@ export default {
     }
   },
   methods: {
+    openPictureModal () {
+      this.$buefy.modal.open({
+        component: PictureModal,
+        hasModalCard: true,
+        props: {
+          event: this.event,
+          permissions: this.permissions,
+          services: this.services,
+          showError: this.$root.showError,
+          showSuccess: this.$root.showSuccess,
+          router: this.$router
+        }
+      })
+    },
     askSwitchStatus (newStatus) {
       this.$buefy.dialog.confirm({
         title: 'Switching status',
@@ -446,9 +484,6 @@ export default {
     },
     duringAgora () {
       return this.event.type === 'agora' && moment().isBetween(this.event.starts, this.event.ends, null, '[]')
-    },
-    canSeeBooklet () {
-      return this.event.type !== 'agora' || moment().isAfter(this.event.booklet_publication_deadline) || this.can.edit_event
     }
   }
 }

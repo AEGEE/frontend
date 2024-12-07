@@ -33,7 +33,11 @@
       <form @submit.prevent="saveEvent()">
         <div class="notification is-info">
           <div class="content">
-            <p>If you have any questions, please refer to the <a href="https://www.projects.aegee.org/suct/su2021/booklets.php" target="_blank" rel="noopener noreferrer">booklets</a> first.</p>
+            <p>If you have any questions, please refer to the <a href="https://drive.google.com/drive/folders/1D2OB5gGmyAScf-ITFK1URJ8ZuIZlWCbX" target="_blank" rel="noopener noreferrer">booklets</a> first.</p>
+            <p><i>You need a AEGEE Google Workspace account to be able to see the booklets. In case you don't have one,
+              <a href="https://oms-project.atlassian.net/wiki/spaces/HEL/pages/248348673/Requesting+a+Gsuite+account+for+yourself" target="blank">
+                here's how to request it
+              </a>.</i></p>
             <p><strong>Once the event is saved for the second submission, you are not able to edit information yourself.</strong> So please check everything twice.</p>
             <p>If you will need the event info to be changed after saving, please contact <a href="mailto:suct@aegee.eu">SUCT</a>.</p>
           </div>
@@ -58,7 +62,8 @@
             <select v-model="season">
               <option value="2021">2021</option>
               <option value="2022">2022</option>
-              <option selected value="2023">2023</option>
+              <option value="2023">2023</option>
+              <option selected value="2024">2024</option>
             </select>
           </div>
           <p class="help is-danger" v-if="errors.season">{{ errors.season.join(', ') }}</p>
@@ -416,7 +421,7 @@
               You can take the templates for the budget and programme here.
             </a></p>
             <p><i>
-              Note: in case you cannot see AEGEE templates at the link above, try switching to AEGEE GSuite account.
+              Note: in case you cannot see AEGEE templates at the link above, try switching to AEGEE Google Workspace account.
               In case you don't have one,
               <a href="https://oms-project.atlassian.net/wiki/spaces/HEL/pages/248348673/Requesting+a+Gsuite+account+for+yourself" target="blank">
                 here's how to request it

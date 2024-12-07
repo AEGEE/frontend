@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="loginUser">
           <label class="label">Filter on body type</label>
           <div class="control">
             <multiselect
@@ -47,15 +47,15 @@
         </div>
 
         <b-table :data="bodies" :loading="isLoading" narrowed>
-          <b-table-column field="code" label="Body code" v-slot="props">
+          <b-table-column field="code" label="Body code" v-slot="props" sortable>
             {{ props.row.code }}
           </b-table-column>
 
-          <b-table-column field="name" label="Body name" v-slot="props">
+          <b-table-column field="name" label="Body name" v-slot="props" sortable>
             <router-link :to="{ name: 'oms.bodies.view', params: { id: props.row.id } }">{{ props.row.name}}</router-link>
           </b-table-column>
 
-          <b-table-column field="type" label="Type" v-slot="props">
+          <b-table-column field="type" label="Type" v-slot="props" sortable>
             {{ props.row.type | capitalize }}
           </b-table-column>
 
@@ -63,7 +63,7 @@
             <span class="body-description" v-html="$options.filters.markdown(props.row.description)" />
           </b-table-column>
 
-          <b-table-column field="founded_at" label="Foundation date" v-slot="props">
+          <b-table-column field="founded_at" label="Foundation date" v-slot="props" sortable>
             {{ props.row.founded_at }}
           </b-table-column>
 
@@ -114,6 +114,7 @@ export default {
         { value: 'committee', name: 'Committee' },
         { value: 'project', name: 'Project' },
         { value: 'partner', name: 'Partner' },
+        { value: 'external', name: 'External' },
         { value: 'other', name: 'Other' }
       ],
       selectedTypes: [],

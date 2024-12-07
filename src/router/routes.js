@@ -262,6 +262,14 @@ module.exports = [
       auth: false
     }
   },
+  {
+    name: 'oms.bodies.boards',
+    path: '/bodies/:id/boards',
+    component: 'core/bodies/ViewBoards',
+    meta: {
+      label: 'View boards of a body'
+    }
+  },
   /* Permissions management */
   {
     name: 'oms.permissions.list',
@@ -713,6 +721,22 @@ module.exports = [
     }
   },
   {
+    name: 'oms.statutory.memberslist.list.missing',
+    path: '/statutory/:id/memberslist/list/missing',
+    component: 'statutory/ListMissingMembersLists',
+    meta: {
+      label: 'List missing members lists'
+    }
+  },
+  {
+    name: 'oms.statutory.memberslist.list.without_fee',
+    path: '/statutory/:id/memberslist/list/without_fee',
+    component: 'statutory/ListWithoutFeeMembersLists',
+    meta: {
+      label: 'List members lists without fee'
+    }
+  },
+  {
     name: 'oms.statutory.massmailer',
     path: '/statutory/:id/massmailer',
     component: 'statutory/MassMailer',
@@ -806,6 +830,23 @@ module.exports = [
     component: 'statutory/ViewPlenary',
     meta: {
       label: 'Plenary details and marking attendance'
+    }
+  },
+  /* Network management. */
+  {
+    name: 'oms.network.boards.list',
+    path: '/network/boards',
+    component: 'network/BoardListing',
+    meta: {
+      label: 'View current boards'
+    }
+  },
+  {
+    name: 'oms.network.ac_check',
+    path: '/network/ac_check',
+    component: 'network/AntennaCriteriaCheck',
+    meta: {
+      label: 'Antenna Criteria check'
     }
   },
   /* Static resources. */
