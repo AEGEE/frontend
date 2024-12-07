@@ -51,7 +51,6 @@
           </ul>
         </div>
 
-        <!-- TODO: fix this table, something about being in the same div height is likely an issue -->
         <div v-show="scope === 'edit' && selectedBody">
           <div class="notification is-danger" v-if="Object.keys(this.errors).length > 0">
             <div class="content">
@@ -65,27 +64,29 @@
             </div>
           </div>
 
-          <b-table
-            :data="bodyStatuses">
-            <b-table-column label="Participant type and order" v-slot="props">
-              {{ props.row.participant_type }} ({{ props.row.participant_order }})
-            </b-table-column>
+          <div>
+            <b-table
+              :data="bodyStatuses">
+              <b-table-column label="Participant type and order" v-slot="props">
+                {{ props.row.participant_type }} ({{ props.row.participant_order }})
+              </b-table-column>
 
-            <b-table-column field="user_id" label="User" v-slot="props">
-              <div class="select">
-                <select v-model="props.row.user_id">
-                  <option :value="null">Not set</option>
-                  <option v-for="application in applications" v-bind:key="application.user_id" v-bind:value="application.user_id">
-                    {{ application.first_name }} {{ application.last_name }}
-                  </option>
-                </select>
-              </div>
-            </b-table-column>
+              <b-table-column field="user_id" label="User" v-slot="props">
+                <div class="select">
+                  <select v-model="props.row.user_id">
+                    <option :value="null">Not set</option>
+                    <option v-for="application in applications" v-bind:key="application.user_id" v-bind:value="application.user_id">
+                      {{ application.first_name }} {{ application.last_name }}
+                    </option>
+                  </select>
+                </div>
+              </b-table-column>
 
-            <b-table-column field="board_comment" label="Board comment" sortable v-slot="props">
-              <textarea class="textarea" v-model="props.row.board_comment" />
-            </b-table-column>
-          </b-table>
+              <b-table-column field="board_comment" label="Board comment" sortable v-slot="props">
+                <textarea class="textarea" v-model="props.row.board_comment" />
+              </b-table-column>
+            </b-table>
+          </div>
 
           <div class="notification is-warning">
             <p>Please keep in mind that if you haven't selected any application here, its participant type/order and board comment would be unset.</p>
