@@ -27,7 +27,11 @@
         </div>
 
         <div class="control">
-          <a class="button is-info" :disabled="!file" @click="updateImage()">Upload!</a>
+          <a class="button is-info" :disabled="!file" @click="updateImage()">Upload</a>
+        </div>
+
+        <div class="control">
+          <a class="button is-danger" :disabled="!user.image" @click="removeImage()">Delete</a>
         </div>
       </div>
     </section>
@@ -50,14 +54,10 @@ export default {
       this.file = event.target.files[0]
     },
     updateImage () {
-      if (!this.file) {
-        return
-      }
+      if (!this.file) return
 
       const data = new FormData()
       data.append('head_image', this.file)
-
-      console.log(data)
 
       this.axios.post(this.services['core'] + '/members/' + this.user.id + '/upload', data).then(() => {
         this.showSuccess('User image is updated.')
@@ -66,6 +66,16 @@ export default {
         this.showError('Could not update image', err)
       })
     },
+    removeImage () {
+      if (!this.user.image) return
+
+      this.axios.delete(this.services['core'] + '/members/' + this.user.id + '/image').then(() => {
+        this.showSuccess('User image is removed.')
+        this.router.go(0)
+      }).catch((err) => {
+        this.showError('Could not remove image', err)
+      })
+    }
   }
 }
 </script>
