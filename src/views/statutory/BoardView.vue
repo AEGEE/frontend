@@ -75,7 +75,7 @@
                 <div class="select">
                   <select v-model="props.row.user_id">
                     <option :value="null">Not set</option>
-                    <option v-for="application in applications" v-bind:key="application.user_id" v-bind:value="application.user_id">
+                    <option v-for="application in nonCancelledApplications" v-bind:key="application.user_id" v-bind:value="application.user_id">
                       {{ application.first_name }} {{ application.last_name }}
                     </option>
                   </select>
@@ -260,6 +260,9 @@ export default {
     canEditSelectedBody () {
       return this.can.set_board_comment_and_participant_type.global
         || this.can.set_board_comment_and_participant_type[this.selectedBody]
+    },
+    nonCancelledApplications () {
+      return this.applications.filter(app => !app.cancelled)
     }
   },
   methods: {

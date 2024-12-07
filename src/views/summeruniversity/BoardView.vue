@@ -59,10 +59,15 @@
             </b-table-column>
 
             <b-table-column field="status" label="Status" sortable>
-              <span v-if="props.row.status === 'accepted'">Accepted</span>
-              <span v-if="props.row.status === 'rejected'">Rejected</span>
-              <span v-if="props.row.status === 'waiting_list'">Waiting list</span>
-              <span v-if="props.row.status === 'pending'">Pending</span>
+              <span v-if="props.row.cancelled">
+                <span class="tag is-danger" v-if="props.row.cancelled">
+                  Cancelled
+                </span>
+              </span>
+              <span v-if="!props.row.cancelled && props.row.status === 'accepted'">Accepted</span>
+              <span v-if="!props.row.cancelled && props.row.status === 'rejected'">Rejected</span>
+              <span v-if="!props.row.cancelled && props.row.status === 'waiting_list'">Waiting list</span>
+              <span v-if="!props.row.cancelled && props.row.status === 'pending'">Pending</span>
             </b-table-column>
 
             <b-table-column field="board_comment" label="Board comment">
