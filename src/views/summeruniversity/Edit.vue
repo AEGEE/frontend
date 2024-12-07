@@ -775,7 +775,6 @@ import credentials from '../../credentials'
 import TimezoneNotification from '../../components/notifications/TimezoneNotification'
 import MarkdownTooltip from '../../components/tooltips/MarkdownTooltip'
 import URLTooltip from '../../components/tooltips/URLTooltip'
-import PictureModal from './PictureModal.vue'
 
 // TODO: check that all unused code is removed
 export default {
@@ -786,7 +785,6 @@ export default {
     TimezoneNotification,
     MarkdownTooltip,
     URLTooltip,
-    PictureModal
   },
   name: 'EditEvent',
   data () {
@@ -870,24 +868,6 @@ export default {
     }
   },
   methods: {
-    setFile (event) {
-      this.file = event.target.files[0]
-    },
-    updateImage () {
-      if (!this.file) {
-        return
-      }
-
-      const data = new FormData()
-      data.append('head_image', this.file)
-
-      this.axios.post(this.services['summeruniversity'] + '/single/' + this.$route.params.id + '/upload', data).then(() => {
-        this.$root.showSuccess('Event image is updated.')
-        this.file = null
-      }).catch((err) => {
-        this.$root.showError('Could not update image', err)
-      })
-    },
     fetchMembers (query) {
       if (!query) return
 

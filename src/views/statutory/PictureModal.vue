@@ -63,7 +63,7 @@ export default {
       }).catch((err) => {
         this.showError('Could not update image', err)
       })
-    },
+    }
   }
 }
 </script>

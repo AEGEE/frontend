@@ -198,7 +198,7 @@
 import { mapGetters } from 'vuex'
 import EditPrimaryBodyModal from './EditPrimaryBodyModal.vue'
 import EditPrimaryEmailModal from './EditPrimaryEmailModal.vue'
-import PictureModal from './PictureModal.vue';
+import PictureModal from './PictureModal.vue'
 
 export default {
   name: 'SingleUser',
