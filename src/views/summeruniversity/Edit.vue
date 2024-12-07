@@ -784,7 +784,7 @@ export default {
     MglNavigationControl,
     TimezoneNotification,
     MarkdownTooltip,
-    URLTooltip,
+    URLTooltip
   },
   name: 'EditEvent',
   data () {
