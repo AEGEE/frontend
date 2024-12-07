@@ -41,7 +41,7 @@
         </div>
 
         <b-table :data="filteredBodies" :loading="isLoading" narrowed>
-          <b-table-column field="code" label="Body code">
+          <b-table-column field="code" label="Body code" v-slot="props">
             {{ props.row.code }}
           </b-table-column>
 
