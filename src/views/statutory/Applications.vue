@@ -72,11 +72,11 @@
             </span>
           </b-table-column>
 
-            <b-table-column field="was_on_memberslist" label="Was on previous memberslist?" centered sortable :visible="event.type === 'agora'" v-slot="props">
-              <span :class="calculateClassForMemberslist(props.row.is_on_previous_memberslist)">
-                {{ props.row.is_on_previous_memberslist | beautify }}
-              </span>
-            </b-table-column>
+          <b-table-column field="was_on_memberslist" label="Was on previous memberslist?" centered sortable :visible="event.type === 'agora'" v-slot="props">
+            <span :class="calculateClassForMemberslist(props.row.is_on_previous_memberslist)">
+              {{ props.row.is_on_previous_memberslist | beautify }}
+            </span>
+          </b-table-column>
 
           <!-- important: there should be no whitespaces/line breaks inside this tag, as it messes up the white-space: pre-wrap styling. !-->
           <b-table-column
@@ -85,7 +85,7 @@
             v-bind:key="index"
             :field="field.column"
             class="has-text-pre-wrap"
-              sortable
+            sortable
             :label="field.name"
             v-slot="props">{{ field.get(props.row) | beautify }}</b-table-column>
 
