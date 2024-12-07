@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.42.3",
+  "version": "1.42.4",
   "description": "MyAEGEE Frontend",
   "homepage": "https://my.aegee.eu",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@babel/core": "^7.24.4",
+    "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.25.9",
     "@babel/types": "^7.22.17",
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -41,7 +41,7 @@
     "@vue/eslint-config-airbnb": "^7.0.0",
     "animate.css": "^4.1.1",
     "axios": "^1.6.5",
-    "buefy": "^0.9.23",
+    "buefy": "^0.9.29",
     "chart.js": "^2.9.4",
     "compression-webpack-plugin": "^6.1.1",
     "css-loader": "^5.2.7",
