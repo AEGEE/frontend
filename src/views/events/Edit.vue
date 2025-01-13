@@ -28,7 +28,7 @@
           <p class="help is-danger" v-if="errors.name">{{ errors.name.join(', ') }}</p>
         </div>
 
-        <div class=notification is-info">
+        <div class="notification is-info">
           <div class="content">
             <p>
               If your event is part of the Operating Grant, please add the following disclaimer at the end of the event description (including the asterisks):
