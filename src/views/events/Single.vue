@@ -92,6 +92,10 @@
         <div class="content">
           <p class="title">{{ event.name }}</p>
 
+          <div class="notification is-info" v-if="isOnlineEvent">
+            This is an online event!
+          </div>
+
           <div class="content">
             <table class="table is-narrow">
               <tbody>
@@ -133,7 +137,7 @@
                   <th>Type</th>
                   <td>{{ eventTypes[event.type] }}</td>
                 </tr>
-                <tr>
+                <tr v-if="!isOnlineEvent">
                   <th>Fee</th>
                   <td v-if="event.fee">€{{ event.fee }}</td>
                   <td v-if="!event.fee"><i>Free</i></td>
@@ -151,7 +155,7 @@
                   <td><a :href="event.link_info_travel_country" target="_blank" rel="noopener noreferrer">{{ event.link_info_travel_country }}</a>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="!isOnlineEvent">
                   <th>Number of meals provided per day</th>
                   <td>{{ event.meals_per_day }}</td>
                 </tr>
@@ -162,7 +166,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="!isOnlineEvent">
                   <th>Accommodation type</th>
                   <td>{{ event.accommodation_type }}</td>
                 </tr>
@@ -187,7 +191,7 @@
 
             <table class="table is-narrow" v-if="event.budget || event.programme">
               <tbody>
-                <tr>
+                <tr v-if="!isOnlineEvent">
                   <th>Budget link</th>
                   <td>
                     <a v-if="event.budget" :href="event.budget" target="_blank" rel="noopener noreferrer">{{ event.budget }}</a>
@@ -289,7 +293,8 @@ export default {
         meals_per_day: 0,
         optional_programme: null,
         link_info_travel_country: null,
-        accommodation_type: ''
+        accommodation_type: '',
+        method: ''
       },
       eventTypes: constants.EVENT_TYPES_NAMES,
       accessToken: '',
@@ -346,7 +351,7 @@ export default {
     },
     askChangeStatus (newStatus) {
       if (this.event.status === 'draft') {
-        if (!this.event.budget) {
+        if (!this.event.budget && !this.isOnlineEvent) {
           this.$root.showError('Please set the budget for the event in the event settings.')
         }
 
@@ -354,7 +359,7 @@ export default {
           this.$root.showError('Please set the program for the event in the event settings.')
         }
 
-        if (!this.event.budget || !this.event.programme) {
+        if ((!this.event.budget && !this.isOnlineEvent) || !this.event.programme) {
           return
         }
       }
@@ -452,6 +457,9 @@ export default {
     }),
     isOrganizer () {
       return this.event.organizers.some(org => org.user_id === this.loginUser.id)
+    },
+    isOnlineEvent () {
+      return this.event.method === 'online'
     }
   }
 }
