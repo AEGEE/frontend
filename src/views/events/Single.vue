@@ -403,19 +403,19 @@ export default {
     },
     askChangeEuropeanEventStatus () {
       const message = this.event.is_european_event
-        ? `Are you sure you want to change this event's status to <b>not</b> a European Event?`
-        : `Are you sure you want to change this event's status to <b>a European Event</b>?`
-      
+        ? 'Are you sure you want to change this event\'s status to <b>not</b> a European Event?'
+        : 'Are you sure you want to change this event\'s status to <b>a European Event</b>?'
+
       this.$buefy.dialog.confirm({
         title: 'Change European Event status',
-        message: message,
+        message,
         confirmText: 'Change European Event status',
         type: 'is-warning',
         hasIcon: true,
         onConfirm: () => this.changeEuropeanEventStatus()
       })
     },
-    changeEuropeanEventStatus() {
+    changeEuropeanEventStatus () {
       this.isLoading = true
       const body = { is_european_event: !this.event.is_european_event }
 
