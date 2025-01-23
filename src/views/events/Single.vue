@@ -78,6 +78,14 @@
             </a>
           </div>
 
+          <!-- For CD: change European Event status-->
+          <div class="field is-grouped" v-if="can.change_european_event_status[event.type]">
+            <a class="button is-fullwidth is-primary" @click="askChangeEuropeanEventStatus()">
+              <span>Change European Event status</span>
+              <span class="icon"><font-awesome-icon icon="edit" /></span>
+            </a>
+          </div>
+
           <div class="field is-grouped" v-if="can.delete_event">
             <a class="button is-fullwidth is-danger" @click="askDeleteEvent()">
               <span>Delete event</span>
@@ -294,7 +302,8 @@ export default {
         optional_programme: null,
         link_info_travel_country: null,
         accommodation_type: '',
-        method: ''
+        method: '',
+        is_european_event: null
       },
       eventTypes: constants.EVENT_TYPES_NAMES,
       accessToken: '',
@@ -314,7 +323,8 @@ export default {
           draft: false,
           submitted: false,
           published: false
-        }
+        },
+        change_european_event_status: {}
       }
     }
   },
@@ -388,7 +398,39 @@ export default {
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-        this.$root.showError('Could not delete event', err)
+        this.$root.showError('Could not change event status', err)
+      })
+    },
+    askChangeEuropeanEventStatus () {
+      const message = this.event.is_european_event
+        ? `Are you sure you want to change this event's status to <b>not</b> a European Event?`
+        : `Are you sure you want to change this event's status to <b>a European Event</b>?`
+      
+      this.$buefy.dialog.confirm({
+        title: 'Change European Event status',
+        message: message,
+        confirmText: 'Change European Event status',
+        type: 'is-warning',
+        hasIcon: true,
+        onConfirm: () => this.changeEuropeanEventStatus()
+      })
+    },
+    changeEuropeanEventStatus() {
+      this.isLoading = true
+      const body = { is_european_event: !this.event.is_european_event }
+
+      this.axios.put(this.services['events'] + '/single/' + this.event.id + '/status/european_event', body).then(() => {
+        this.$root.showInfo(`European Event status is now ${!this.event.is_european_event}`)
+
+        // Refetching the event to renew the permissions.
+        return this.axios.get(this.services['events'] + '/single/' + this.$route.params.id)
+      }).then((response) => {
+        this.event = response.data.data
+        this.can = response.data.permissions
+        this.isLoading = false
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not change European Event status', err)
       })
     },
     onMapLoaded (event) {
