@@ -64,7 +64,7 @@ import { faUmbrellaBeach } from '@fortawesome/free-solid-svg-icons/faUmbrellaBea
 import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay'
 import { faStop } from '@fortawesome/free-solid-svg-icons/faStop'
 import { faBookReader } from '@fortawesome/free-solid-svg-icons/faBookReader'
-import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse'
+import { faHome } from '@fortawesome/free-solid-svg-icons/faHome'
 import { faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons/faHandHoldingMedical'
 
 library.add(faTimesCircle)
@@ -129,7 +129,7 @@ library.add(faUmbrellaBeach)
 library.add(faPlay)
 library.add(faStop)
 library.add(faBookReader)
-library.add(faHouse)
+library.add(faHome)
 library.add(faHandHoldingMedical)
 
 export default FontAwesomeIcon
