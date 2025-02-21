@@ -114,7 +114,7 @@
                         <span class="title is-4">
                           {{ event.name }}
                           <b-tag type="is-info" v-if="event.method === 'online'">Online</b-tag>
-                        </span> 
+                        </span>
                       </li>
                       <li style="display: flex; justify-content: space-between;">
                         <span class="tag" :style="{ 'background-color': colors[event.type], color: '#FFFFFF' }">
