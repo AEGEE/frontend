@@ -128,7 +128,7 @@ export default {
           {
             url: 'https://www.aegee.org/code-of-conduct/',
             title: 'Code of Conduct',
-            description: 'Read AEGEE's Code of Conduct',
+            description: 'Read AEGEE\'s Code of Conduct',
             color: '#FFDB4C'
           },
           {
