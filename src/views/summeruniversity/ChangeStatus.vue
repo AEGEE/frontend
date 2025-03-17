@@ -6,7 +6,8 @@
 
         <b-table
           :data="events"
-          :loading="isLoading">
+          :loading="isLoading"
+          :default-sort="['starts', 'desc']">
           <b-table-column field="type" label="Event type" sortable v-slot="props">
             {{ eventTypes[props.row.type] }}
           </b-table-column>
