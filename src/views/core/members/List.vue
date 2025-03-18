@@ -39,7 +39,7 @@
             {{ props.row.date_of_birth }}
           </b-table-column>
 
-          <b-table-column field="primary_body_id" label="Primary body" sortable v-slot="props">
+          <b-table-column field="primary_body_id" label="Primary body" v-slot="props">
             <span v-if="props.row.primary_body_id">{{ bodyMapping[props.row.primary_body_id] }}</span>
             <span v-else><i>Not set.</i></span>
           </b-table-column>
