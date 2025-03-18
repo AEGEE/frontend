@@ -1,3 +1,38 @@
+## [1.42.15](https://github.com/AEGEE/frontend/compare/1.42.14...1.42.15) (2025-03-17)
+
+
+### Bug Fixes
+
+* **resources:** update resource page with Code of Conduct ([#2326](https://github.com/AEGEE/frontend/issues/2326)) ([1d1a0f6](https://github.com/AEGEE/frontend/commit/1d1a0f64abb758c1833b694869c049b47a7cedbd))
+
+## [1.42.14](https://github.com/AEGEE/frontend/compare/1.42.13...1.42.14) (2025-03-16)
+
+
+### Bug Fixes
+
+* only show menu items with proper permissions. Fixes HELP-2691 ([#2321](https://github.com/AEGEE/frontend/issues/2321)) ([89c44f8](https://github.com/AEGEE/frontend/commit/89c44f85cf85e0e9953c8b2ed433c6efcdd0f1ee))
+
+## [1.42.13](https://github.com/AEGEE/frontend/compare/1.42.12...1.42.13) (2025-03-16)
+
+
+### Bug Fixes
+
+* **network:** use NetCom GSuite accounts if it is set ([#2325](https://github.com/AEGEE/frontend/issues/2325)) ([ee546ee](https://github.com/AEGEE/frontend/commit/ee546ee05403ce1e076c056a4931aba006b6353f))
+
+## [1.42.12](https://github.com/AEGEE/frontend/compare/1.42.11...1.42.12) (2025-03-14)
+
+
+### Bug Fixes
+
+* **network:** fix rounding error with fee payment automatic AC check ([#2324](https://github.com/AEGEE/frontend/issues/2324)) ([60a29f4](https://github.com/AEGEE/frontend/commit/60a29f42db11a48df0658ccc05bcdaa958346915))
+
+## [1.42.11](https://github.com/AEGEE/frontend/compare/1.42.10...1.42.11) (2025-03-10)
+
+
+### Bug Fixes
+
+* **network:** add check for body in ac check page ([#2322](https://github.com/AEGEE/frontend/issues/2322)) ([6143d7b](https://github.com/AEGEE/frontend/commit/6143d7bd4362e3394e57295705b418629d0b6d49))
+
 ## [1.42.10](https://github.com/AEGEE/frontend/compare/1.42.9...1.42.10) (2025-02-21)
 
 
