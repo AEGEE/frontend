@@ -67,18 +67,6 @@
                 Submit second draft
               </button>
               <button
-                v-if="props.row.status === 'second approval'"
-                class="button is-small is-warning"
-                @click="changeStatus(props.row, 'covid submission')">
-                Submit covid draft
-              </button>
-              <button
-                v-if="props.row.status === 'covid draft'"
-                class="button is-small is-warning"
-                @click="changeStatus(props.row, 'covid submission')">
-                Submit covid draft
-              </button>
-              <button
                 v-if="props.row.status === 'first submission'"
                 class="button is-small is-primary"
                 @click="changeStatus(props.row, 'first approval')">
@@ -91,12 +79,6 @@
                 Approve second submission
               </button>
               <button
-                v-if="props.row.status === 'covid submission'"
-                class="button is-small is-primary"
-                @click="changeStatus(props.row, 'covid approval')">
-                Approve covid submission
-              </button>
-              <button
                 v-if="props.row.status === 'first submission'"
                 class="button is-small is-danger"
                 @click="changeStatus(props.row, 'first draft')">
@@ -107,12 +89,6 @@
                 class="button is-small is-danger"
                 @click="changeStatus(props.row, 'second draft')">
                 Reject second submission
-              </button>
-              <button
-                v-if="props.row.status === 'covid submission'"
-                class="button is-small is-danger"
-                @click="changeStatus(props.row, 'covid draft')">
-                Reject covid submission
               </button>
             </div>
           </b-table-column>
@@ -130,12 +106,6 @@
                 class="button is-small is-info"
                 @click="changePublication(props.row, 'full')">
                 Publish full event
-              </button>
-              <button
-                v-if="props.row.published === 'full'"
-                class="button is-small is-info"
-                @click="changePublication(props.row, 'covid')">
-                Publish covid event
               </button>
               <button
                 v-if="props.row.published !== 'none'"
