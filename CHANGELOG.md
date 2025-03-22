@@ -1,3 +1,80 @@
+# [1.44.0](https://github.com/AEGEE/frontend/compare/1.43.0...1.44.0) (2025-03-22)
+
+
+### Features
+
+* **events:** add online events as event type ([#2290](https://github.com/AEGEE/frontend/issues/2290)) ([4bf53b8](https://github.com/AEGEE/frontend/commit/4bf53b8c36d23d5c241ba4c2db36c6f22e3b1b44))
+
+# [1.43.0](https://github.com/AEGEE/frontend/compare/1.42.18...1.43.0) (2025-03-22)
+
+
+### Features
+
+* **event:** remove covid workflow ([#2328](https://github.com/AEGEE/frontend/issues/2328)) ([ade7c06](https://github.com/AEGEE/frontend/commit/ade7c065d435c1b52fe5344c9642004392930791))
+
+## [1.42.18](https://github.com/AEGEE/frontend/compare/1.42.17...1.42.18) (2025-03-19)
+
+
+### Bug Fixes
+
+* add global permissions to board view on menu ([#2329](https://github.com/AEGEE/frontend/issues/2329)) ([f1b44c3](https://github.com/AEGEE/frontend/commit/f1b44c3aeaf330196615b5473018eb56da4ffac7))
+
+## [1.42.17](https://github.com/AEGEE/frontend/compare/1.42.16...1.42.17) (2025-03-18)
+
+
+### Bug Fixes
+
+* **network:** add information about needed documents to board change ([#2327](https://github.com/AEGEE/frontend/issues/2327)) ([6e1d568](https://github.com/AEGEE/frontend/commit/6e1d5684975b5a37d2b6d5290df6ce27e22658aa))
+
+## [1.42.16](https://github.com/AEGEE/frontend/compare/1.42.15...1.42.16) (2025-03-18)
+
+
+### Bug Fixes
+
+* **core:** display user primary body on list view ([#2318](https://github.com/AEGEE/frontend/issues/2318)) ([9386daf](https://github.com/AEGEE/frontend/commit/9386daf2cdb5b3341b65cfb0d911232a0b548491)), closes [#2679](https://github.com/AEGEE/frontend/issues/2679)
+
+## [1.42.15](https://github.com/AEGEE/frontend/compare/1.42.14...1.42.15) (2025-03-17)
+
+
+### Bug Fixes
+
+* **resources:** update resource page with Code of Conduct ([#2326](https://github.com/AEGEE/frontend/issues/2326)) ([1d1a0f6](https://github.com/AEGEE/frontend/commit/1d1a0f64abb758c1833b694869c049b47a7cedbd))
+
+## [1.42.14](https://github.com/AEGEE/frontend/compare/1.42.13...1.42.14) (2025-03-16)
+
+
+### Bug Fixes
+
+* only show menu items with proper permissions. Fixes HELP-2691 ([#2321](https://github.com/AEGEE/frontend/issues/2321)) ([89c44f8](https://github.com/AEGEE/frontend/commit/89c44f85cf85e0e9953c8b2ed433c6efcdd0f1ee))
+
+## [1.42.13](https://github.com/AEGEE/frontend/compare/1.42.12...1.42.13) (2025-03-16)
+
+
+### Bug Fixes
+
+* **network:** use NetCom GSuite accounts if it is set ([#2325](https://github.com/AEGEE/frontend/issues/2325)) ([ee546ee](https://github.com/AEGEE/frontend/commit/ee546ee05403ce1e076c056a4931aba006b6353f))
+
+## [1.42.12](https://github.com/AEGEE/frontend/compare/1.42.11...1.42.12) (2025-03-14)
+
+
+### Bug Fixes
+
+* **network:** fix rounding error with fee payment automatic AC check ([#2324](https://github.com/AEGEE/frontend/issues/2324)) ([60a29f4](https://github.com/AEGEE/frontend/commit/60a29f42db11a48df0658ccc05bcdaa958346915))
+
+## [1.42.11](https://github.com/AEGEE/frontend/compare/1.42.10...1.42.11) (2025-03-10)
+
+
+### Bug Fixes
+
+* **network:** add check for body in ac check page ([#2322](https://github.com/AEGEE/frontend/issues/2322)) ([6143d7b](https://github.com/AEGEE/frontend/commit/6143d7bd4362e3394e57295705b418629d0b6d49))
+
+## [1.42.10](https://github.com/AEGEE/frontend/compare/1.42.9...1.42.10) (2025-02-21)
+
+
+### Bug Fixes
+
+* **discounts:** load missing icons for new discount codes ([#2319](https://github.com/AEGEE/frontend/issues/2319)) ([1c92ea7](https://github.com/AEGEE/frontend/commit/1c92ea76a0dd8e444ec115fa129fefe0c5f8a0ac)), closes [#2683](https://github.com/AEGEE/frontend/issues/2683)
+
 ## [1.42.9](https://github.com/AEGEE/frontend/compare/1.42.8...1.42.9) (2025-01-13)
 
 

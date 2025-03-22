@@ -373,7 +373,9 @@ export default {
       await this.axios.get(this.services['network'] + '/boards/recents', { params: { ends: this.selectedAgora.ends } }).then((boardsResponse) => {
         for (const board of boardsResponse.data.data) {
           const body = this.bodies.find(x => x.id === board.body_id)
-          this.$set(body, 'latestElection', board.latest_election)
+          if (body) {
+            this.$set(body, 'latestElection', board.latest_election)
+          }
         }
 
         // Check if the current board was elected within the past year
@@ -394,7 +396,7 @@ export default {
           const body = this.bodies.find(x => x.id === membersList.body_id)
           this.$set(body.antennaCriteria, 'membersList', 'true')
 
-          if (membersList.fee_not_paid === 0) {
+          if (membersList.fee_not_paid <= 0) {
             this.$set(body.antennaCriteria, 'membershipFee', 'true')
           }
         }
@@ -424,7 +426,7 @@ export default {
           this.netcommies = netcomMembersResponse.data.data.map(netcommie => ({
             user_id: netcommie.user_id,
             first_name: netcommie.user.first_name,
-            email: netcommie.user.email
+            email: netcommie.user.gsuite_id ? netcommie.user.gsuite_id : netcommie.user.email
           }))
           this.netcommies.push({ 'user_id': 0, 'first_name': 'Not set', 'email': '' })
         })
