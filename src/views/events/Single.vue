@@ -171,7 +171,7 @@
                   <td>{{ event.status | capitalize }}</td>
                 </tr>
                 <tr>
-                  <th>Organizing bodies</th>
+                  <th>Organising bodies</th>
                   <td>
                     <ul>
                       <li v-for="body in event.organizing_bodies" v-bind:key="body._id">
@@ -204,7 +204,7 @@
           </div>
 
           <div class="notification is-info" v-if="event.status !== 'published'">
-            <p><strong>This event is visible to EQAC and organizers only because it's not approved yet.</strong></p>
+            <p><strong>This event is visible to EQAC and organisers only because it's not approved yet.</strong></p>
             <p>Once the event will be published, others would be able to access it.</p>
           </div>
 

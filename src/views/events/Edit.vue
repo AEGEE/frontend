@@ -721,7 +721,7 @@ export default {
     },
     addOrganizer (organizer) {
       if (this.event.organizers.some(org => org.user_id === organizer.id)) {
-        return this.$root.showWarning('This user is already an organizer.')
+        return this.$root.showWarning('This user is already an organiser.')
       }
 
       this.event.organizers.push({
