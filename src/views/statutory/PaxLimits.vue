@@ -4,7 +4,7 @@
       <article class="tile is-child">
         <h4 class="title">Manage participants limits for a statutory event</h4>
 
-        <p>Here you can specify how much envoys, delegates, visitors and observers can go to a statutory event for every body.</p>
+        <p>Here you can specify how many envoys, delegates, visitors and observers can go to a statutory event for every body.</p>
         <p>When editing, type the empty value for unlimited.</p>
         <p>The limits that were set in a custom way have grey background. Others use the default limits.</p>
         <br />
@@ -104,6 +104,7 @@ export default {
   name: 'PaxLimits',
   data () {
     return {
+      defaultLimits: [],
       limits: [],
       bodies: [],
       eventType: 'agora',
@@ -116,7 +117,7 @@ export default {
       this.axios.post(this.services['statutory'] + '/limits/' + this.eventType, limit).then(() => {
         this.$root.showSuccess('Limit is saved.')
         this.$set(limit, 'isEditing', false)
-        this.$set(limit, 'default', false)
+        this.compareWithDefaults()
       }).catch((err) => {
         this.$root.showError('Error saving limit', err)
       })
@@ -142,11 +143,51 @@ export default {
           this.$set(limit, 'body', this.bodies.find(body => body.id === limit.body_id))
           this.$set(limit, 'isEditing', false)
         }
+        this.compareWithDefaults()
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
         this.$root.showError('Could not fetch participants limits', err)
       })
+    },
+    fetchDefaultLimits () {
+      this.isLoading = true
+      this.axios.get(this.services['statutory'] + '/limits/' + this.eventType + '/defaults/').then((response) => {
+        this.defaultLimits = response.data.data
+
+        return this.axios.get(this.services['core'] + '/bodies/')
+      }).then((response) => {
+        this.bodies = response.data.data
+
+        for (const defaultLimit of this.defaultLimits) {
+          this.$set(defaultLimit, 'body', this.bodies.find(body => body.id === defaultLimit.body_id))
+          this.$set(defaultLimit, 'isEditing', false)
+        }
+        this.compareWithDefaults()
+        this.isLoading = false
+      }).catch((err) => {
+        this.isLoading = false
+        this.$root.showError('Could not fetch participants limits', err)
+      })
+    },
+    compareWithDefaults () {
+      if (this.limits.length === 0 || this.defaultLimits.length === 0) {
+        return
+      }
+      for (const limit of this.limits) {
+        const defaultLimit = this.defaultLimits.find(def => def.body_id === limit.body_id)
+        if (defaultLimit) {
+          this.$set(limit, 'default', this.isSameAsOriginal(limit, defaultLimit))
+        }
+      }
+    },
+    isSameAsOriginal (limit, defaultLimit) {
+      return (
+        limit.delegate === defaultLimit.delegate
+        && limit.envoy === defaultLimit.envoy
+        && limit.observer === defaultLimit.observer
+        && limit.visitor === defaultLimit.visitor
+      )
     }
   },
   filters: {
@@ -157,10 +198,12 @@ export default {
   watch: {
     eventType () {
       this.fetchLimits()
+      this.fetchDefaultLimits()
     }
   },
   mounted () {
     this.fetchLimits()
+    this.fetchDefaultLimits()
   }
 }
 </script>
