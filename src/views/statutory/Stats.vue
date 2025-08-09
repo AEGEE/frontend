@@ -4,7 +4,44 @@
       <div class="tile is-child">
         <div class="title">Application statistics for {{ event.name }}</div>
 
-        <table class="table is-narrow is-fullwidth">
+        <table class="table is-narrow is-fullwidth" v-if="new Date() < event.participants_list_publish_deadline">
+          <tbody>
+            <tr>
+              <th>Total applications:</th>
+              <td>{{ stats.numbers.total }}</td>
+            </tr>
+            <tr>
+              <th>Cancelled applications:</th>
+              <td>{{ stats.numbers.cancelled }}</td>
+            </tr>
+            <tr>
+              <th>Pending applications:</th>
+              <td>{{ stats.numbers.total - stats.numbers.cancelled }}</td>
+            </tr>
+            <tr>
+              <th>Waiting list applications:</th>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>Rejected applications:</th>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>Accepted applications:</th>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>Confirmed:</th>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>Arrived:</th>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table is-narrow is-fullwidth" v-else>
           <tbody>
             <tr>
               <th>Total applications:</th>
@@ -38,14 +75,6 @@
               <th>Arrived:</th>
               <td>{{ stats.numbers.attended }}</td>
             </tr>
-            <!--<tr>
-              <th>JC registered:</th>
-              <td>{{ stats.numbers.registered }}</td>
-            </tr>
-            <tr>
-              <th>Departed:</th>
-              <td>{{ stats.numbers.departed }}</td>
-            </tr>-->
           </tbody>
         </table>
 
@@ -394,6 +423,8 @@ export default {
     this.isLoading = true
     this.axios.get(this.services['statutory'] + '/events/' + this.$route.params.id).then((response) => {
       this.event = response.data.data
+
+      this.event.participants_list_publish_deadline = new Date(this.event.participants_list_publish_deadline)
 
       return this.axios.get(this.services['statutory'] + '/events/' + this.$route.params.id + '/applications/stats')
     }).then((stats) => {
