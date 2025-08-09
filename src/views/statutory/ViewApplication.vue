@@ -169,17 +169,17 @@
         <!-- Application status -->
         <div class="tile is-parent" v-if="application && !application.cancelled">
           <div class="tile is-child">
-            <div class="notification is-warning" v-if="application.status === 'pending'">
+            <div class="notification is-warning" v-if="new Date() < event.participants_list_publish_deadline || application.status === 'pending'">
               Your application is recorded, please wait for the organisers to evaluate your application.
-              <span v-show="can.edit_application">You can still edit it till the application period ends.</span>
+              <span v-show="can.edit_application">You can still edit it until the application period ends.</span>
             </div>
-            <div class="notification is-success" v-if="application.status === 'accepted'">
+            <div class="notification is-success" v-if="new Date() >= event.participants_list_publish_deadline && application.status === 'accepted'">
               Congratulations, you have been accepted to the event!
             </div>
-            <div class="notification is-warning" v-if="application.status === 'waiting_list'">
+            <div class="notification is-warning" v-if="new Date() >= event.participants_list_publish_deadline && application.status === 'waiting_list'">
               Unfortunately you've been put to a waiting list. Please contact organisers to get more info on that.
             </div>
-            <div class="notification is-danger" v-if="application.status === 'rejected'">
+            <div class="notification is-danger" v-if="new Date() >= event.participants_list_publish_deadline && application.status === 'rejected'">
               Sorry, but you were not accepted to the event.
             </div>
           </div>
@@ -316,6 +316,7 @@ export default {
 
       this.event.application_period_starts = new Date(this.event.application_period_starts)
       this.event.application_period_ends = new Date(this.event.application_period_ends)
+      this.event.participants_list_publish_deadline = new Date(this.event.participants_list_publish_deadline)
 
       return this.axios.get(this.services['statutory'] + '/events/' + this.$route.params.id + '/applications/' + this.$route.params.application_id).then((application) => {
         this.$set(this, 'application', application.data.data)
