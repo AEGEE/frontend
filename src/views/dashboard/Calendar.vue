@@ -2,26 +2,27 @@
   <div>
     <div class="content">
       <div class="tags">
-        <span class="tag" v-for="(type, key) in constants.EVENT_TYPES_NAMES" :key="key" :style="{ 'background-color': colors[key], color: '#FFFFFF' }">
+        <span
+          class="tag"
+          v-for="(type, key) in constants.EVENT_TYPES_NAMES"
+          :key="key"
+          :style="{ 'background-color': colors[key], color: '#FFFFFF' }"
+        >
           {{ type }}
         </span>
-        <span class="tag" style="background-color: #1468C5; color: #FFFFFF">
-          Statutory
-        </span>
-        <span class="tag" style="background-color: #00BBD8; color: #FFFFFF">
+        <span class="tag" style="background-color: #1468c5; color: #ffffff"> Statutory </span>
+        <span class="tag" style="background-color: #00bbd8; color: #ffffff">
           Summer University
         </span>
-        <span class="tag" style="background-color: #898989; color: #FFFFFF">
-          Online event
-        </span>
+      </div>
+      <div>
+        Events starting with 🖥️ are online events
       </div>
     </div>
 
     <hr />
 
-    <FullCalendar
-      :options="calendarOptions"
-    />
+    <FullCalendar :options="calendarOptions" />
 
     <b-loading :is-full-page="true" :active.sync="isLoading" />
   </div>
@@ -30,7 +31,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-import ical from 'ical'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import constants from '../../constants'
@@ -72,6 +72,7 @@ export default {
           title: info.event.title,
           message: '<strong>Starts: </strong>' + moment(info.event.start).format('D MMMM Y H:mm')
             + '</br><strong>Ends: </strong>' + moment(info.event.end).format('D MMMM Y H:mm')
+            + (info.event.extendedProps.online ? '</br><em>This is an online event</em>' : '')
             + '<hr>' + this.$options.filters.markdown(info.event.extendedProps.description),
           canCancel: '[escape, button, outside]',
           confirmText: 'Event page',
@@ -93,20 +94,17 @@ export default {
     fetchEvents () {
       this.isLoading = true
 
-      const onlineEventsUrl = '/services/calendar-cors/calendar/ical/'
-        + 'aegee.eu_v5mn651imeqpvs87v4ln7hr1f4@group.calendar.google.com' // ID of the online calendar
-        + '/public/basic.ics'
-
       const eventsPromise = this.axios.get(this.services['events']).then((result) => {
         return result.data.data.map((event) => ({
-          title: event.name,
+          title: `${event.method === 'online' ? '🖥️ ' : ''}${event.name}`,
           start: new Date(event.starts),
           end: new Date(event.ends),
           backgroundColor: this.colors[event.type] || '#1468C5',
           borderColor: '#FFFFFF',
           textColor: '#FFFFFF',
           url: '/events/' + (event.url || event.id),
-          description: event.description
+          description: event.description,
+          online: event.method === 'online'
         }))
       }).catch((err) => {
         this.$root.showError('Could not load events list', err)
@@ -145,31 +143,12 @@ export default {
         return []
       })
 
-      const onlinePromise = fetch(onlineEventsUrl).then(res => res.text()).then((result) => {
-        /* Loading the online events Google calendar */
-        const onlineEventsData = Object.values(ical.parseICS(result))
-        onlineEventsData.shift() // remove the timezone object. Alternative: drop object where "onlineEventsData.type != 'VEVENT'"
-        return onlineEventsData.map((event) => ({
-          title: event.summary,
-          start: new Date(event.start),
-          end: new Date(event.end),
-          backgroundColor: '#898989',
-          borderColor: '#FFFFFF',
-          textColor: '#FFFFFF',
-          description: event.description
-        }))
-      }).catch((err) => {
-        this.$root.showError('Could not load online events list', err)
-        return []
-      })
-
       Promise.all([
         eventsPromise,
         summeruniversityPromise,
-        statutoryPromise,
-        onlinePromise
-      ]).then(([regular, summeruniversity, statutory, online]) => {
-        this.calendarOptions.events = [...regular, ...summeruniversity, ...statutory, ...online]
+        statutoryPromise
+      ]).then(([regular, summeruniversity, statutory]) => {
+        this.calendarOptions.events = [...regular, ...summeruniversity, ...statutory]
         this.isLoading = false
       })
     }
@@ -184,7 +163,7 @@ export default {
 </script>
 
 <style>
-  .modal-card-title {
-    width: 100%;
-  }
+.modal-card-title {
+  width: 100%;
+}
 </style>
