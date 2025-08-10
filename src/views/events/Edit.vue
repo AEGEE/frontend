@@ -78,47 +78,64 @@
           <p class="help is-danger" v-if="errors.url">{{ errors.url.join(', ') }}</p>
         </div>
 
-        <div class="notification is-info" v-if="!$route.params.id">
-          Please select how the event will take place wisely. <strong>It cannot be changed later.</strong>
-        </div>
-
-        <div class="field" v-if="!$route.params.id">
-          <label class="label">How will the event take place <span class="has-text-danger">*</span></label>
-          <div class="select">
-            <select v-model="event.method">
-              <option value="in person">In person</option>
-              <option value="online">Online</option>
-            </select>
+        <template v-if="!$route.params.id">
+          <div class="notification is-info">
+            Please select whether this event is organized by an external organization. <strong>It cannot be changed later.</strong>
           </div>
-        </div>
 
-        <div class="notification is-info" v-if="!$route.params.id && isOnlineEvent">
-          Please select whether you want an application period for participants. <strong>It cannot be changed later.</strong>
-        </div>
-
-        <div class="field" v-if="!$route.params.id && isOnlineEvent">
-          <label class="label">Do you want people to apply for this event? <span class="has-text-danger">*</span></label>
-          <div class="select">
-            <select v-model="event.has_applications" @change="event.has_applications = event.has_applications === 'true' || event.has_applications === true">
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
+          <div class="field">
+            <label class="label">Is this an event organised by an external party? <span class="has-text-danger">*</span></label>
+            <div class="select">
+              <select v-model="event.is_external_event" @change="event.is_external_event = event.is_external_event === 'true' || event.is_external_event === true">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
           </div>
-        </div>
-
-        <div class="notification is-info" v-if="!$route.params.id">
-          Please select the event type wisely. <strong>It cannot be changed later.</strong>
-        </div>
-
-        <div class="field" v-if="!$route.params.id">
-          <label class="label">Event type <span class="has-text-danger">*</span></label>
-          <div class="select">
-            <select v-model="event.type">
-              <option v-for="(name, type) in eventTypes" v-bind:key="type" v-bind:value="type">{{ name }}</option>
-            </select>
+          
+          <div class="notification is-info">
+            Please select how the event will take place wisely. <strong>It cannot be changed later.</strong>
           </div>
-          <p class="help is-danger" v-if="errors.type">{{ errors.type.join(', ') }}</p>
-        </div>
+
+          <div class="field">
+            <label class="label">How will the event take place? <span class="has-text-danger">*</span></label>
+            <div class="select">
+              <select v-model="event.method">
+                <option value="in person">In person</option>
+                <option value="online">Online</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="notification is-info" v-if="isOnlineEvent">
+            Please select whether you want an application period for participants. <strong>It cannot be changed later.</strong>
+          </div>
+
+          <div class="field" v-if="isOnlineEvent">
+            <label class="label">Do you want people to apply for this event? <span class="has-text-danger">*</span></label>
+            <div class="select">
+              <select v-model="event.has_applications" @change="event.has_applications = event.has_applications === 'true' || event.has_applications === true">
+                <option value="true" v-if="!event.is_external_event">Yes</option>
+                <option value="true" v-if="event.is_external_event">Yes, externally</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="notification is-info">
+            Please select the event type wisely. <strong>It cannot be changed later.</strong>
+          </div>
+
+          <div class="field">
+            <label class="label">Event type <span class="has-text-danger">*</span></label>
+            <div class="select">
+              <select v-model="event.type">
+                <option v-for="(name, type) in eventTypes" v-bind:key="type" v-bind:value="type">{{ name }}</option>
+              </select>
+            </div>
+            <p class="help is-danger" v-if="errors.type">{{ errors.type.join(', ') }}</p>
+          </div>
+        </template>
 
         <div class="field" v-if="!isOnlineEvent">
           <label class="label">Fee <span class="has-text-danger">*</span></label>
@@ -135,7 +152,7 @@
           <p class="help is-danger" v-if="errors.fee">{{ errors.fee.join(', ') }}</p>
         </div>
 
-        <div class="field" v-if="(isOnlineEvent && event.has_applications) || !isOnlineEvent">
+        <div class="field" v-if="(isOnlineEvent && event.has_applications) || !event.is_external_event">
           <label class="label">Max. participants</label>
           <div class="control">
             <input class="input" type="number" v-model="event.max_participants" min="0" @input="$root.nullifyIfEmpty(event, 'max_participants')" />
@@ -143,7 +160,7 @@
           <p class="help is-danger" v-if="errors.max_participants">{{ errors.max_participants.join(', ') }}</p>
         </div>
 
-        <div class="field notification is-info" v-if="!isOnlineEvent">
+        <div class="field notification is-info" v-if="!isOnlineEvent && !event.is_external_event">
           <label class="label" style="color: white">Regarding water access</label>
           <p>
             Please make sure that the participants have access to a reasonable amount of water during the event.
@@ -171,7 +188,7 @@
           </div>
         </div>
 
-        <div class="notification is-success" v-if="!$route.params.id && !isOnlineEvent">
+        <div class="notification is-success" v-if="!$route.params.id && !isOnlineEvent && !event.is_external_event">
           Consider if you want to make the event fully vegetarian / vegan! <strong>It can't be changed later.</strong>
         </div>
 
@@ -274,109 +291,130 @@
           <p class="help is-danger" v-if="errors.ends">{{ errors.ends.join(', ') }}</p>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Organising bodies <span class="has-text-danger">*</span></div>
-        <hr />
+        <template v-if="!event.is_external_event">
+          <div class="subtitle is-fullwidth has-text-centered">Organising bodies <span class="has-text-danger">*</span></div>
+          <hr />
 
-        <div class="tags">
-          <a
-            class="tag is-primary is-medium"
-            v-for="(body, index) in event.organizing_bodies"
-            v-bind:key="body.body_id">
-            {{ body ? body.body.name : 'Loading...' }}
-            <button class="delete is-small" @click.prevent="body => event.organizing_bodies.splice(index, 1)" />
-          </a>
-          <a class="tag is-danger is-medium" v-if="event.organizing_bodies.length === 0">No organising bodies.</a>
-        </div>
-
-        <div class="field">
-          <label class="label">Add organising body</label>
-          <div class="control">
-            <div class="field has-addons">
-              <div class="control">
-                <div class="select">
-                  <select v-model="selectedBody">
-                    <option :value="null">--</option>
-                    <option v-for="body in bodies" v-bind:key="body.id" v-bind:value="body">{{ body.name }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="control">
-                <a class="button is-primary" @click="addOrganizingBody()">Add</a>
-              </div>
-            </div>
+          <div class="tags">
+            <a
+              class="tag is-primary is-medium"
+              v-for="(body, index) in event.organizing_bodies"
+              v-bind:key="body.body_id">
+              {{ body ? body.body.name : 'Loading...' }}
+              <button class="delete is-small" @click.prevent="body => event.organizing_bodies.splice(index, 1)" />
+            </a>
+            <a class="tag is-danger is-medium" v-if="event.organizing_bodies.length === 0">No organising bodies.</a>
           </div>
-        </div>
-
-        <div class="subtitle is-fullwidth has-text-centered">Organisers <span class="has-text-danger">*</span></div>
-        <hr />
-
-        <div class="notification is-info">
-          <div class="content">
-            <p>The user creating the event automatically becomes the organiser.</p>
-            <p>People who are not listed as organisers won't be able to see and manage event manage applications, even if they are the board members.</p>
-            <p v-if="!can.viewAllMembers">
-              <strong>You can only add people from your bodies.</strong>
-              If a person from another body needs to be added as an organiser, you can temporarily join this body to get the permissions
-              to see members of this body, add required people, then leave it.
-            </p>
-            <p>Organisers list cannot be edited once the event is published, if you need to update it, please contact EQAC or CD.</p>
-          </div>
-        </div>
-
-        <div>
-          <b-table
-            :data="event.organizers"
-            :loading="isLoading">
-            <b-table-column field="first_name" label="First and last name" sortable v-slot="props">
-              <router-link target="_blank" rel="noopener noreferrer" :to="{ name: 'oms.members.view', params: { id: props.row.user_id } }">
-                {{ props.row.first_name }} {{ props.row.last_name }}
-              </router-link>
-            </b-table-column>
-
-            <b-table-column field="comment" label="Comment" v-slot="props">
-              <div class="control">
-                <input class="input" type="text" v-model="props.row.comment" />
-              </div>
-            </b-table-column>
-
-            <b-table-column label="Delete" v-slot="props">
-              <button class="button is-small is-danger" v-if="!props.row.disableEdit" @click="deleteOrganizer(props.index)">
-                Delete
-              </button>
-            </b-table-column>
-
-            <template slot="empty">
-              <empty-table-stub />
-            </template>
-          </b-table>
 
           <div class="field">
-            <label class="label">Add organiser</label>
+            <label class="label">Add organising body</label>
             <div class="control">
               <div class="field has-addons">
-                <b-autocomplete
-                  v-model="autoComplete.members.name"
-                  :data="autoComplete.members.values"
-                  open-on-focus="true"
-                  :loading="autoComplete.members.loading"
-                  @input="query => fetchMembers(query)"
-                  @select="organizer => addOrganizer(organizer)">
-                  <template slot-scope="props">
-                    <div class="media">
-                      <div class="media-content">
-                        {{ props.option.first_name }}
-                        <br>
-                        <small> {{ props.option.last_name }} </small>
-                      </div>
-                    </div>
-                  </template>
-                </b-autocomplete>
+                <div class="control">
+                  <div class="select">
+                    <select v-model="selectedBody">
+                      <option :value="null">--</option>
+                      <option v-for="body in bodies" v-bind:key="body.id" v-bind:value="body">{{ body.name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control">
+                  <a class="button is-primary" @click="addOrganizingBody()">Add</a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <template v-if="(isOnlineEvent && event.has_applications) || !isOnlineEvent">
+          <div class="subtitle is-fullwidth has-text-centered">Organisers <span class="has-text-danger">*</span></div>
+          <hr />
+
+          <div class="notification is-info">
+            <div class="content">
+              <p>The user creating the event automatically becomes the organiser.</p>
+              <p>People who are not listed as organisers won't be able to see and manage event manage applications, even if they are the board members.</p>
+              <p v-if="!can.viewAllMembers">
+                <strong>You can only add people from your bodies.</strong>
+                If a person from another body needs to be added as an organiser, you can temporarily join this body to get the permissions
+                to see members of this body, add required people, then leave it.
+              </p>
+              <p>Organisers list cannot be edited once the event is published, if you need to update it, please contact EQAC or CD.</p>
+            </div>
+          </div>
+
+          <div>
+            <b-table
+              :data="event.organizers"
+              :loading="isLoading">
+              <b-table-column field="first_name" label="First and last name" sortable v-slot="props">
+                <router-link target="_blank" rel="noopener noreferrer" :to="{ name: 'oms.members.view', params: { id: props.row.user_id } }">
+                  {{ props.row.first_name }} {{ props.row.last_name }}
+                </router-link>
+              </b-table-column>
+
+              <b-table-column field="comment" label="Comment" v-slot="props">
+                <div class="control">
+                  <input class="input" type="text" v-model="props.row.comment" />
+                </div>
+              </b-table-column>
+
+              <b-table-column label="Delete" v-slot="props">
+                <button class="button is-small is-danger" v-if="!props.row.disableEdit" @click="deleteOrganizer(props.index)">
+                  Delete
+                </button>
+              </b-table-column>
+
+              <template slot="empty">
+                <empty-table-stub />
+              </template>
+            </b-table>
+
+            <div class="field">
+              <label class="label">Add organiser</label>
+              <div class="control">
+                <div class="field has-addons">
+                  <b-autocomplete
+                    v-model="autoComplete.members.name"
+                    :data="autoComplete.members.values"
+                    open-on-focus="true"
+                    :loading="autoComplete.members.loading"
+                    @input="query => fetchMembers(query)"
+                    @select="organizer => addOrganizer(organizer)">
+                    <template slot-scope="props">
+                      <div class="media">
+                        <div class="media-content">
+                          {{ props.option.first_name }}
+                          <br>
+                          <small> {{ props.option.last_name }} </small>
+                        </div>
+                      </div>
+                    </template>
+                  </b-autocomplete>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="subtitle is-fullwidth has-text-centered">External organisers</div>
+          <hr />
+
+          <div class="notification is-info">
+            <div class="content">
+              <p>External organisers are the organisations or people who are not AEGEE members, but are responsible for the event.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">External organisers</label>
+            <div class="control">
+              <input class="input" type="text" v-model="event.external_organisers" />
+            </div>
+            <p class="help is-danger" v-if="errors.external_organisers">{{ errors.external_organisers.join(', ') }}</p>
+          </div>
+        </template>
+
+        <template v-if="((isOnlineEvent && event.has_applications) || !isOnlineEvent) && !event.is_external_event">
           <div class="subtitle is-fullwidth has-text-centered">Questions</div>
           <hr />
 
@@ -463,6 +501,26 @@
           <p class="help is-danger" v-if="errors.questions">{{ errors.questions.message }}</p>
         </template>
 
+        <template v-if="event.is_external_event && event.has_applications">
+          <div class="subtitle is-fullwidth has-text-centered">External application link</div>
+          <hr />
+
+          <div class="notification is-info">
+            <div class="content">
+              <p>As this event is organised by an external party, you can provide a link to the external application form.</p>
+              <p>It will be displayed on the event page and people will be able to apply there.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">External application URL</label>
+            <div class="control">
+              <input class="input" type="url" v-model="event.external_application_url" />
+            </div>
+            <p class="help is-danger" v-if="errors.external_application_url">{{ errors.external_application_url.join(', ') }}</p>
+          </div>
+        </template>
+
         <template v-if="!isOnlineEvent">
           <div class="subtitle is-fullwidth has-text-centered">Locations</div>
           <hr />
@@ -525,7 +583,7 @@
             </div>
           </div>
 
-          <div class="field">
+          <div class="field" v-if="!event.is_external_event">
             <label class="label">How to travel to your country</label>
             <p>You may provide an optional link to provide useful information about travelling to your country.</p>
             <div class="control">
@@ -535,86 +593,88 @@
           </div>
         </template>
 
-        <div class="subtitle is-fullwidth has-text-centered">EQAC approval fields</div>
-        <hr />
+        <template v-if="!event.is_external_event">
+          <div class="subtitle is-fullwidth has-text-centered">EQAC approval fields</div>
+          <hr />
 
-        <div class="notification is-info">
-          <div class="content">
-            <p>These fields are visible to EQAC only.</p>
-            <p>
-              You can omit specifying them when creating the event, but
-              <strong> you won't be able to submit event to EQAC if these fields are not set.</strong>
-            </p>
-            <p>Please provide the link to Google spreadsheets for the event program<span v-if="!isOnlineEvent"> and budget</span>.</p>
-            <p><a href="https://docs.google.com/spreadsheets/u/1/?ftv=1&tgif=d" target="_blank" rel="noopener noreferrer">
-              You can take the template for <span v-if="!isOnlineEvent">the budget and </span>the program here.
-            </a></p>
-            <p><i>
-              Note: in case you cannot see AEGEE templates at the link above, try switching to AEGEE Google Workspace account.
-              In case you don't have one,
-              <a href="https://oms-project.atlassian.net/wiki/spaces/HEL/pages/248348673/Requesting+a+Gsuite+account+for+yourself" target="blank">
-                here's how to request it
-              </a>.
-            </i></p>
+          <div class="notification is-info">
+            <div class="content">
+              <p>These fields are visible to EQAC only.</p>
+              <p>
+                You can omit specifying them when creating the event, but
+                <strong> you won't be able to submit event to EQAC if these fields are not set.</strong>
+              </p>
+              <p>Please provide the link to Google spreadsheets for the event program<span v-if="!isOnlineEvent"> and budget</span>.</p>
+              <p><a href="https://docs.google.com/spreadsheets/u/1/?ftv=1&tgif=d" target="_blank" rel="noopener noreferrer">
+                You can take the template for <span v-if="!isOnlineEvent">the budget and </span>the program here.
+              </a></p>
+              <p><i>
+                Note: in case you cannot see AEGEE templates at the link above, try switching to AEGEE Google Workspace account.
+                In case you don't have one,
+                <a href="https://oms-project.atlassian.net/wiki/spaces/HEL/pages/248348673/Requesting+a+Gsuite+account+for+yourself" target="blank">
+                  here's how to request it
+                </a>.
+              </i></p>
+            </div>
           </div>
-        </div>
 
-        <div class="field" v-if="!isOnlineEvent">
-          <label class="label">Link to event budget</label>
-          <div class="control">
-            <input class="input" type="url" v-model="event.budget" />
+          <div class="field" v-if="!isOnlineEvent">
+            <label class="label">Link to event budget</label>
+            <div class="control">
+              <input class="input" type="url" v-model="event.budget" />
+            </div>
+            <p class="help is-danger" v-if="errors.is_budget_set">{{ errors.is_budget_set.join(', ') }}</p>
           </div>
-          <p class="help is-danger" v-if="errors.is_budget_set">{{ errors.is_budget_set.join(', ') }}</p>
-        </div>
 
-        <div class="field">
-          <label class="label">Link to event program</label>
-          <div class="control">
-            <input class="input" type="url" v-model="event.programme" />
+          <div class="field">
+            <label class="label">Link to event program</label>
+            <div class="control">
+              <input class="input" type="url" v-model="event.programme" />
+            </div>
+            <p class="help is-danger" v-if="errors.is_programme_set">{{ errors.is_programme_set.join(', ') }}</p>
           </div>
-          <p class="help is-danger" v-if="errors.is_programme_set">{{ errors.is_programme_set.join(', ') }}</p>
-        </div>
 
-        <div class="notification is-success">
-          <div class="content">
-            <p><strong>Useful sustainability tips</strong></p>
-            <p>In AEGEE we aim to make our events as environmentally sustainable as possible.
-              In order to help you out on what you can do to make your event sustainable,
-              we have a few handy documents for you!
-            </p>
+          <div class="notification is-success">
+            <div class="content">
+              <p><strong>Useful sustainability tips</strong></p>
+              <p>In AEGEE we aim to make our events as environmentally sustainable as possible.
+                In order to help you out on what you can do to make your event sustainable,
+                we have a few handy documents for you!
+              </p>
 
-            <p>Firstly, there is a general
-              <a href="https://drive.google.com/file/d/1xSgp2THL4rqFwZYgN79F0JwW2yFabiR7/view?usp=sharing" target="blank"><strong>guide on how to organise a sustainable event</strong></a>.
-              There is also an
-              <a href="https://docs.google.com/spreadsheets/d/1kwwbtznv4IjTY4bFmIp0PDYxXTkpQTD6/edit#gid=1247355884" target="blank"><strong>event sustainability assessment tool</strong></a>,
-              which is a list of measures that you can use before your event to plan
-              how to be as sustainable as possible, and check off afterwards to see how well you did.
-              Lastly, there is a
-              <a href="https://drive.google.com/file/d/16aWZLATOSo8kDBM5p33c1XLcjga4g3Kl/view?usp=sharing" target="blank"><strong>recipe booklet</strong></a>,
-              where you can find sustainable vegetarian and vegan recipes that are easily made for a large number of people.
-            </p>
+              <p>Firstly, there is a general
+                <a href="https://drive.google.com/file/d/1xSgp2THL4rqFwZYgN79F0JwW2yFabiR7/view?usp=sharing" target="blank"><strong>guide on how to organise a sustainable event</strong></a>.
+                There is also an
+                <a href="https://docs.google.com/spreadsheets/d/1kwwbtznv4IjTY4bFmIp0PDYxXTkpQTD6/edit#gid=1247355884" target="blank"><strong>event sustainability assessment tool</strong></a>,
+                which is a list of measures that you can use before your event to plan
+                how to be as sustainable as possible, and check off afterwards to see how well you did.
+                Lastly, there is a
+                <a href="https://drive.google.com/file/d/16aWZLATOSo8kDBM5p33c1XLcjga4g3Kl/view?usp=sharing" target="blank"><strong>recipe booklet</strong></a>,
+                where you can find sustainable vegetarian and vegan recipes that are easily made for a large number of people.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="notification" style="background-color: purple; color: white;">
-          <div class="content">
-            <p><strong>Creating a safe event</strong></p>
-            <p>AEGEE should be a place in which everyone can feel safe.
-              That is why it is important to take measures against sexual harassment.
-            </p>
+          <div class="notification" style="background-color: purple; color: white;">
+            <div class="content">
+              <p><strong>Creating a safe event</strong></p>
+              <p>AEGEE should be a place in which everyone can feel safe.
+                That is why it is important to take measures against sexual harassment.
+              </p>
 
-            <p><a href="https://myaegee.atlassian.net/wiki/spaces/KMS/pages/2451505153/Organising+Safe+Events" target="blank">Here</a>
-              you can find a checklist on how to make your event safer and educational posters to hang up during events.
-              You may also request a workshop or briefing around consent and active bystanding or a Safe Person
-              which acts as a first contact for people that experience sexual harassment during an AEGEE event
-              <a href="https://forms.gle/oKjTeWrhLadrWkwR7" target="blank">here</a>.
-            </p>
+              <p><a href="https://myaegee.atlassian.net/wiki/spaces/KMS/pages/2451505153/Organising+Safe+Events" target="blank">Here</a>
+                you can find a checklist on how to make your event safer and educational posters to hang up during events.
+                You may also request a workshop or briefing around consent and active bystanding or a Safe Person
+                which acts as a first contact for people that experience sexual harassment during an AEGEE event
+                <a href="https://forms.gle/oKjTeWrhLadrWkwR7" target="blank">here</a>.
+              </p>
 
-            <p>For any further questions, please contact the Safe Person Committee via
-              <a href="mailto:safe.person@aegee.eu">safe.person@aegee.eu</a>
-            </p>
+              <p>For any further questions, please contact the Safe Person Committee via
+                <a href="mailto:safe.person@aegee.eu">safe.person@aegee.eu</a>
+              </p>
+            </div>
           </div>
-        </div>
+        </template>
 
         <b-loading is-full-page="false" :active.sync="isLoading" />
 
@@ -672,7 +732,10 @@ export default {
         link_info_travel_country: null,
         accommodation_type: '',
         method: 'in person',
-        has_applications: true
+        has_applications: true,
+        is_external_event: false,
+        external_organisers: null,
+        external_application_url: null
       },
       autoComplete: {
         members: { name: '', values: [], loading: false }
@@ -833,19 +896,29 @@ export default {
         return this.$root.showError('Please set the date when the event will end.')
       }
 
-      if (this.event.organizing_bodies.length === 0) {
+      if (this.event.organizing_bodies.length === 0 && !this.event.is_external_event) {
         return this.$root.showError('Please select at least one organizing body.')
       }
 
-      if (this.event.organizers.length === 0) {
+      if (this.event.organizers.length === 0 && !this.event.is_external_event) {
         return this.$root.showError('Please add at least one organizer.')
       }
 
-      if (this.event.has_applications) {
+      if (this.event.has_applications && !this.event.is_external_event) {
         for (const question of this.event.questions) {
           if (question.type === 'select' && question.values.length === 0) {
             return this.$root.showError('Please set values for select questions.')
           }
+        }
+      }
+
+      if (this.event.is_external_event) {
+        if (!this.event.external_organisers) {
+          return this.$root.showError('Please set the external organisers.')
+        }
+
+        if (this.has_applications && !this.event.external_url) {
+          return this.$root.showError('Please set the external event URL.')
         }
       }
 
