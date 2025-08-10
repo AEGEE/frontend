@@ -97,7 +97,7 @@
         </div>
 
         <div class="field" v-if="!$route.params.id && isOnlineEvent">
-          <label class="label">Do you want people to apply before the event starts? <span class="has-text-danger">*</span></label>
+          <label class="label">Do you want people to apply for this event? <span class="has-text-danger">*</span></label>
           <div class="select">
             <select v-model="event.has_applications" @change="event.has_applications = event.has_applications === 'true' || event.has_applications === true">
               <option value="true">Yes</option>

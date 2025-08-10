@@ -101,7 +101,7 @@
           <p class="title">{{ event.name }}</p>
 
           <div class="notification is-info" v-if="isOnlineEvent">
-            This is an online event<span v-if="!event.has_applications">, without prior applications</span>!
+            This is an online event<span v-if="!event.has_applications">, you can join without applying</span>!
           </div>
 
           <div class="content">
