@@ -631,11 +631,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import { MglMap, MglMarker, MglNavigationControl } from 'vue-mapbox'
+import moment from 'moment'
 import constants from '../../constants'
 import credentials from '../../credentials'
 import TimezoneNotification from '../../components/notifications/TimezoneNotification'
 import MarkdownTooltip from '../../components/tooltips/MarkdownTooltip'
-import moment from 'moment'
 
 export default {
   components: {
