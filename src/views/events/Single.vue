@@ -11,7 +11,7 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child is-info">
-          <div class="field is-grouped" v-if="can.list_applications">
+          <div class="field is-grouped" v-if="can.list_applications && event.has_applications && !event.is_external_event">
             <router-link :to="{ name: 'oms.events.participants', params: { id: event.url || event.id } }" class="button is-fullwidth">
               <span>View applications</span>
               <span class="icon"><font-awesome-icon icon="users" /></span>
@@ -26,10 +26,23 @@
           </div>-->
 
           <div class="field is-grouped" v-if="event.status === 'published' && event.has_applications">
-            <router-link :to="{ name: 'oms.events.apply', params: { id: event.url || event.id, application_id: 'me' } }" class="button is-warning is-fullwidth">
+            <router-link
+              v-if="!event.is_external_event"
+              :to="{ name: 'oms.events.apply', params: { id: event.url || event.id, application_id: 'me' } }"
+              class="button is-warning is-fullwidth"
+            >
               <span>Manage my application</span>
               <span class="icon"><font-awesome-icon icon="plus" /></span>
             </router-link>
+            <a
+              v-else
+              :href="event.external_application_url"
+              class="button is-warning is-fullwidth"
+              target="_blank"
+            >
+              <span>Manage my application</span>
+              <span class="icon"><font-awesome-icon icon="plus" /></span>
+            </a>
           </div>
 
           <div class="field is-grouped" v-if="can.edit_event">
@@ -117,7 +130,7 @@
                     <div class="content" v-html="$options.filters.markdown(event.description)" />
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="event.max_participants">
                   <th>Max. participants</th>
                   <td>{{ event.max_participants }}</td>
                 </tr>
@@ -186,7 +199,7 @@
                 </tr>
                 <tr>
                   <th>Organising bodies</th>
-                  <td>
+                  <td v-if="!event.is_external_event">
                     <ul>
                       <li v-for="body in event.organizing_bodies" v-bind:key="body._id">
                         <router-link class="tag" :to="{ name: 'oms.bodies.view', params: { id: body.body_id } }">
@@ -194,6 +207,9 @@
                         </router-link>
                       </li>
                     </ul>
+                  </td>
+                  <td v-else>
+                    {{ event.external_organisers }}
                   </td>
                 </tr>
               </tbody>
@@ -363,15 +379,15 @@ export default {
     },
     askChangeStatus (newStatus) {
       if (this.event.status === 'draft') {
-        if (!this.event.budget && !this.isOnlineEvent) {
+        if (!this.event.budget && !this.isOnlineEvent && !this.event.is_external_event) {
           this.$root.showError('Please set the budget for the event in the event settings.')
         }
 
-        if (!this.event.programme) {
+        if (!this.event.programme && !this.event.is_external_event) {
           this.$root.showError('Please set the program for the event in the event settings.')
         }
 
-        if ((!this.event.budget && !this.isOnlineEvent) || !this.event.programme) {
+        if (((!this.event.budget && !this.isOnlineEvent) || !this.event.programme) && !this.event.is_external_event) {
           return
         }
       }
