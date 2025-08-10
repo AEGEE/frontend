@@ -177,14 +177,7 @@
               Congratulations, you have been accepted to the event!
             </div>
             <div class="notification is-warning" v-if="application.status === 'waiting_list'">
-              Unfortunately you've been put on the waiting list. This can be because of different reasons:
-              <ul style="list-style: inside">
-                <li>There are limited spots available for your participant type.</li>
-                <li>Your application was missing a participant type, participant order, or board comment, please contact a board member from {{ application.body_name }} about this.</li>
-                <li>You are not on the submitted memberslist for {{ application.body_name }}, please contact a board member from {{ application.body_name }} about this.</li>
-                <li>You signed up as delegate (for Antenna) or envoy (for Contact Antenna), but you are not on the previous submitted memberslist, please contact a board member from {{ application.body_name }} and the Network Director about this.</li>
-                <li>Something else is wrong with your application, please contact the organisers about this.</li>
-              </ul>
+              Unfortunately you've been put to a waiting list. Please contact organisers to get more info on that.
             </div>
             <div class="notification is-danger" v-if="application.status === 'rejected'">
               Sorry, but you were not accepted to the event.
