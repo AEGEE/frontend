@@ -52,17 +52,17 @@
               </tr>
             </tfoot>
             <tbody>
-              <tr v-for="limit in limits" v-bind:key="limit.body_id" :class="{ 'has-background-grey-light': !limit.default }">
+              <tr v-for="limit in limits" v-bind:key="limit.body_id" >
                 <td>
                   <router-link :to="{ name: 'oms.bodies.view', params: { id: limit.body_id } }">
                     {{ limit.body ? limit.body.name : 'Loading...' }}
                   </router-link>
                 </td>
                 <td>{{ (limit.body ? limit.body.type : 'Loading...') | capitalize }}</td>
-                <td v-if="!limit.isEditing">{{ limit.delegate | numberOrUnlimited }}</td>
-                <td v-if="!limit.isEditing">{{ limit.envoy | numberOrUnlimited }}</td>
-                <td v-if="!limit.isEditing">{{ limit.observer | numberOrUnlimited }}</td>
-                <td v-if="!limit.isEditing">{{ limit.visitor | numberOrUnlimited }}</td>
+                <td v-if="!limit.isEditing":class="{ 'has-background-grey-light': !limit.default }">{{ limit.delegate | numberOrUnlimited }}</td>
+                <td v-if="!limit.isEditing":class="{ 'has-background-grey-light': !limit.default }">{{ limit.envoy | numberOrUnlimited }}</td>
+                <td v-if="!limit.isEditing":class="{ 'has-background-grey-light': !limit.default }">{{ limit.observer | numberOrUnlimited }}</td>
+                <td v-if="!limit.isEditing":class="{ 'has-background-grey-light': !limit.default }">{{ limit.visitor | numberOrUnlimited }}</td>
                 <td v-if="limit.isEditing">
                   <input type="number" min="0" v-model.number="limit.delegate" @input="$root.nullifyIfEmpty(limit, 'delegate')">
                 </td>
