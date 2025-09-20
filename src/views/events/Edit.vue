@@ -28,6 +28,17 @@
           <p class="help is-danger" v-if="errors.name">{{ errors.name.join(', ') }}</p>
         </div>
 
+        <div class="notification is-info">
+          <div class="content">
+            <p>
+              If your event is part of the Operating Grant, please add the following disclaimer at the end of the event description (including the asterisks):
+            </p>
+            <span>
+              *Disclaimer: Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Education and Culture Executive Agency (EACEA). Neither the European Union nor the granting authority can be held responsible for them.*
+            </span>
+          </div>
+        </div>
+
         <div class="field">
           <label class="label">Description <span class="has-text-danger">*</span></label>
           <div class="control">
@@ -68,6 +79,34 @@
         </div>
 
         <div class="notification is-info" v-if="!$route.params.id">
+          Please select how the event will take place wisely. <strong>It cannot be changed later.</strong>
+        </div>
+
+        <div class="field" v-if="!$route.params.id">
+          <label class="label">How will the event take place <span class="has-text-danger">*</span></label>
+          <div class="select">
+            <select v-model="event.method">
+              <option value="in person">In person</option>
+              <option value="online">Online</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="notification is-info" v-if="!$route.params.id && isOnlineEvent">
+          Please select whether you want an application period for participants. <strong>It cannot be changed later.</strong>
+        </div>
+
+        <div class="field" v-if="!$route.params.id && isOnlineEvent">
+          <label class="label">Do you want people to apply for this event? <span class="has-text-danger">*</span></label>
+          <div class="select">
+            <select v-model="event.has_applications" @change="event.has_applications = event.has_applications === 'true' || event.has_applications === true">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="notification is-info" v-if="!$route.params.id">
           Please select the event type wisely. <strong>It cannot be changed later.</strong>
         </div>
 
@@ -81,7 +120,7 @@
           <p class="help is-danger" v-if="errors.type">{{ errors.type.join(', ') }}</p>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isOnlineEvent">
           <label class="label">Fee <span class="has-text-danger">*</span></label>
           <div class="control">
             <div class="field has-addons">
@@ -95,14 +134,16 @@
           </div>
           <p class="help is-danger" v-if="errors.fee">{{ errors.fee.join(', ') }}</p>
         </div>
-        <div class="field">
+
+        <div class="field" v-if="(isOnlineEvent && event.has_applications) || !isOnlineEvent">
           <label class="label">Max. participants</label>
           <div class="control">
             <input class="input" type="number" v-model="event.max_participants" min="0" @input="$root.nullifyIfEmpty(event, 'max_participants')" />
           </div>
           <p class="help is-danger" v-if="errors.max_participants">{{ errors.max_participants.join(', ') }}</p>
         </div>
-        <div class="field notification is-info">
+
+        <div class="field notification is-info" v-if="!isOnlineEvent">
           <label class="label" style="color: white">Regarding water access</label>
           <p>
             Please make sure that the participants have access to a reasonable amount of water during the event.
@@ -112,7 +153,7 @@
           </p>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isOnlineEvent">
           <label class="label">Number of meals provided per day <span class="has-text-danger">*</span></label>
           <div class="control">
             <div class="control">
@@ -122,7 +163,7 @@
           <p class="help is-danger" v-if="errors.meals_per_day">{{ errors.meals_per_day.join(', ') }}</p>
         </div>
 
-        <div class="field" v-if="!$route.params.id">
+        <div class="field" v-if="!$route.params.id && !isOnlineEvent">
           <label class="label">Is the event going to be fully vegetarian?</label>
           <div class="control">
             <input type="checkbox" v-model="event.vegetarian" />
@@ -130,11 +171,11 @@
           </div>
         </div>
 
-        <div class="notification is-success" v-if="!$route.params.id">
+        <div class="notification is-success" v-if="!$route.params.id && !isOnlineEvent">
           Consider if you want to make the event fully vegetarian / vegan! <strong>It can't be changed later.</strong>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isOnlineEvent">
           <label class="label">Accommodation type <span class="has-text-danger">*</span></label>
           <div class="notification is-info" v-if="!$route.params.id">
             <p>Accommodation can be for instance camping, hostel, hosting by the members of the local, or in a gym. Write "none" for online events.</p>
@@ -145,42 +186,44 @@
           <p class="help is-danger" v-if="errors.accommodation_type">{{ errors.accommodation_type.join(', ') }}</p>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Optional Programme</div>
-        <hr />
+        <template v-if="!isOnlineEvent">
+          <div class="subtitle is-fullwidth has-text-centered">Optional Programme</div>
+          <hr />
 
-        <div class="notification is-info">
-          <div class="content">
-            <p>You may offer an optional feature to your event. If so, please specify the optional programme and its cost. Leave the fields empty if there is no extra fee charged. Be concise in the description: "trip to city X", "ice-skating", "extra museum".</p>
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Optional Fee</label>
-          <div class="control">
-            <div class="field has-addons">
-              <div class="control">
-                <a class="button is-static">€</a>
-              </div>
-              <div class="control">
-                <input class="input" type="number" v-model="event.optional_fee" min="0" />
-              </div>
+          <div class="notification is-info">
+            <div class="content">
+              <p>You may offer an optional feature to your event. If so, please specify the optional programme and its cost. Leave the fields empty if there is no extra fee charged. Be concise in the description: "trip to city X", "ice-skating", "extra museum".</p>
             </div>
           </div>
-          <p class="help is-danger" v-if="errors.optional_fee">{{ errors.optional_fee.join(', ') }}</p>
-        </div>
-        <div class="field">
-          <label class="label">Optional Programme</label>
-          <div class="control">
-            <input class="input" type="text" v-model="event.optional_programme" />
+          <div class="field">
+            <label class="label">Optional Fee</label>
+            <div class="control">
+              <div class="field has-addons">
+                <div class="control">
+                  <a class="button is-static">€</a>
+                </div>
+                <div class="control">
+                  <input class="input" type="number" v-model="event.optional_fee" min="0" />
+                </div>
+              </div>
+            </div>
+            <p class="help is-danger" v-if="errors.optional_fee">{{ errors.optional_fee.join(', ') }}</p>
           </div>
-          <p class="help is-danger" v-if="errors.optional_programme">{{ errors.optional_programme.join(', ') }}</p>
-        </div>
+          <div class="field">
+            <label class="label">Optional Programme</label>
+            <div class="control">
+              <input class="input" type="text" v-model="event.optional_programme" />
+            </div>
+            <p class="help is-danger" v-if="errors.optional_programme">{{ errors.optional_programme.join(', ') }}</p>
+          </div>
+        </template>
 
         <div class="subtitle is-fullwidth has-text-centered">Event dates</div>
         <hr />
 
         <timezone-notification />
 
-        <div class="field">
+        <div class="field" v-if="(isOnlineEvent && event.has_applications) || !isOnlineEvent">
           <label class="label">Application period starts <span class="has-text-danger">*</span></label>
           <div class="control">
             <flat-pickr
@@ -193,7 +236,7 @@
           <p class="help is-danger" v-if="errors.application_starts">{{ errors.application_starts.join(', ') }}</p>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="(isOnlineEvent && event.has_applications) || !isOnlineEvent">
           <label class="label">Application period ends <span class="has-text-danger">*</span></label>
           <div class="control">
             <flat-pickr
@@ -231,7 +274,7 @@
           <p class="help is-danger" v-if="errors.ends">{{ errors.ends.join(', ') }}</p>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Organizing bodies <span class="has-text-danger">*</span></div>
+        <div class="subtitle is-fullwidth has-text-centered">Organising bodies <span class="has-text-danger">*</span></div>
         <hr />
 
         <div class="tags">
@@ -242,11 +285,11 @@
             {{ body ? body.body.name : 'Loading...' }}
             <button class="delete is-small" @click.prevent="body => event.organizing_bodies.splice(index, 1)" />
           </a>
-          <a class="tag is-danger is-medium" v-if="event.organizing_bodies.length === 0">No organizing bodies.</a>
+          <a class="tag is-danger is-medium" v-if="event.organizing_bodies.length === 0">No organising bodies.</a>
         </div>
 
         <div class="field">
-          <label class="label">Add organizing body</label>
+          <label class="label">Add organising body</label>
           <div class="control">
             <div class="field has-addons">
               <div class="control">
@@ -264,19 +307,19 @@
           </div>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Organizers <span class="has-text-danger">*</span></div>
+        <div class="subtitle is-fullwidth has-text-centered">Organisers <span class="has-text-danger">*</span></div>
         <hr />
 
         <div class="notification is-info">
           <div class="content">
-            <p>The user creating the event automatically becomes the organizer.</p>
-            <p>People who are not listed as organizers won't be able to see and manage event manage applications, even if they are the board members.</p>
+            <p>The user creating the event automatically becomes the organiser.</p>
+            <p>People who are not listed as organisers won't be able to see and manage event manage applications, even if they are the board members.</p>
             <p v-if="!can.viewAllMembers">
               <strong>You can only add people from your bodies.</strong>
-              If a person from another body needs to be added as an organizer, you can temporarily join this body to get the permissions
+              If a person from another body needs to be added as an organiser, you can temporarily join this body to get the permissions
               to see members of this body, add required people, then leave it.
             </p>
-            <p>Organizers list cannot be edited once the event is published, if you need to update it, please contact EQAC or CD.</p>
+            <p>Organisers list cannot be edited once the event is published, if you need to update it, please contact EQAC or CD.</p>
           </div>
         </div>
 
@@ -308,7 +351,7 @@
           </b-table>
 
           <div class="field">
-            <label class="label">Add organizer</label>
+            <label class="label">Add organiser</label>
             <div class="control">
               <div class="field has-addons">
                 <b-autocomplete
@@ -333,160 +376,164 @@
           </div>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Questions</div>
-        <hr />
+        <template v-if="(isOnlineEvent && event.has_applications) || !isOnlineEvent">
+          <div class="subtitle is-fullwidth has-text-centered">Questions</div>
+          <hr />
 
-        <div class="notification is-info">
-          <div class="content">
-            <p>
-              Keep in mind that the only questions gathered from users by default are body name and application consent.
-              So, if you need some other fields in the application form (like motivation, visa fields etc.), you have to add them manually.
-            </p>
-            <p>Some fields (specifically, the email) are copied from the profile when applying, so you don't need to ask for it.</p>
-            <p>Here are the question types that can be used:</p>
-            <ul>
-              <li><b>string</b> - short string value (like "Meals type")</li>
-              <li><b>text</b> - long string value (like "Why I'm a good participant")</li>
-              <li><b>number</b> - a number (like "How much events in AEGEE I've visited")</li>
-              <li><b>select</b> - predefined set of values (like "Vegan", "Vegetarian" and "Meat-eater" for meals type)</li>
-              <li><b>checkbox</b> - a yes/no question (like "Do I need a visa?").
-                Combine it with "required" field to only allow this to be checked in order to to apply (like "I give my consent to share my data with third parties")
-              </li>
-            </ul>
+          <div class="notification is-info">
+            <div class="content">
+              <p>
+                Keep in mind that the only questions gathered from users by default are body name and application consent.
+                So, if you need some other fields in the application form (like motivation, visa fields etc.), you have to add them manually.
+              </p>
+              <p>Some fields (specifically, the email) are copied from the profile when applying, so you don't need to ask for it.</p>
+              <p>Here are the question types that can be used:</p>
+              <ul>
+                <li><b>string</b> - short string value (like "Meals type")</li>
+                <li><b>text</b> - long string value (like "Why I'm a good participant")</li>
+                <li><b>number</b> - a number (like "How many events in AEGEE I've visited")</li>
+                <li><b>select</b> - predefined set of values (like "Vegan", "Vegetarian" and "Meat-eater" for meals type)</li>
+                <li><b>checkbox</b> - a yes/no question (like "Do I need a visa?").
+                  Combine it with "required" field to only allow this to be checked in order to to apply (like "I give my consent to share my data with third parties")
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
 
-        <table class="table is-fullwidth is-narrowed">
-          <thead>
-            <tr>
-              <th>Description <span class="has-text-danger">*</span></th>
-              <th>Type <span class="has-text-danger">*</span></th>
-              <th>Required?</th>
-              <th>Values (for select)</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(question, index) in event.questions" v-bind:key="index">
-              <td>
-                <input class="input" type="text" required v-model="event.questions[index].description" />
-              </td>
-              <td>
-                <div class="select">
-                  <select v-model="event.questions[index].type" @change="nullifyOrDeleteSelect(index)">
-                    <option value="string">String</option>
-                    <option value="text">Text</option>
-                    <option value="number">Number</option>
-                    <option value="checkbox">Checkbox</option>
-                    <option value="select">Select</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <input type="checkbox" v-model="event.questions[index].required" />
-              </td>
-              <td>
-                <input-tag
-                  v-if="event.questions[index].type === 'select'"
-                  v-model="event.questions[index].values"
-                  :before-adding="value => value.trim()" />
-              </td>
-              <td>
-                <a class="button is-danger" @click="deleteQuestion(index)">Delete question</a>
-              </td>
-            </tr>
-            <tr colspan="5" v-if="event.questions.length === 0">
-              <td>No questions are set.</td>
-            </tr>
-          </tbody>
-        </table>
+          <table class="table is-fullwidth is-narrowed">
+            <thead>
+              <tr>
+                <th>Description <span class="has-text-danger">*</span></th>
+                <th>Type <span class="has-text-danger">*</span></th>
+                <th>Required?</th>
+                <th>Values (for select)</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(question, index) in event.questions" v-bind:key="index">
+                <td>
+                  <input class="input" type="text" required v-model="event.questions[index].description" />
+                </td>
+                <td>
+                  <div class="select">
+                    <select v-model="event.questions[index].type" @change="nullifyOrDeleteSelect(index)">
+                      <option value="string">String</option>
+                      <option value="text">Text</option>
+                      <option value="number">Number</option>
+                      <option value="checkbox">Checkbox</option>
+                      <option value="select">Select</option>
+                    </select>
+                  </div>
+                </td>
+                <td>
+                  <input type="checkbox" v-model="event.questions[index].required" />
+                </td>
+                <td>
+                  <input-tag
+                    v-if="event.questions[index].type === 'select'"
+                    v-model="event.questions[index].values"
+                    :before-adding="value => value.trim()" />
+                </td>
+                <td>
+                  <a class="button is-danger" @click="deleteQuestion(index)">Delete question</a>
+                </td>
+              </tr>
+              <tr colspan="5" v-if="event.questions.length === 0">
+                <td>No questions are set.</td>
+              </tr>
+            </tbody>
+          </table>
 
-        <div class="notification is-danger" v-if="errors.questions">
-          <div class="content">
-            Could not create/edit event because of these reasons:
-            <ul v-if="errors.questions">
-              <li v-for="(error, index) in errors.questions" v-bind:key="index">{{ error }}</li>
-            </ul>
+          <div class="notification is-danger" v-if="errors.questions">
+            <div class="content">
+              Could not create/edit event because of these reasons:
+              <ul v-if="errors.questions">
+                <li v-for="(error, index) in errors.questions" v-bind:key="index">{{ error }}</li>
+              </ul>
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <div class="control">
-            <a class="button is-primary" @click="addQuestion()">Add new question</a>
+          <div class="field">
+            <div class="control">
+              <a class="button is-primary" @click="addQuestion()">Add new question</a>
+            </div>
           </div>
-        </div>
 
-        <p class="help is-danger" v-if="errors.fee">{{ errors.questions.message }}</p>
+          <p class="help is-danger" v-if="errors.questions">{{ errors.questions.message }}</p>
+        </template>
 
-        <div class="subtitle is-fullwidth has-text-centered">Locations</div>
-        <hr />
+        <template v-if="!isOnlineEvent">
+          <div class="subtitle is-fullwidth has-text-centered">Locations</div>
+          <hr />
 
-        <div class="notification is-info">
-          <div class="content">
-            <p>You can add a location and drag it on the map to the desired point.</p>
-            <p>The location name would be displayed as a map marker popup.</p>
+          <div class="notification is-info">
+            <div class="content">
+              <p>You can add a location and drag it on the map to the desired point.</p>
+              <p>The location name would be displayed as a map marker popup.</p>
+            </div>
           </div>
-        </div>
 
-        <div class="tile" style="position: relative; height: 400px">
-          <MglMap
-            :accessToken="accessToken"
-            :mapStyle="map.style"
-            :zoom="map.zoom"
-            :scrollZoom="false"
-            @load="onMapLoaded"
-            :center="map.center">
-            <MglNavigationControl position="top-right" />
-            <MglMarker
-              v-for="(location, index) in event.locations"
-              v-bind:key="index"
-              :coordinates="location.position"
-              color="red"
-              :draggable="true"
-              @dragend="setMarkerPosition($event, index)" />
-          </MglMap>
-        </div>
-
-        <table class="table is-narrowed is-stripped is-fullwidth">
-          <thead>
-            <tr>
-              <th>Latitude</th>
-              <th>Longitude</th>
-              <th>Name</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(marker, index) in event.locations" v-bind:key="index">
-              <td>{{ marker.position.lat }}</td>
-              <td>{{ marker.position.lng }}</td>
-              <td>
-                <input type="text" class="input" required v-model="marker.name" />
-              </td>
-              <td>
-                <button class="button is-danger" @click="deleteLocation(index)">Delete location</button>
-              </td>
-            </tr>
-            <tr colspan="4" v-if="event.locations.length === 0">
-              <td>No locations added.</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="field">
-          <div class="control">
-            <a class="button is-primary" @click="addLocation()">Add new location</a>
+          <div class="tile" style="position: relative; height: 400px">
+            <MglMap
+              :accessToken="accessToken"
+              :mapStyle="map.style"
+              :zoom="map.zoom"
+              :scrollZoom="false"
+              @load="onMapLoaded"
+              :center="map.center">
+              <MglNavigationControl position="top-right" />
+              <MglMarker
+                v-for="(location, index) in event.locations"
+                v-bind:key="index"
+                :coordinates="location.position"
+                color="red"
+                :draggable="true"
+                @dragend="setMarkerPosition($event, index)" />
+            </MglMap>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label">How to travel to your country</label>
-          <p>You may provide an optional link to provide useful information about travelling to your country.</p>
-          <div class="control">
-            <input class="input" type="url" v-model="event.link_info_travel_country" />
+          <table class="table is-narrowed is-stripped is-fullwidth">
+            <thead>
+              <tr>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Name</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(marker, index) in event.locations" v-bind:key="index">
+                <td>{{ marker.position.lat }}</td>
+                <td>{{ marker.position.lng }}</td>
+                <td>
+                  <input type="text" class="input" required v-model="marker.name" />
+                </td>
+                <td>
+                  <button class="button is-danger" @click="deleteLocation(index)">Delete location</button>
+                </td>
+              </tr>
+              <tr colspan="4" v-if="event.locations.length === 0">
+                <td>No locations added.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="field">
+            <div class="control">
+              <a class="button is-primary" @click="addLocation()">Add new location</a>
+            </div>
           </div>
-          <p class="help is-danger" v-if="errors.link_info_travel_country">{{ errors.link_info_travel_country.join(', ') }}</p>
-        </div>
+
+          <div class="field">
+            <label class="label">How to travel to your country</label>
+            <p>You may provide an optional link to provide useful information about travelling to your country.</p>
+            <div class="control">
+              <input class="input" type="url" v-model="event.link_info_travel_country" />
+            </div>
+            <p class="help is-danger" v-if="errors.link_info_travel_country">{{ errors.link_info_travel_country.join(', ') }}</p>
+          </div>
+        </template>
 
         <div class="subtitle is-fullwidth has-text-centered">EQAC approval fields</div>
         <hr />
@@ -497,12 +544,10 @@
             <p>
               You can omit specifying them when creating the event, but
               <strong> you won't be able to submit event to EQAC if these fields are not set.</strong>
-
-              For online events, you are able to use https://online-event.example.com/ as a placeholder for the budget.
             </p>
-            <p>Please provide the link to Google spreadsheets for the event program and budget.</p>
+            <p>Please provide the link to Google spreadsheets for the event program<span v-if="!isOnlineEvent"> and budget</span>.</p>
             <p><a href="https://docs.google.com/spreadsheets/u/1/?ftv=1&tgif=d" target="_blank" rel="noopener noreferrer">
-              You can take the template for the budget and the program here.
+              You can take the template for <span v-if="!isOnlineEvent">the budget and </span>the program here.
             </a></p>
             <p><i>
               Note: in case you cannot see AEGEE templates at the link above, try switching to AEGEE Google Workspace account.
@@ -514,7 +559,7 @@
           </div>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isOnlineEvent">
           <label class="label">Link to event budget</label>
           <div class="control">
             <input class="input" type="url" v-model="event.budget" />
@@ -586,6 +631,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { MglMap, MglMarker, MglNavigationControl } from 'vue-mapbox'
+import moment from 'moment'
 import constants from '../../constants'
 import credentials from '../../credentials'
 import TimezoneNotification from '../../components/notifications/TimezoneNotification'
@@ -624,7 +670,9 @@ export default {
         vegetarian: false,
         optional_programme: null,
         link_info_travel_country: null,
-        accommodation_type: ''
+        accommodation_type: '',
+        method: 'in person',
+        has_applications: true
       },
       autoComplete: {
         members: { name: '', values: [], loading: false }
@@ -710,7 +758,7 @@ export default {
     },
     addOrganizer (organizer) {
       if (this.event.organizers.some(org => org.user_id === organizer.id)) {
-        return this.$root.showWarning('This user is already an organizer.')
+        return this.$root.showWarning('This user is already an organiser.')
       }
 
       this.event.organizers.push({
@@ -769,11 +817,11 @@ export default {
       this.selectedBody = null
     },
     saveEvent () {
-      if (!this.event.application_starts) {
+      if (!this.event.application_starts && this.event.has_applications) {
         return this.$root.showError('Please set the date when applications period will start.')
       }
 
-      if (!this.event.application_ends) {
+      if (!this.event.application_ends && this.event.has_applications) {
         return this.$root.showError('Please set the date when applications period will end.')
       }
 
@@ -793,14 +841,21 @@ export default {
         return this.$root.showError('Please add at least one organizer.')
       }
 
-      for (const question of this.event.questions) {
-        if (question.type === 'select' && question.values.length === 0) {
-          return this.$root.showError('Please set values for select questions.')
+      if (this.event.has_applications) {
+        for (const question of this.event.questions) {
+          if (question.type === 'select' && question.values.length === 0) {
+            return this.$root.showError('Please set values for select questions.')
+          }
         }
       }
 
       this.isSaving = true
       this.errors = {}
+
+      if (!this.event.has_applications) {
+        this.event.application_starts = moment()
+        this.event.application_ends = this.event.starts - moment.duration(1, 'minutes')
+      }
 
       // we don't need to pass body objects there
       const eventToSave = JSON.parse(JSON.stringify(this.event))
@@ -866,10 +921,15 @@ export default {
       this.map.actions.fitBounds([minCoords, maxCoords], { padding: 50 })
     }
   },
-  computed: mapGetters({
-    services: 'services',
-    loginUser: 'user'
-  }),
+  computed: {
+    ...mapGetters({
+      services: 'services',
+      loginUser: 'user'
+    }),
+    isOnlineEvent () {
+      return this.event.method === 'online'
+    }
+  },
   watch: {
     'event.name': function (newName) {
       if (!this.$route.params.id) {

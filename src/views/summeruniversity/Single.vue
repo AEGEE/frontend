@@ -13,7 +13,7 @@
         <article class="tile is-child is-info">
           <div class="field is-grouped">
             <a :href="`mailto:${event.email}`" class="button is-fullwidth">
-              <span>Mail organizers</span>
+              <span>Mail organisers</span>
               <span class="icon"><font-awesome-icon icon="envelope" /></span>
             </a>
           </div>
@@ -91,26 +91,10 @@
             </a>
           </div>
 
-          <!-- For SUCT: submit covid draft (covid draft -> covid submission) -->
-          <div class="field is-grouped" v-if="can.change_status.covid_submission && event.status === 'covid draft'">
-            <a class="button is-fullwidth is-warning" @click="askChangeStatus('covid submission')">
-              <span>Submit covid draft</span>
-              <span class="icon"><font-awesome-icon icon="sign-in-alt" /></span>
-            </a>
-          </div>
-
           <!-- For SUCT & LOs: submit first approval (first approval -> second submission) -->
           <div class="field is-grouped" v-if="can.change_status.second_submission && event.status === 'first approval'">
             <a class="button is-fullwidth is-warning" @click="askChangeStatus('second submission')">
               <span>Submit event for second approval</span>
-              <span class="icon"><font-awesome-icon icon="sign-in-alt" /></span>
-            </a>
-          </div>
-
-          <!-- For SUCT & LOs: submit second approval (second approval -> covid submission) -->
-          <div class="field is-grouped" v-if="can.change_status.covid_submission && event.status === 'second approval'">
-            <a class="button is-fullwidth is-warning" @click="askChangeStatus('covid submission')">
-              <span>Submit event for covid approval</span>
               <span class="icon"><font-awesome-icon icon="sign-in-alt" /></span>
             </a>
           </div>
@@ -131,14 +115,6 @@
             </a>
           </div>
 
-          <!-- For SUCT: approve covid submission (covid submission -> covid approval) -->
-          <div class="field is-grouped" v-if="can.change_status.covid_approval && event.status === 'covid submission'">
-            <a class="button is-fullwidth is-primary" @click="askChangeStatus('covid approval')">
-              <span>Approve covid submission</span>
-              <span class="icon"><font-awesome-icon icon="check" /></span>
-            </a>
-          </div>
-
           <!-- For SUCT: reject first submission (first submission -> first draft) -->
           <div class="field is-grouped" v-if="can.change_status.first_draft && event.status === 'first submission'">
             <a class="button is-fullwidth is-danger" @click="askChangeStatus('first draft')">
@@ -155,14 +131,6 @@
             </a>
           </div>
 
-          <!-- For SUCT: reject covid submission (covid submission -> covid draft) -->
-          <div class="field is-grouped" v-if="can.change_status.covid_draft && event.status === 'covid submission'">
-            <a class="button is-fullwidth is-danger" @click="askChangeStatus('covid draft')">
-              <span>Reject covid submission</span>
-              <span class="icon"><font-awesome-icon icon="times-circle" /></span>
-            </a>
-          </div>
-
           <!-- For SUCT: publish minimal event -->
           <div class="field is-grouped" v-if="can.manage_summeruniversity[event.type] && event.published === 'none'">
             <a class="button is-fullwidth is-info" @click="askChangePublication('minimal')">
@@ -175,14 +143,6 @@
           <div class="field is-grouped" v-if="can.manage_summeruniversity[event.type] && event.published === 'minimal'">
             <a class="button is-fullwidth is-info" @click="askChangePublication('full')">
               <span>Publish full event</span>
-              <span class="icon"><font-awesome-icon icon="globe" /></span>
-            </a>
-          </div>
-
-          <!-- For SUCT: publish covid event -->
-          <div class="field is-grouped" v-if="can.manage_summeruniversity[event.type] && event.published === 'full'">
-            <a class="button is-fullwidth is-info" @click="askChangePublication('covid')">
-              <span>Publish covid event</span>
               <span class="icon"><font-awesome-icon icon="globe" /></span>
             </a>
           </div>
@@ -317,10 +277,6 @@
                   <th>Has university support?</th>
                   <td>{{ event.university_support | beautify }}</td>
                 </tr>
-                <tr v-if="event.covid_regulations">
-                  <th>Where to find covid regulations</th>
-                  <td>{{ event.covid_regulations }}</td>
-                </tr>
                 <tr v-if="event.cancellation_rules">
                   <th>Payment and cancellation rules</th>
                   <td>{{ event.cancellation_rules }}</td>
@@ -338,7 +294,7 @@
                   <td>{{ event.published | capitalize }}</td>
                 </tr>
                 <tr>
-                  <th>Organizing bodies</th>
+                  <th>Organising bodies</th>
                   <td>
                     <ul>
                       <li v-for="body in event.organizing_bodies" v-bind:key="body._id">
@@ -383,7 +339,7 @@
           </div>
 
           <div class="notification is-info" v-if="event.published === 'none'">
-            <p><strong>This event is visible to SUCT and organizers only because it's not published yet.</strong></p>
+            <p><strong>This event is visible to SUCT and organisers only because it's not published yet.</strong></p>
             <p>Once the event will be published, others would be able to access it.</p>
           </div>
 
@@ -484,10 +440,7 @@ export default {
           first_approval: false,
           second_draft: false,
           second_submission: false,
-          second_approval: false,
-          covid_draft: false,
-          covid_submission: false,
-          covid_approval: false
+          second_approval: false
         }
       }
     }

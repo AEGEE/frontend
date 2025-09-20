@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.42.5",
+  "version": "1.45.0",
   "description": "MyAEGEE Frontend",
   "homepage": "https://my.aegee.eu",
   "license": "MIT",
@@ -87,7 +87,7 @@
     "husky": "^8.0.3",
     "istanbul-instrumenter-loader": "^3.0.1",
     "istanbul-lib-coverage": "^3.2.2",
-    "semantic-release": "^22.0.12"
+    "semantic-release": "^24.2.7"
   },
   "optionalDependencies": {
     "iltorb": "^2.4.5"

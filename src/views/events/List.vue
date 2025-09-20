@@ -50,7 +50,11 @@
                 </div>
                 <div class="media-content">
                   <router-link :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }">
-                    <p class="title is-4">{{ event.name }}</p>
+                    <p class="title is-4">
+                      {{ event.name }}
+                      <b-tag type="is-info" v-if="event.method === 'online' && event.has_applications">Online</b-tag>
+                      <b-tag type="is-info" v-if="event.method === 'online' && !event.has_applications">Online, no applications</b-tag>
+                    </p>
                   </router-link>
                 </div>
               </div>
@@ -61,11 +65,11 @@
                   <li><strong>Type:</strong> {{ eventTypesNames[event.type] }} </li>
                   <li><strong>From:</strong> {{ event.starts | date }} </li>
                   <li><strong>To:</strong> {{ event.ends | date }} </li>
-                  <li><strong>Application period: </strong>
+                  <li v-if="event.has_applications"><strong>Application period: </strong>
                     <span>{{ event.application_starts | date }} - {{ event.application_ends | date }}</span>
                   </li>
                   <li>
-                    <strong>Organizing bodies: </strong>
+                    <strong>Organising bodies: </strong>
                     <router-link
                       v-for="(body, index) in event.organizing_bodies"
                       v-bind:key="index"
@@ -81,7 +85,7 @@
                       :to="{ name: 'oms.events.view', params: { id: event.url || event.id } }"
                       class="button">Go to event page</router-link>
                   </p>
-                  <p class="control">
+                  <p class="control" v-if="event.has_applications">
                     <router-link
                       :to="{ name: 'oms.events.apply', params: { id: event.url || event.id, application_id: 'me' } }"
                       class="button is-warning">
@@ -107,14 +111,22 @@
 
                   <div class="content" style="padding-top: 1rem">
                     <ul style="list-style-type: none; padding: 0; margin: 0">
-                      <li><span class="title is-4">{{ event.name }}</span></li>
+                      <li>
+                        <span class="title is-4">
+                          {{ event.name }}
+                          <b-tag type="is-info" v-if="event.method === 'online' && event.has_applications">Online</b-tag>
+                          <b-tag type="is-info" v-if="event.method === 'online' && !event.has_applications">Online, no applications</b-tag>
+                        </span>
+                      </li>
                       <li style="display: flex; justify-content: space-between;">
                         <span class="tag" :style="{ 'background-color': colors[event.type], color: '#FFFFFF' }">
                           {{ eventTypesNames[event.type] }}
                         </span>
-                        <span v-if="today.isBefore(event.application_starts)" class="tag is-warning">Apply after {{ event.application_starts | date }}</span>
-                        <span v-if="event.application_status === 'open'" class="tag is-success">Apply before {{ event.application_ends | date }}</span>
-                        <span v-if="today.isAfter(event.application_ends)" class="tag is-light">Applications are closed</span>
+                        <template v-if="event.has_applications">
+                          <span v-if="today.isBefore(event.application_starts)" class="tag is-warning">Apply after {{ event.application_starts | date }}</span>
+                          <span v-if="event.application_status === 'open'" class="tag is-success">Apply before {{ event.application_ends | date }}</span>
+                          <span v-if="today.isAfter(event.application_ends)" class="tag is-light">Applications are closed</span>
+                        </template>
                       </li>
                     </ul>
 
@@ -157,7 +169,7 @@
                           class="button">Go to event page</router-link>
                       </p>
 
-                      <p class="control" v-if="event.status === 'published' && event.application_status === 'open'">
+                      <p class="control" v-if="event.status === 'published' && event.application_status === 'open' && event.has_applications">
                         <router-link
                           :to="{ name: 'oms.events.apply', params: { id: event.url || event.id, application_id: 'me' } }"
                           class="button is-success">
