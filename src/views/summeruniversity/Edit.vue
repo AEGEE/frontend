@@ -88,6 +88,7 @@
               <option value="2022">2022</option>
               <option value="2023">2023</option>
               <option value="2024">2024</option>
+              <option value="2025">2025</option>
             </select>
           </div>
           <p class="help is-danger" v-if="errors.season">{{ errors.season.join(', ') }}</p>
@@ -123,7 +124,7 @@
         </div>
 
         <!-- TODO: If larger than max, show warning that higher fee can only be set by SUCT -->
-        <!-- TODO: Have two inputs, one without a maximum for people with the proper permission and one with the maximum based on duration (max 14 euros per night) -->
+        <!-- TODO: Have two inputs, one without a maximum for people with the proper permission and one with the maximum based on duration (max 19.23 euros per night) -->
         <div class="field" v-if="!event.status || event.status === 'first draft' || can.editFee">
           <label class="label">Fee <span class="has-text-danger">*</span></label>
           <div class="control">
@@ -198,7 +199,7 @@
             <tbody>
               <tr v-for="(learning_objective, index) in event.learning_objectives" v-bind:key="index">
                 <td>
-                  <input class="input" type="text" required v-model="event.learning_objectives[index].description" />
+                  <input class="input" type="text" required v-model="learning_objective.description" />
                 </td>
                 <td>
                   <a class="button is-danger" @click="deleteLearningObjective(index)">Delete</a>
@@ -315,9 +316,9 @@
           <label class="label">Social media <URLTooltip /></label>
           <table class="table is-narrowed">
             <tbody>
-              <tr v-for="(social_media, index) in event.social_media" v-bind:key="index">
+              <tr v-for="(social_medium, index) in event.social_media" v-bind:key="index">
                 <td>
-                  <input class="input" type="url" required v-model="event.social_media[index].description" />
+                  <input class="input" type="url" required v-model="social_medium.description" />
                 </td>
                 <td>
                   <a class="button is-danger" @click="deleteSocialMedia(index)">Delete</a>
@@ -353,9 +354,9 @@
           <label class="label">Photos <URLTooltip /></label>
           <table class="table is-narrowed">
             <tbody>
-              <tr v-for="(photos, index) in event.photos" v-bind:key="index">
+              <tr v-for="(photo, index) in event.photos" v-bind:key="index">
                 <td>
-                  <input class="input" type="url" required v-model="event.photos[index].description" />
+                  <input class="input" type="url" required v-model="photo.description" />
                 </td>
                 <td>
                   <a class="button is-danger" @click="deletePhotos(index)">Delete</a>
@@ -388,7 +389,7 @@
           <p class="help is-danger" v-if="errors.video">{{ errors.video.join(', ') }}</p>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Organizing bodies <span class="has-text-danger">*</span></div>
+        <div class="subtitle is-fullwidth has-text-centered">Organising bodies <span class="has-text-danger">*</span></div>
         <hr />
 
         <div class="tags">
@@ -403,7 +404,7 @@
         </div>
 
         <div class="field">
-          <label class="label">Add organizing body</label>
+          <label class="label">Add organising body</label>
           <div class="control">
             <div class="field has-addons">
               <div class="control">
@@ -461,16 +462,16 @@
           </div>
         </div>
 
-        <div class="subtitle is-fullwidth has-text-centered">Organizers <span class="has-text-danger">*</span></div>
+        <div class="subtitle is-fullwidth has-text-centered">Organisers <span class="has-text-danger">*</span></div>
         <hr />
 
         <div class="notification is-info">
           <div class="content">
-            <p>The user creating the event automatically becomes an organizer.</p>
-            <p>People who are not listed as organizers won't be able to see and manage event applications, even if they are the board members.</p>
-            <p><strong>You can only add people from the organizing bodies.</strong></p>
+            <p>The user creating the event automatically becomes an organiser.</p>
+            <p>People who are not listed as organisers won't be able to see and manage event applications, even if they are the board members.</p>
+            <p><strong>You can only add people from the organising bodies.</strong></p>
             <p>Please add at least:<br />
-              - 1 main coordinator per organizing body<br />
+              - 1 main coordinator per organising body<br />
               - 1 content manager<br />
               - 1 treasurer<br />
               - 1 incoming responsible</p>
@@ -507,7 +508,7 @@
           </b-table>
 
           <div class="field">
-            <label class="label">Add organizer</label>
+            <label class="label">Add organiser</label>
             <div class="control">
               <div class="field has-addons">
                 <b-autocomplete
@@ -567,7 +568,7 @@
             <tr>
               <th>Latitude</th>
               <th>Longitude</th>
-              <th>Name</th>
+              <th>Name <span class="has-text-danger">*</span></th>
               <th>Description</th>
               <th>Starting city</th>
               <th>Ending city</th>
@@ -646,9 +647,9 @@
         <div class="field">
           <table class="table is-narrowed">
             <tbody>
-              <tr v-for="(questions, index) in event.questions" v-bind:key="index">
+              <tr v-for="(question, index) in event.questions" v-bind:key="index">
                 <td>
-                  <input class="input" type="text" required v-model="event.questions[index].description" />
+                  <input class="input" type="text" required v-model="question.description" />
                 </td>
                 <td>
                   <a class="button is-danger" @click="deleteQuestion(index)">Delete</a>
@@ -673,16 +674,8 @@
         </div>
         <p class="help is-danger" v-if="errors.questions">{{ errors.questions.message }}</p>
 
-        <div class="subtitle is-fullwidth has-text-centered">Covid regulations</div>
+        <div class="subtitle is-fullwidth has-text-centered">Regulations</div>
         <hr />
-
-        <div class="field">
-          <label class="label">Where to find covid regulations <span class="has-text-danger">*</span></label>
-          <div class="control">
-            <textarea class="textarea" placeholder="Where to find information on destinations' covid regulations." required v-model="event.covid_regulations" />
-          </div>
-          <p class="help is-danger" v-if="errors.covid_regulations">{{ errors.covid_regulations.join(', ') }}</p>
-        </div>
 
         <div class="field">
           <label class="label">Payment and cancellation rules <span class="has-text-danger">*</span></label>
@@ -746,7 +739,7 @@
               - We are able to provide meals 2x per day, also to people with specific dietary needs.<br />
               - We are able to provide accommodation for all the nights of the event for every participant.<br />
               - We are able to provide 2 hours of tuition per night on average.<br />
-              - We are able to provide all the activities with the participation fee of 14 EUR per night (excluding the optional fee and its activities).</p>
+              - We are able to provide all the activities with the participation fee of 19.23 EUR per night (excluding the optional fee and its activities).</p>
           </div>
         </div>
 
@@ -829,7 +822,6 @@ export default {
         pax_confirmation: null,
         pax_description: null,
         special_equipment: null,
-        covid_regulations: null,
         cancellation_rules: null,
         additional_regulation: null,
         agreed_to_su_terms: false
@@ -880,7 +872,7 @@ export default {
       if (this.token) this.token.cancel()
       this.token = this.axios.CancelToken.source()
 
-      // Fetch all of the members of the selected organizing bodies.
+      // Fetch all of the members of the selected organising bodies.
       const endpoints = this.event.organizing_bodies.map(body => this.services['core'] + '/bodies/' + body.body_id + '/members')
 
       // Ignoring the requests that failed (because of 403 most likely)
@@ -912,7 +904,7 @@ export default {
     },
     addOrganizer (organizer) {
       if (this.event.organizers.some(org => org.user_id === organizer.id)) {
-        return this.$root.showWarning('This user is already an organizer.')
+        return this.$root.showWarning('This user is already an organiser.')
       }
 
       this.event.organizers.push({
@@ -1024,11 +1016,11 @@ export default {
       }
 
       if (this.event.organizing_bodies.length === 0) {
-        return this.$root.showError('Please select at least one organizing body.')
+        return this.$root.showError('Please select at least one organising body.')
       }
 
       if (this.event.organizers.length === 0) {
-        return this.$root.showError('Please add at least one organizer.')
+        return this.$root.showError('Please add at least one organiser.')
       }
 
       this.isSaving = true
